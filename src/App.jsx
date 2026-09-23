@@ -58,7 +58,7 @@ function Brand({ onHome = null }) {
 }
 
 function Header({ status = 'Ready', onHome = null, nav = false }) {
-  return <header className="topbar"><Brand onHome={onHome} />{nav ? <nav className="top-nav" aria-label="Main navigation"><a href="#activities">Activities</a><a href="#simulators">Simulators</a><a href="#pulse">Pulse</a><a href="#feedback">Feedback</a></nav> : <span className="status-pill"><span className="status-dot" />{status}</span>}</header>
+  return <header className="topbar"><Brand onHome={onHome} />{nav ? <nav className="top-nav" aria-label="Main navigation"><a href="#activities">Activities</a><a href="#simulators">Simulators</a><a href="#pulse">Pulse</a></nav> : <span className="status-pill"><span className="status-dot" />{status}</span>}</header>
 }
 
 function TypingSprint({ onBack }) {
@@ -148,7 +148,7 @@ function MicrosoftPulse() {
   </section>
 }
 
-function FeedbackSection() {
+function FeedbackSection({ open, onClose }) {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [message, setMessage] = useState('')
@@ -182,17 +182,35 @@ function FeedbackSection() {
     } catch (error) { setNotice(error.message) } finally { setBusy(false) }
   }
 
-  return <section className="feedback-section" id="feedback"><div className="feedback-copy"><span className="eyebrow">Help shape the next update</span><h2>Feedback, but make it useful.</h2><p>Share an idea, report a confusing exercise, or suggest a product topic. We’ll verify your work email before sending it.</p><div className="feedback-recipients"><span>Goes to</span><strong>mohammed.ulhasan@concentrix.com</strong><strong>v-moulhasan@microsoft.com</strong></div></div><form className="feedback-form" onSubmit={challenge ? submitFeedback : requestCode}><label>Work email<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@concentrix.com or you@microsoft.com" required pattern="^[^\s@]+@(concentrix\.com|microsoft\.com)$" title="Use a @concentrix.com or @microsoft.com address." /></label>{challenge && <label>Email verification code<input inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="8-digit code" required /></label>}<label>Your feedback<textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="What should we improve?" required maxLength={3000} /></label>{challenge ? <button className="button-primary" disabled={busy || !code || !message}>{busy ? 'Sending…' : 'Verify & send feedback'} <span aria-hidden="true">→</span></button> : <button className="button-primary" disabled={busy}>{busy ? 'Sending code…' : 'Verify work email'} <span aria-hidden="true">→</span></button>}<p className="feedback-privacy">Only verified @concentrix.com and @microsoft.com mailboxes can submit. Your message is sent to the two MLTS feedback recipients above.</p>{notice && <p className="feedback-notice" role="status">{notice}</p>}</form></section>
+  if (!open) return null
+  return <div className="feedback-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}><section className="feedback-drawer" id="feedback" role="dialog" aria-modal="true" aria-labelledby="feedback-title"><div className="feedback-drawer-heading"><div><span className="eyebrow">Help shape the next update</span><h2 id="feedback-title">Send feedback</h2></div><button className="drawer-close" onClick={onClose} aria-label="Close feedback">×</button></div><p className="feedback-description">Share an idea or report an issue. Only verified @concentrix.com and @microsoft.com work email addresses can send.</p><form className="feedback-form" onSubmit={challenge ? submitFeedback : requestCode}><label>Work email<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@concentrix.com or you@microsoft.com" required pattern="^[^\s@]+@(concentrix\.com|microsoft\.com)$" title="Use a @concentrix.com or @microsoft.com address." /></label>{challenge && <label>Email verification code<input inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="8-digit code" required /></label>}<label>Your feedback<textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="What should we improve?" required maxLength={3000} /></label>{challenge ? <button className="button-primary" disabled={busy || !code || !message}>{busy ? 'Sending…' : 'Verify & send feedback'} <span aria-hidden="true">→</span></button> : <button className="button-primary" disabled={busy}>{busy ? 'Sending code…' : 'Verify work email'} <span aria-hidden="true">→</span></button>}<p className="feedback-privacy">Verified feedback goes to the two MLTS recipients.</p>{notice && <p className="feedback-notice" role="status">{notice}</p>}</form><div className="feedback-recipients"><strong>mohammed.ulhasan@concentrix.com</strong><strong>v-moulhasan@microsoft.com</strong></div></section></div>
 }
 
 function App() {
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
+  const [spotlightIndex, setSpotlightIndex] = useState(0)
+  const [spotlightPaused, setSpotlightPaused] = useState(false)
   const brand = <><MicrosoftMark /><span><strong>MLTS Consumer Simulator</strong><small>Microsoft learning, made practical</small></span></>
+
+  const spotlights = [
+    { eyebrow: 'Practice · customer care', title: 'Customer Conversation Lab', text: 'Build calm, clear customer conversations with a realistic simulator.', label: 'Start a conversation', action: () => setActiveSimulator('customer') },
+    { eyebrow: 'Play · four quick modes', title: 'MLTS Skill Arcade', text: 'Myth or Fact, shortcuts, settings, and error code detection.', label: 'Open the arcade', action: () => setActiveGame('arcade') },
+    { eyebrow: 'Practice · consumer Microsoft', title: 'Knowledge Sprint', text: 'Explore everyday Microsoft products with your quiz simulator.', label: 'Start the quiz', action: () => setActiveSimulator('quiz') },
+    { eyebrow: 'Play · 30 seconds', title: 'Typing Sprint', text: 'Test your speed and accuracy in a quick support themed round.', label: 'Start typing', action: () => setActiveGame('typing') },
+    { eyebrow: 'Read · official updates', title: 'Microsoft Pulse', text: 'Browse compact update cards linked to Microsoft published sources.', label: 'Browse Pulse', action: () => document.getElementById('pulse')?.scrollIntoView({ behavior: 'smooth' }) },
+  ]
+  const spotlight = spotlights[spotlightIndex]
+  useEffect(() => {
+    if (spotlightPaused || activeGame || activeSimulator) return undefined
+    const timer = window.setInterval(() => setSpotlightIndex((index) => (index + 1) % spotlights.length), 5200)
+    return () => window.clearInterval(timer)
+  }, [spotlightPaused, activeGame, activeSimulator])
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
-    return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveSimulator(null)}>{brand}</button><span className="status-pill"><span className="status-dot" />Practice mode</span></header><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section><section className="simulator-frame"><iframe title={simulator.title} src={simulator.url} /></section></main></div>
+    return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveSimulator(null)}>{brand}</button><span className="status-pill"><span className="status-dot" />Practice mode</span></header><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p><span className="chat-compat-note">The chat is supplied by Copilot Studio and scrolls inside this responsive frame.</span></section><section className="simulator-frame"><iframe title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" /></section></main></div>
   }
   if (activeGame) {
     const Game = activeGame === 'typing' ? TypingSprint : activeGame === 'arcade' ? SkillArcade : ReplyRemix
@@ -209,13 +227,13 @@ function App() {
     { id: 'reply', icon: '💌', tag: 'Customer care', title: 'Reply Remix', text: 'Pick a helpful, human response to a customer situation.' },
   ]
 
-  return <div className="app-shell"><Header nav /><main id="home"><section className="hero"><div className="hero-copy"><span className="eyebrow light">Your support skills arcade</span><h1>Learn the products.<br /><span>Win the conversation.</span></h1><p>Quick games and realistic practice for the Microsoft products customers use every day.</p><div className="hero-actions"><button className="button-primary" onClick={() => setActiveGame('arcade')}>Enter the Skill Arcade <span aria-hidden="true">→</span></button><span className="tiny-note">Short rounds · useful skills · zero pressure</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Choose your<br />power-up</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Level up</div></div></section>
+  return <div className="app-shell"><Header nav /><main id="home"><section className="hero" onMouseEnter={() => setSpotlightPaused(true)} onMouseLeave={() => setSpotlightPaused(false)} onFocusCapture={() => setSpotlightPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSpotlightPaused(false) }}><div className="hero-copy" key={spotlightIndex}><span className="eyebrow light">{spotlight.eyebrow}</span><h1>{spotlight.title}</h1><p>{spotlight.text}</p><div className="hero-actions"><button className="button-primary" onClick={spotlight.action}>{spotlight.label} <span aria-hidden="true">→</span></button><span className="tiny-note">MLTS Consumer Simulator · Practice at your pace</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Explore the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Stay current</div><div className="spotlight-dots"><span>{spotlightIndex + 1} / {spotlights.length}</span>{spotlights.map((item, index) => <button key={item.title} aria-label={`Show ${item.title}`} aria-current={spotlightIndex === index ? 'true' : undefined} onClick={() => setSpotlightIndex(index)} />)}</div></div></section>
     <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build speed, confidence, and good support instincts in short rounds.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
     <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">MLTS Consumer Simulator</span><h2>Practice with people skills</h2></div><p>Realistic conversations and product knowledge, at your pace.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start conversation' : 'Start knowledge sprint'} <span aria-hidden="true">→</span></button></article>)}</div></section>
     <MicrosoftPulse />
-    <FeedbackSection />
+    <FeedbackSection open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
-  </main></div>
+  </main><button className="feedback-bubble" aria-label="Open feedback" onClick={() => setFeedbackOpen(true)}><span aria-hidden="true">✎</span><span>Feedback</span></button></div>
 }
 
 export default App
