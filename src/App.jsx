@@ -152,7 +152,7 @@ function App() {
 
       <footer>
         <div>
-          <strong>Support Academy</strong>
+          <strong>Microsoft Training Simulator</strong>
           <span>Independent customer-support training environment</span>
         </div>
         <span>Practice · Progress · Perform</span>
