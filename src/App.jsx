@@ -17,7 +17,7 @@ const simulators = {
       'Turn product knowledge into customer-ready confidence with quick challenges.',
     icon: '✦',
     accent: 'purple',
-    url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_betaquiz_2nN7-S/canvas?__version__=2&enableFileAttachment=false&cliAgent=true',
+    url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_betaquiz_2nN7-S/webchat?__version__=2&enableFileAttachment=false&cliAgent=true',
   },
 }
 
@@ -70,13 +70,6 @@ function App() {
           </section>
 
           <section className="simulator-frame">
-            <div className="frame-topbar">
-              <span className="frame-dot red" />
-              <span className="frame-dot yellow" />
-              <span className="frame-dot green" />
-              <span>Support Academy workspace</span>
-            </div>
-
             <iframe title={simulator.title} src={simulator.url} />
           </section>
         </main>
