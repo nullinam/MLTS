@@ -96,52 +96,22 @@ function App() {
 
       <main>
         <section className="hero">
-          <div className="hero-glow glow-one" />
-          <div className="hero-glow glow-two" />
-
           <div className="hero-copy">
             <span className="eyebrow light">Customer support training</span>
-            <h1>
-              Learn the skills.
-              <span> Love the progress.</span>
-            </h1>
-            <p>
-              A calm, practical space for new support professionals to build
-              confidence before their first real customer conversation.
-            </p>
-
+            <h1>Build confidence for your next customer conversation.</h1>
+            <p>Practice real support scenarios and product knowledge in short, focused learning sessions.</p>
             <div className="hero-actions">
-              <button
-                className="primary-button"
-                onClick={() => setActiveSimulator('customer')}
-              >
-                Start practicing <span>→</span>
+              <button className="primary-button" onClick={() => setActiveSimulator('customer')}>
+                Start conversation practice <span aria-hidden="true">→</span>
               </button>
-
-              <span className="tiny-note">
-                <span>✦</span> Two learning modules ready
-              </span>
+              <span className="tiny-note">Two practice modules available</span>
             </div>
           </div>
-
-          <aside className="hero-card">
-            <div className="hero-card-top">
-              <span>Today’s momentum</span>
-              <span className="sparkle">✦</span>
-            </div>
-
-            <div className="circle-progress">
-              <strong>01</strong>
-              <span>of 02</span>
-            </div>
-
-            <h2>You’re ready to grow.</h2>
-            <p>Start small. Practice often. Show up confidently.</p>
-
-            <div className="mini-progress">
-              <span />
-            </div>
-          </aside>
+          <div className="hero-summary" aria-label="Your learning options">
+            <span className="summary-label">Choose a module</span>
+            <button onClick={() => setActiveSimulator('customer')}><span>01</span> Customer conversation <b>→</b></button>
+            <button onClick={() => setActiveSimulator('quiz')}><span>02</span> Product knowledge <b>→</b></button>
+          </div>
         </section>
 
         <section className="learning-section">
@@ -155,55 +125,29 @@ function App() {
 
           <div className="simulator-grid">
             <article className="learning-card customer-card">
-              <div className="card-orb">💬</div>
-              <span className="card-label">Module 01 · Scenario practice</span>
-              <h3>Customer Simulator</h3>
-              <p>
-                Practice empathy, clarity, and confident responses through
-                realistic customer-support conversations.
-              </p>
-
-              <div className="skill-tags">
-                <span>Communication</span>
-                <span>Empathy</span>
-                <span>Problem solving</span>
+              <div className="card-heading">
+                <span className="card-orb" aria-hidden="true">💬</span>
+                <span className="card-label">Module 01 · Scenario practice</span>
               </div>
-
-              <button onClick={() => setActiveSimulator('customer')}>
-                Open conversation lab <span>→</span>
-              </button>
+              <h3>Customer conversation</h3>
+              <p>Practice listening, showing empathy, and guiding a customer toward a clear next step.</p>
+              <div className="card-details"><span>Practice focus</span><strong>Empathy · Clear communication · Problem solving</strong></div>
+              <button onClick={() => setActiveSimulator('customer')}>Open conversation practice <span aria-hidden="true">→</span></button>
             </article>
 
             <article className="learning-card quiz-card">
-              <div className="card-orb">✦</div>
-              <span className="card-label">Module 02 · Knowledge check</span>
-              <h3>Quiz Simulator</h3>
-              <p>
-                Reinforce product knowledge with quick questions that make
-                learning feel focused, useful, and rewarding.
-              </p>
-
-              <div className="skill-tags">
-                <span>Product knowledge</span>
-                <span>Confidence</span>
-                <span>Growth</span>
+              <div className="card-heading">
+                <span className="card-orb" aria-hidden="true">✦</span>
+                <span className="card-label">Module 02 · Knowledge check</span>
               </div>
-
-              <button onClick={() => setActiveSimulator('quiz')}>
-                Start knowledge sprint <span>→</span>
-              </button>
+              <h3>Product knowledge</h3>
+              <p>Check what you know with quick questions and learn where to focus next.</p>
+              <div className="card-details"><span>Practice focus</span><strong>Product knowledge · Recall · Confidence</strong></div>
+              <button onClick={() => setActiveSimulator('quiz')}>Start knowledge check <span aria-hidden="true">→</span></button>
             </article>
           </div>
         </section>
 
-        <section className="promise-strip">
-          <span className="promise-icon">✦</span>
-          <p>
-            Every great support experience starts with a confident first
-            conversation.
-          </p>
-          <span className="promise-icon">✦</span>
-        </section>
       </main>
 
       <footer>
