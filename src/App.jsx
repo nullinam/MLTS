@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const simulators = {
   customer: {
@@ -16,46 +16,6 @@ const simulators = {
     url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_betaquiz_2nN7-S/webchat?__version__=2&enableFileAttachment=false&cliAgent=true',
   },
 }
-
-const topics = ['All', 'Microsoft 365', 'Windows', 'Copilot', 'Surface', 'Xbox']
-
-const questions = [
-  {
-    topic: 'Microsoft 365',
-    prompt: 'A customer wants to edit a document with a teammate at the same time. What should you suggest?',
-    options: ['Share the document for collaboration', 'Take a screenshot and send it', 'Create a second copy'],
-    answer: 0,
-    feedback: 'Sharing the document lets people work together on the same file.',
-  },
-  {
-    topic: 'Windows',
-    prompt: 'A customer needs help finding a setting on their PC. What is a useful first step?',
-    options: ['Ask what they see and search Settings', 'Ask them to reinstall Windows', 'Change several settings at once'],
-    answer: 0,
-    feedback: 'Start with what they see, then guide them to the relevant Settings page.',
-  },
-  {
-    topic: 'Copilot',
-    prompt: 'A customer says an AI answer seems wrong. What is the best support response?',
-    options: ['Ask them to verify important details', 'Tell them every answer is guaranteed', 'Ignore the concern'],
-    answer: 0,
-    feedback: 'Encourage checking important details and clarify what the answer needs to do.',
-  },
-  {
-    topic: 'Surface',
-    prompt: 'A customer reports a device issue. What should you learn before suggesting a fix?',
-    options: ['Their device model and what happened', 'Their favorite color', 'Whether they can buy a new device'],
-    answer: 0,
-    feedback: 'The model and symptoms help narrow down relevant troubleshooting steps.',
-  },
-  {
-    topic: 'Xbox',
-    prompt: 'A player cannot join a multiplayer game. What is a helpful first question?',
-    options: ['What error message do they see?', 'How long have they owned a TV?', 'Can they delete all their games?'],
-    answer: 0,
-    feedback: 'The exact error and when it happens help identify the right next step.',
-  },
-]
 
 const replyChallenge = {
   prompt: 'A customer says: “I’ve tried twice and I’m still locked out. I need this fixed today.” Pick the best opening reply.',
@@ -121,47 +81,107 @@ function TypingSprint({ onBack }) {
   )
 }
 
-function QuickChallenge({ mode, onBack }) {
-  const isReply = mode === 'reply'
-  const [topic, setTopic] = useState('All')
-  const [index, setIndex] = useState(0)
+function QuickChallenge({ onBack }) {
   const [choice, setChoice] = useState(null)
+  const [round, setRound] = useState(1)
   const [score, setScore] = useState(0)
-  const pool = useMemo(() => isReply ? [replyChallenge] : questions.filter((question) => topic === 'All' || question.topic === topic), [isReply, topic])
-  const question = pool[index % pool.length]
   const complete = choice !== null
 
   function selectOption(optionIndex) {
     if (complete) return
     setChoice(optionIndex)
-    if (optionIndex === question.answer) setScore((value) => value + 1)
+    if (optionIndex === replyChallenge.answer) setScore((value) => value + 1)
   }
 
-  function nextQuestion() {
-    setIndex((value) => value + 1)
-    setChoice(null)
-  }
-
-  function changeTopic(nextTopic) {
-    setTopic(nextTopic)
-    setIndex(0)
+  function nextRound() {
+    setRound((value) => value + 1)
     setChoice(null)
   }
 
   return (
     <div className="game-page">
       <button className="back-button" onClick={onBack}>← All activities</button>
-      <div className="game-heading"><span className="eyebrow">Mini game · {isReply ? 'Customer care' : 'Product smarts'}</span><h1>{isReply ? 'Reply Remix' : 'Product Pop Quiz'}</h1><p>{isReply ? 'Choose a response that makes the customer feel heard and gives them a clear next step.' : 'Short customer support scenarios across the products people use every day.'}</p></div>
-      {!isReply && <div className="topic-filters" aria-label="Filter questions by product">{topics.map((item) => <button key={item} className={topic === item ? 'active' : ''} onClick={() => changeTopic(item)}>{item}</button>)}</div>}
+      <div className="game-heading"><span className="eyebrow">Mini game · Customer care</span><h1>Reply Remix</h1><p>Choose a response that makes the customer feel heard and gives them a clear next step.</p></div>
       <section className="game-panel challenge-panel">
-        <div className="challenge-meta"><span>{isReply ? 'One-minute practice' : question.topic}</span><span>Score {score}</span></div>
-        <h2>{question.prompt}</h2>
-        <div className="answer-options">{question.options.map((option, optionIndex) => <button key={option} className={choice === optionIndex ? (optionIndex === question.answer ? 'chosen correct' : 'chosen incorrect') : (complete && optionIndex === question.answer ? 'correct' : '')} onClick={() => selectOption(optionIndex)} disabled={complete}><span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span>{option}</button>)}</div>
-        {complete && <div className={`answer-feedback ${choice === question.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === question.answer ? 'You got it!' : 'Good try!'}</strong><span>{isReply ? (choice === question.answer ? 'Empathy plus a clear next step makes a strong opening.' : 'Acknowledge the frustration, then offer a clear next step.') : question.feedback}</span></div>}
-        <button className="button-primary next-button" onClick={nextQuestion} disabled={!complete}>{isReply ? 'Play again' : 'Next question'} <span aria-hidden="true">→</span></button>
+        <div className="challenge-meta"><span>Round {round}</span><span>Good replies {score}</span></div>
+        <h2>{replyChallenge.prompt}</h2>
+        <div className="answer-options">{replyChallenge.options.map((option, optionIndex) => <button key={option} className={complete && optionIndex === replyChallenge.answer ? 'correct' : (choice === optionIndex ? 'incorrect' : '')} onClick={() => selectOption(optionIndex)} disabled={complete}><span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span>{option}</button>)}</div>
+        {complete && <div className={`answer-feedback ${choice === replyChallenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === replyChallenge.answer ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{choice === replyChallenge.answer ? 'Empathy plus a clear next step makes a strong opening.' : 'Acknowledge the frustration, then offer a clear next step.'}</span></div>}
+        <button className="button-primary next-button" onClick={nextRound} disabled={!complete}>Next round <span aria-hidden="true">→</span></button>
       </section>
     </div>
   )
+}
+
+const triageRounds = [
+  { prompt: 'Two support requests arrive at once. Which should you pick up first?', choices: ['A customer is locked out and cannot access their Microsoft account', 'A customer wants to change the color of an app theme', 'A customer asks where to find a product tip'], answer: 0, why: 'Being locked out blocks access, so start there and assess the account recovery path.' },
+  { prompt: 'Which request needs the fastest first response?', choices: ['A customer asks for a feature recommendation next week', 'A customer reports a suspicious sign-in alert on their account', 'A customer wants help organizing their desktop'], answer: 1, why: 'A possible account security issue should be acknowledged and routed promptly.' },
+  { prompt: 'A customer has a deadline in ten minutes. What should you do first?', choices: ['Ask what they need to finish and identify the blocker', 'Send a long list of unrelated tips', 'Ask them to check back tomorrow'], answer: 0, why: 'Clarify the immediate blocker so you can focus on the quickest useful next step.' },
+]
+
+function TriageDash({ onBack }) {
+  const [round, setRound] = useState(0)
+  const [choice, setChoice] = useState(null)
+  const [score, setScore] = useState(0)
+  const finished = round >= triageRounds.length
+  const item = triageRounds[Math.min(round, triageRounds.length - 1)]
+
+  function choose(index) {
+    if (choice !== null || finished) return
+    setChoice(index)
+    if (index === item.answer) setScore((value) => value + 1)
+  }
+
+  function advance() {
+    setRound((value) => value + 1)
+    setChoice(null)
+  }
+
+  function restart() { setRound(0); setChoice(null); setScore(0) }
+
+  return <div className="game-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="game-heading"><span className="eyebrow">Mini game · 3 quick rounds</span><h1>Ticket Triage Dash</h1><p>Pick what to handle first, then see why that choice helps the customer.</p></div><section className="game-panel challenge-panel"><div className="challenge-meta"><span>{finished ? 'Run complete' : `Round ${round + 1} of ${triageRounds.length}`}</span><span>Score {score}/{triageRounds.length}</span></div>{finished ? <><h2>Dash complete!</h2><p className="triage-result">You prioritized {score} of {triageRounds.length} situations well.</p><button className="button-primary" onClick={restart}>Play again <span aria-hidden="true">↻</span></button></> : <><h2>{item.prompt}</h2><div className="answer-options">{item.choices.map((text, index) => <button key={text} className={choice !== null && index === item.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{text}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === item.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === item.answer ? 'Great call!' : 'Here’s the priority.'}</strong><span>{item.why}</span></div>}<button className="button-primary next-button" onClick={advance} disabled={choice === null}>Next ticket <span aria-hidden="true">→</span></button></>}</section></div>
+}
+
+function MicrosoftPulse() {
+  const [updates, setUpdates] = useState([])
+  const [status, setStatus] = useState('loading')
+  const [updatedAt, setUpdatedAt] = useState(null)
+  const [sources, setSources] = useState([])
+  const [filter, setFilter] = useState('All')
+  const [search, setSearch] = useState('')
+
+  async function loadUpdates() {
+    setStatus('loading')
+    try {
+      const response = await fetch('/api/microsoft-pulse')
+      if (!response.ok) throw new Error('Feed request failed')
+      const payload = await response.json()
+      setUpdates(Array.isArray(payload.updates) ? payload.updates : [])
+      setUpdatedAt(payload.checkedAt || null)
+      setSources(Array.isArray(payload.sources) ? payload.sources : [])
+      setStatus(payload.updates?.length ? 'ready' : 'empty')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  useEffect(() => { loadUpdates() }, [])
+
+  const categories = ['All', ...new Set(updates.map((item) => item.category).filter(Boolean))]
+  const visibleUpdates = updates.filter((item) => {
+    const matchesCategory = filter === 'All' || item.category === filter
+    const haystack = `${item.title} ${item.summary} ${item.source} ${item.category}`.toLowerCase()
+    return matchesCategory && haystack.includes(search.toLowerCase())
+  })
+  const checkedLabel = updatedAt ? new Date(updatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
+
+  return <section className="pulse-section" id="pulse"><div className="pulse-heading"><div><span className="eyebrow">Official Microsoft updates</span><h2><span className="pulse-mark">●</span> Microsoft Pulse</h2><p>Product news with the source attached. No rumors, reposts, or anonymous tips.</p></div><div className="pulse-live"><span className={status === 'ready' ? 'live-dot' : 'live-dot checking'} />{status === 'ready' ? `Official sources ${sources.filter((source) => source.ok).length}/${sources.length}` : 'Checking official feeds'}</div></div><div className="pulse-toolbar"><div className="pulse-filters">{categories.map((category) => <button key={category} className={filter === category ? 'active' : ''} onClick={() => setFilter(category)}>{category}</button>)}</div><label className="pulse-search"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search updates" aria-label="Search Microsoft updates" /></label></div>
+    {status === 'loading' && <div className="pulse-message" role="status">Checking Microsoft’s public update feeds…</div>}
+    {status === 'error' && <div className="pulse-message" role="status"><strong>Couldn’t load the live feeds.</strong><span>Try again in a moment, or browse the official source pages below.</span><button className="button-quiet" onClick={loadUpdates}>Try again</button></div>}
+    {status === 'empty' && <div className="pulse-message">No updates were returned by the official feeds just now. Check the source pages below.</div>}
+    {status === 'ready' && visibleUpdates.length === 0 && <div className="pulse-message">No matching updates. Try another topic or search.</div>}
+    {status === 'ready' && visibleUpdates.length > 0 && <div className="pulse-grid">{visibleUpdates.slice(0, 9).map((item) => <article className="pulse-card" key={item.url}><div className="pulse-card-meta"><span className="pulse-category">{item.category}</span><time dateTime={item.date}>{new Date(item.date).toLocaleDateString(undefined, { dateStyle: 'medium' })}</time></div><h3>{item.title}</h3><p>{item.summary || 'Open the official Microsoft update for details.'}</p><div className="pulse-source"><span>Official source · {item.source}</span><a href={item.url} target="_blank" rel="noreferrer">Read at Microsoft <span aria-hidden="true">↗</span></a></div></article>)}</div>}
+    <div className="pulse-footer"><span>{checkedLabel ? `Feeds checked ${checkedLabel}` : 'Stories link directly to Microsoft-published pages.'} · Results are limited to connected public Microsoft feeds; refreshed periodically.</span><button className="button-quiet" onClick={loadUpdates}>Refresh updates</button></div><div className="pulse-sources"><strong>Sources we use</strong><a href="https://www.microsoft.com/en-us/microsoft-365/blog/" target="_blank" rel="noreferrer">Microsoft 365 Blog</a><a href="https://blogs.windows.com/" target="_blank" rel="noreferrer">Windows Blog</a><a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" rel="noreferrer">Microsoft Security Blog</a></div></section>
 }
 
 function App() {
@@ -174,11 +194,12 @@ function App() {
   }
 
   if (activeGame === 'typing') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><TypingSprint onBack={() => setActiveGame(null)} /></main></div>
-  if (activeGame) return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><QuickChallenge mode={activeGame} onBack={() => setActiveGame(null)} /></main></div>
+  if (activeGame === 'reply') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><QuickChallenge onBack={() => setActiveGame(null)} /></main></div>
+  if (activeGame === 'triage') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><TriageDash onBack={() => setActiveGame(null)} /></main></div>
 
   const gameCards = [
     { id: 'typing', icon: '⌨️', tag: '30-second game', title: 'Typing Sprint', text: 'Race the clock, build accuracy, and see your words per minute.' },
-    { id: 'product', icon: '🧠', tag: 'Product knowledge', title: 'Product Pop Quiz', text: 'Quick support scenarios for Microsoft 365, Windows, Copilot, Surface, and Xbox.' },
+    { id: 'triage', icon: '🚦', tag: '3 quick rounds', title: 'Ticket Triage Dash', text: 'Sort support situations by urgency and choose the best first move.' },
     { id: 'reply', icon: '💌', tag: 'Customer care', title: 'Reply Remix', text: 'Pick the most helpful, human response to a customer situation.' },
   ]
   const tracks = [
@@ -186,10 +207,11 @@ function App() {
     { id: 'quiz', icon: '⚡', tag: 'Ask & learn', title: 'Knowledge Sprint', text: 'Explore consumer Microsoft products with your Copilot Studio quiz.' },
   ]
 
-  return <div className="app-shell"><header className="topbar"><a className="brand" href="#home"><MicrosoftMark /><span><strong>MLTS</strong><small>Microsoft learning, made practical</small></span></a><span className="topbar-note">Pick a path. Play a round. Level up.</span></header><main id="home">
+  return <div className="app-shell"><header className="topbar"><a className="brand" href="#home"><MicrosoftMark /><span><strong>MLTS</strong><small>Microsoft learning, made practical</small></span></a><a className="topbar-note" href="#pulse">Pulse <span aria-hidden="true">↘</span></a></header><main id="home">
     <section className="hero"><div className="hero-copy"><span className="eyebrow light">Your support skills arcade</span><h1>Learn the products.<br /><span>Win the conversation.</span></h1><p>Quick games and realistic practice for the Microsoft products customers use every day.</p><div className="hero-actions"><button className="button-primary" onClick={() => setActiveGame('typing')}>Play a quick game <span aria-hidden="true">→</span></button><span className="tiny-note">Short rounds · useful skills · zero pressure</span></div></div><div className="hero-sticker" aria-label="Three ways to practice"><span className="sticker-spark">✦</span><strong>Pick your<br />power-up</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Progress</div></div></section>
     <section className="learning-section"><div className="section-heading"><div><span className="eyebrow">Choose your mode</span><h2>Practice with people skills</h2></div><p>Realistic conversations, no awkward role-play required.</p></div><div className="module-grid">{tracks.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start conversation' : 'Start knowledge sprint'} <span aria-hidden="true">→</span></button></article>)}</div></section>
-    <section className="games-section"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Jump into a 30-second challenge or a few fast questions.</p></div><p className="topic-note">Product quiz topics: Microsoft 365 · Windows · Copilot · Surface · Xbox</p><div className="game-grid">{gameCards.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
+    <section className="games-section"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build speed, empathy, and good support instincts in short rounds.</p></div><div className="game-grid">{gameCards.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
+    <MicrosoftPulse />
     <footer><div><strong>MLTS</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
   </main></div>
 }

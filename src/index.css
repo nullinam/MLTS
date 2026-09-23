@@ -118,7 +118,6 @@ footer strong, footer span { display: block; }footer strong { margin-bottom: 3px
 }
 @media (max-width: 500px) {
   .topbar, main, footer { width: calc(100% - 24px); }
-  .topbar-note { display: none; }
   .hero { min-height: unset; padding: 23px 19px; border-radius: 17px; }
   .hero h1 { font-size: 2.65rem; }
   .game-grid { grid-template-columns: 1fr; }
@@ -130,3 +129,39 @@ footer strong, footer span { display: block; }footer strong { margin-bottom: 3px
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Microsoft Pulse: live, source-linked Microsoft updates */
+.pulse-section { margin: 0 0 52px; padding: clamp(20px, 4vw, 32px); border: 1px solid #e6e2ef; border-radius: 20px; background: linear-gradient(145deg, #fff, #faf9ff); }
+.pulse-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.pulse-heading h2 { margin: 0; display: flex; align-items: center; gap: 10px; font: 700 clamp(1.8rem, 3.5vw, 2.5rem)/1.1 "Outfit", sans-serif; letter-spacing: -.045em; }
+.pulse-heading p { margin: 9px 0 0; color: var(--muted); font-size: .88rem; }
+.pulse-mark { color: #6848df; font-size: .75em; text-shadow: 0 0 0 #d6fb69, 0 0 13px #a999f6; }
+.pulse-live { padding: 7px 10px; display: inline-flex; flex: 0 0 auto; align-items: center; gap: 7px; border: 1px solid #e6e2ef; border-radius: 999px; background: #fff; color: #504a63; font-size: .7rem; font-weight: 700; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #33a477; }.live-dot.checking { background: #e4a32a; }
+.pulse-toolbar { margin: 20px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pulse-filters { display: flex; flex-wrap: wrap; gap: 7px; }
+.pulse-filters button { min-height: 33px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--muted); font-size: .73rem; font-weight: 700; cursor: pointer; }
+.pulse-filters button.active { border-color: #6848df; background: #6848df; color: #fff; }
+.pulse-search { min-width: 200px; height: 36px; padding: 0 10px; display: flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--muted); }
+.pulse-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: .76rem; }
+.pulse-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
+.pulse-card { min-height: 220px; padding: 16px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.pulse-card-meta { margin-bottom: 11px; display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); font-size: .66rem; }
+.pulse-category { padding: 5px 8px; border-radius: 999px; background: #f0edfa; color: #574794; font-weight: 800; }
+.pulse-card h3 { margin: 0 0 8px; font: 700 1rem/1.28 "Outfit", sans-serif; letter-spacing: -.015em; }
+.pulse-card > p { margin: 0 0 14px; color: var(--muted); font-size: .76rem; line-height: 1.5; }
+.pulse-source { margin-top: auto; padding-top: 10px; display: grid; gap: 9px; border-top: 1px solid #f0edf5; }
+.pulse-source span { color: #6c687a; font-size: .67rem; }
+.pulse-source a, .pulse-sources a { color: #553bb9; font-size: .73rem; font-weight: 800; text-decoration: none; }
+.pulse-source a:hover, .pulse-sources a:hover { text-decoration: underline; }
+.pulse-message { min-height: 100px; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 8px; border: 1px dashed #d9d2ea; border-radius: 12px; background: #fff; color: var(--muted); font-size: .85rem; }
+.pulse-message strong { color: var(--ink); }.pulse-message .button-quiet { min-height: 36px; }
+.pulse-footer { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .68rem; }
+.pulse-footer .button-quiet { min-height: 34px; padding: 0 10px; font-size: .7rem; }
+.pulse-sources { margin-top: 17px; padding-top: 13px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border-top: 1px solid var(--line); }
+.pulse-sources strong { margin-right: 3px; color: #49445c; font-size: .7rem; }
+.triage-result { margin: 0 0 16px; color: var(--muted); }
+@media (max-width: 760px) { .pulse-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.pulse-toolbar { align-items: flex-start; flex-direction: column; }.pulse-search { width: 100%; }.pulse-heading { flex-direction: column; }.pulse-live { align-self: flex-start; } }
+@media (max-width: 500px) { .pulse-section { padding: 18px 14px; }.pulse-grid { grid-template-columns: 1fr; }.pulse-card { min-height: unset; }.pulse-footer { align-items: flex-start; flex-direction: column; }.pulse-sources { align-items: flex-start; flex-direction: column; gap: 8px; }.pulse-sources strong { margin: 0; } }
+.topbar-note { color: #574794; text-decoration: none; }
+.topbar-note:hover { text-decoration: underline; }
