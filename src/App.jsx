@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const simulators = {
   customer: {
@@ -11,11 +11,32 @@ const simulators = {
   quiz: {
     title: 'Knowledge Sprint',
     label: 'Quick challenge',
-    description: 'Build confidence across Microsoft products with a quick knowledge check.',
+    description: 'Build confidence across consumer Microsoft products with your quiz simulator.',
     icon: '⚡',
     url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_betaquiz_2nN7-S/webchat?__version__=2&enableFileAttachment=false&cliAgent=true',
   },
 }
+
+const typingText = 'Clear support starts with listening carefully, checking the details, and explaining the next step in simple language.'
+
+const arcadeModes = [
+  {
+    id: 'myth', title: 'Myth or Fact', icon: '🧪', prompt: 'In Windows, pressing Win + V opens clipboard history. You may need to turn clipboard history on first.', options: ['Fact', 'Myth'], answer: 0,
+    explanation: 'Fact. Win + V opens clipboard history; Windows may prompt you to enable it the first time.', source: 'https://support.microsoft.com/en-US/Windows/Apps/using-the-clipboard',
+  },
+  {
+    id: 'shortcut', title: 'Shortcut Showdown', icon: '⌨️', prompt: 'Which Windows shortcut opens Task Manager directly?', options: ['Ctrl + Shift + Esc', 'Ctrl + Alt + S', 'Win + T'], answer: 0,
+    explanation: 'Ctrl + Shift + Esc opens Task Manager. See Microsoft’s Windows keyboard shortcut guide.', source: 'https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec',
+  },
+  {
+    id: 'settings', title: 'Settings Sprint', icon: '⚙️', prompt: 'A customer wants to quiet app notifications on Windows 11. Where should you guide them first?', options: ['Settings → System → Notifications', 'Settings → Personalization → Colors', 'Settings → Time & language → Date & time'], answer: 0,
+    explanation: 'Settings → System → Notifications is the starting point for Windows notification controls.',
+  },
+  {
+    id: 'error', title: 'Error Code Detective', icon: '🕵️', prompt: 'A customer shares an unfamiliar error code. What is the best first move?', options: ['Get the exact code, full message, affected app, and when it appears', 'Guess what it means and ask them to reset everything', 'Ignore the code and reinstall Windows'], answer: 0,
+    explanation: 'Capture the full details before diagnosing. Error codes can depend on the product and situation.',
+  },
+]
 
 const replyChallenge = {
   prompt: 'A customer says: “I’ve tried twice and I’m still locked out. I need this fixed today.” Pick the best opening reply.',
@@ -27,10 +48,17 @@ const replyChallenge = {
   answer: 0,
 }
 
-const typingText = 'Clear support starts with listening carefully, checking the details, and explaining the next step in simple language.'
-
 function MicrosoftMark() {
   return <span className="microsoft-mark" aria-hidden="true"><i /><i /><i /><i /></span>
+}
+
+function Brand({ onHome = null }) {
+  const content = <><MicrosoftMark /><span><strong>MLTS Consumer Simulator</strong><small>Microsoft learning, made practical</small></span></>
+  return onHome ? <button className="brand" onClick={onHome}>{content}</button> : <a className="brand" href="#home">{content}</a>
+}
+
+function Header({ status = 'Ready', onHome = null, nav = false }) {
+  return <header className="topbar"><Brand onHome={onHome} />{nav ? <nav className="top-nav" aria-label="Main navigation"><a href="#activities">Activities</a><a href="#simulators">Simulators</a><a href="#pulse">Pulse</a><a href="#feedback">Feedback</a></nav> : <span className="status-pill"><span className="status-dot" />{status}</span>}</header>
 }
 
 function TypingSprint({ onBack }) {
@@ -58,97 +86,38 @@ function TypingSprint({ onBack }) {
   const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 100
   const elapsed = 30 - seconds
   const wpm = elapsed ? Math.round((correct / 5) / (elapsed / 60)) : 0
+  function reset() { setStarted(false); setFinished(false); setSeconds(30); setTyped('') }
 
-  function reset() {
-    setStarted(false)
-    setFinished(false)
-    setSeconds(30)
-    setTyped('')
-  }
-
-  return (
-    <div className="game-page">
-      <button className="back-button" onClick={onBack}>← All activities</button>
-      <div className="game-heading"><span className="eyebrow">Mini game · 30 seconds</span><h1>Typing Sprint</h1><p>Type the sentence accurately. Your speed and accuracy update as you go.</p></div>
-      <section className="game-panel typing-panel">
-        <div className="typing-stats"><div><span>Time</span><strong>{seconds}s</strong></div><div><span>Speed</span><strong>{wpm} WPM</strong></div><div><span>Accuracy</span><strong>{accuracy}%</strong></div></div>
-        <p className="typing-copy">{[...typingText].map((char, index) => <span key={index} className={index < typed.length ? (typed[index] === char ? 'correct-char' : 'wrong-char') : ''}>{char}</span>)}</p>
-        <textarea aria-label="Typing practice" value={typed} onChange={(event) => setTyped(event.target.value.slice(0, typingText.length))} disabled={!started || finished} placeholder={started ? 'Start typing here…' : 'Press Start when you’re ready'} />
-        <div className="game-actions"><button className="button-primary" onClick={started && !finished ? () => setFinished(true) : () => setStarted(true)} disabled={started && !finished}>{finished ? 'Sprint complete' : started ? 'Typing…' : 'Start sprint'}</button><button className="button-quiet" onClick={reset}>Try again</button></div>
-        {finished && <p className="result-note" role="status">Nice run: {wpm} WPM with {accuracy}% accuracy.</p>}
-      </section>
-    </div>
-  )
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Quick play · 30 seconds</span><h1>Typing Sprint</h1><p>Type the sentence accurately. Speed and accuracy update as you go.</p></div><section className="activity-panel"><div className="typing-stats"><div><span>Time</span><strong>{seconds}s</strong></div><div><span>Speed</span><strong>{wpm} WPM</strong></div><div><span>Accuracy</span><strong>{accuracy}%</strong></div></div><p className="typing-copy">{[...typingText].map((char, index) => <span key={index} className={index < typed.length ? (typed[index] === char ? 'correct-char' : 'wrong-char') : ''}>{char}</span>)}</p><textarea aria-label="Typing practice" value={typed} onChange={(event) => setTyped(event.target.value.slice(0, typingText.length))} disabled={!started || finished} placeholder={started ? 'Start typing here…' : 'Press Start when you’re ready'} /><div className="activity-actions"><button className="button-primary" onClick={() => setStarted(true)} disabled={started || finished}>{finished ? 'Sprint complete' : started ? 'Typing…' : 'Start sprint'}</button><button className="button-secondary" onClick={reset}>Try again</button></div>{finished && <p className="success-note" role="status">Nice run: {wpm} WPM with {accuracy}% accuracy.</p>}</section></div>
 }
 
-function QuickChallenge({ onBack }) {
+function ReplyRemix({ onBack }) {
   const [choice, setChoice] = useState(null)
   const [round, setRound] = useState(1)
   const [score, setScore] = useState(0)
-  const complete = choice !== null
-
-  function selectOption(optionIndex) {
-    if (complete) return
-    setChoice(optionIndex)
-    if (optionIndex === replyChallenge.answer) setScore((value) => value + 1)
-  }
-
-  function nextRound() {
-    setRound((value) => value + 1)
-    setChoice(null)
-  }
-
-  return (
-    <div className="game-page">
-      <button className="back-button" onClick={onBack}>← All activities</button>
-      <div className="game-heading"><span className="eyebrow">Mini game · Customer care</span><h1>Reply Remix</h1><p>Choose a response that makes the customer feel heard and gives them a clear next step.</p></div>
-      <section className="game-panel challenge-panel">
-        <div className="challenge-meta"><span>Round {round}</span><span>Good replies {score}</span></div>
-        <h2>{replyChallenge.prompt}</h2>
-        <div className="answer-options">{replyChallenge.options.map((option, optionIndex) => <button key={option} className={complete && optionIndex === replyChallenge.answer ? 'correct' : (choice === optionIndex ? 'incorrect' : '')} onClick={() => selectOption(optionIndex)} disabled={complete}><span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span>{option}</button>)}</div>
-        {complete && <div className={`answer-feedback ${choice === replyChallenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === replyChallenge.answer ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{choice === replyChallenge.answer ? 'Empathy plus a clear next step makes a strong opening.' : 'Acknowledge the frustration, then offer a clear next step.'}</span></div>}
-        <button className="button-primary next-button" onClick={nextRound} disabled={!complete}>Next round <span aria-hidden="true">→</span></button>
-      </section>
-    </div>
-  )
+  function choose(index) { if (choice !== null) return; setChoice(index); if (index === replyChallenge.answer) setScore((value) => value + 1) }
+  function next() { setRound((value) => value + 1); setChoice(null) }
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Quick play · Customer care</span><h1>Reply Remix</h1><p>Choose a response that makes the customer feel heard and gives them a clear next step.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Round {round}</span><span>Good replies {score}</span></div><h2>{replyChallenge.prompt}</h2><div className="answer-options">{replyChallenge.options.map((option, index) => <button key={option} className={choice !== null && index === replyChallenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === 0 ? 'good' : 'try-again'}`} role="status"><strong>{choice === 0 ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{choice === 0 ? 'Empathy plus a clear next step makes a strong opening.' : 'Acknowledge the frustration, then offer a clear next step.'}</span></div>}<button className="button-primary next-button" onClick={next} disabled={choice === null}>Next round <span aria-hidden="true">→</span></button></section></div>
 }
 
-const triageRounds = [
-  { prompt: 'Two support requests arrive at once. Which should you pick up first?', choices: ['A customer is locked out and cannot access their Microsoft account', 'A customer wants to change the color of an app theme', 'A customer asks where to find a product tip'], answer: 0, why: 'Being locked out blocks access, so start there and assess the account recovery path.' },
-  { prompt: 'Which request needs the fastest first response?', choices: ['A customer asks for a feature recommendation next week', 'A customer reports a suspicious sign-in alert on their account', 'A customer wants help organizing their desktop'], answer: 1, why: 'A possible account security issue should be acknowledged and routed promptly.' },
-  { prompt: 'A customer has a deadline in ten minutes. What should you do first?', choices: ['Ask what they need to finish and identify the blocker', 'Send a long list of unrelated tips', 'Ask them to check back tomorrow'], answer: 0, why: 'Clarify the immediate blocker so you can focus on the quickest useful next step.' },
-]
-
-function TriageDash({ onBack }) {
-  const [round, setRound] = useState(0)
+function SkillArcade({ onBack }) {
+  const [modeId, setModeId] = useState('myth')
   const [choice, setChoice] = useState(null)
   const [score, setScore] = useState(0)
-  const finished = round >= triageRounds.length
-  const item = triageRounds[Math.min(round, triageRounds.length - 1)]
-
-  function choose(index) {
-    if (choice !== null || finished) return
-    setChoice(index)
-    if (index === item.answer) setScore((value) => value + 1)
-  }
-
-  function advance() {
-    setRound((value) => value + 1)
-    setChoice(null)
-  }
-
-  function restart() { setRound(0); setChoice(null); setScore(0) }
-
-  return <div className="game-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="game-heading"><span className="eyebrow">Mini game · 3 quick rounds</span><h1>Ticket Triage Dash</h1><p>Pick what to handle first, then see why that choice helps the customer.</p></div><section className="game-panel challenge-panel"><div className="challenge-meta"><span>{finished ? 'Run complete' : `Round ${round + 1} of ${triageRounds.length}`}</span><span>Score {score}/{triageRounds.length}</span></div>{finished ? <><h2>Dash complete!</h2><p className="triage-result">You prioritized {score} of {triageRounds.length} situations well.</p><button className="button-primary" onClick={restart}>Play again <span aria-hidden="true">↻</span></button></> : <><h2>{item.prompt}</h2><div className="answer-options">{item.choices.map((text, index) => <button key={text} className={choice !== null && index === item.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{text}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === item.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === item.answer ? 'Great call!' : 'Here’s the priority.'}</strong><span>{item.why}</span></div>}<button className="button-primary next-button" onClick={advance} disabled={choice === null}>Next ticket <span aria-hidden="true">→</span></button></>}</section></div>
+  const mode = arcadeModes.find((item) => item.id === modeId)
+  function changeMode(id) { setModeId(id); setChoice(null) }
+  function choose(index) { if (choice !== null) return; setChoice(index); if (index === mode.answer) setScore((value) => value + 1) }
+  function nextMode() { const index = arcadeModes.findIndex((item) => item.id === modeId); changeMode(arcadeModes[(index + 1) % arcadeModes.length].id) }
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Four mini games · One arcade</span><h1>MLTS Skill Arcade</h1><p>Pick a mode, make your call, and collect a skill point.</p></div><div className="arcade-modes" role="tablist" aria-label="Choose a mini game">{arcadeModes.map((item) => <button key={item.id} role="tab" aria-selected={modeId === item.id} className={modeId === item.id ? 'active' : ''} onClick={() => changeMode(item.id)}><span>{item.icon}</span>{item.title}</button>)}</div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>{mode.icon} {mode.title}</span><span>Skill points {score}</span></div><h2>{mode.prompt}</h2><div className="answer-options">{mode.options.map((option, index) => <button key={option} className={choice !== null && index === mode.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === mode.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === mode.answer ? 'Nice one!' : 'Here’s the answer.'}</strong><span>{mode.explanation}{mode.source && <> <a href={mode.source} target="_blank" rel="noreferrer">Check Microsoft’s guide ↗</a></>}</span></div>}<button className="button-primary next-button" onClick={nextMode} disabled={choice === null}>Next mini game <span aria-hidden="true">→</span></button></section></div>
 }
 
 function MicrosoftPulse() {
   const [updates, setUpdates] = useState([])
-  const [status, setStatus] = useState('loading')
-  const [updatedAt, setUpdatedAt] = useState(null)
   const [sources, setSources] = useState([])
+  const [status, setStatus] = useState('loading')
+  const [checkedAt, setCheckedAt] = useState(null)
   const [filter, setFilter] = useState('All')
-  const [search, setSearch] = useState('')
+  const trackRef = useRef(null)
 
   async function loadUpdates() {
     setStatus('loading')
@@ -156,63 +125,96 @@ function MicrosoftPulse() {
       const response = await fetch('/api/microsoft-pulse')
       if (!response.ok) throw new Error('Feed request failed')
       const payload = await response.json()
-      setUpdates(Array.isArray(payload.updates) ? payload.updates : [])
-      setUpdatedAt(payload.checkedAt || null)
+      const items = Array.isArray(payload.updates) ? payload.updates : []
+      setUpdates(items)
       setSources(Array.isArray(payload.sources) ? payload.sources : [])
-      setStatus(payload.updates?.length ? 'ready' : 'empty')
+      setCheckedAt(payload.checkedAt || null)
+      setStatus(items.length ? 'ready' : 'empty')
     } catch {
       setStatus('error')
     }
   }
 
   useEffect(() => { loadUpdates() }, [])
-
   const categories = ['All', ...new Set(updates.map((item) => item.category).filter(Boolean))]
-  const visibleUpdates = updates.filter((item) => {
-    const matchesCategory = filter === 'All' || item.category === filter
-    const haystack = `${item.title} ${item.summary} ${item.source} ${item.category}`.toLowerCase()
-    return matchesCategory && haystack.includes(search.toLowerCase())
-  })
-  const checkedLabel = updatedAt ? new Date(updatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
+  const visibleUpdates = updates.filter((item) => filter === 'All' || item.category === filter)
+  const checkedLabel = checkedAt ? new Date(checkedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
+  function scrollTrack(direction) { trackRef.current?.scrollBy({ left: direction * trackRef.current.clientWidth * 0.84, behavior: 'smooth' }) }
 
-  return <section className="pulse-section" id="pulse"><div className="pulse-heading"><div><span className="eyebrow">Official Microsoft updates</span><h2><span className="pulse-mark">●</span> Microsoft Pulse</h2><p>Product news with the source attached. No rumors, reposts, or anonymous tips.</p></div><div className="pulse-live"><span className={status === 'ready' ? 'live-dot' : 'live-dot checking'} />{status === 'ready' ? `Official sources ${sources.filter((source) => source.ok).length}/${sources.length}` : 'Checking official feeds'}</div></div><div className="pulse-toolbar"><div className="pulse-filters">{categories.map((category) => <button key={category} className={filter === category ? 'active' : ''} onClick={() => setFilter(category)}>{category}</button>)}</div><label className="pulse-search"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search updates" aria-label="Search Microsoft updates" /></label></div>
-    {status === 'loading' && <div className="pulse-message" role="status">Checking Microsoft’s public update feeds…</div>}
-    {status === 'error' && <div className="pulse-message" role="status"><strong>Couldn’t load the live feeds.</strong><span>Try again in a moment, or browse the official source pages below.</span><button className="button-quiet" onClick={loadUpdates}>Try again</button></div>}
-    {status === 'empty' && <div className="pulse-message">No updates were returned by the official feeds just now. Check the source pages below.</div>}
-    {status === 'ready' && visibleUpdates.length === 0 && <div className="pulse-message">No matching updates. Try another topic or search.</div>}
-    {status === 'ready' && visibleUpdates.length > 0 && <div className="pulse-grid">{visibleUpdates.slice(0, 9).map((item) => <article className="pulse-card" key={item.url}><div className="pulse-card-meta"><span className="pulse-category">{item.category}</span><time dateTime={item.date}>{new Date(item.date).toLocaleDateString(undefined, { dateStyle: 'medium' })}</time></div><h3>{item.title}</h3><p>{item.summary || 'Open the official Microsoft update for details.'}</p><div className="pulse-source"><span>Official source · {item.source}</span><a href={item.url} target="_blank" rel="noreferrer">Read at Microsoft <span aria-hidden="true">↗</span></a></div></article>)}</div>}
-    <div className="pulse-footer"><span>{checkedLabel ? `Feeds checked ${checkedLabel}` : 'Stories link directly to Microsoft-published pages.'} · Results are limited to connected public Microsoft feeds; refreshed periodically.</span><button className="button-quiet" onClick={loadUpdates}>Refresh updates</button></div><div className="pulse-sources"><strong>Sources we use</strong><a href="https://www.microsoft.com/en-us/microsoft-365/blog/" target="_blank" rel="noreferrer">Microsoft 365 Blog</a><a href="https://blogs.windows.com/" target="_blank" rel="noreferrer">Windows Blog</a><a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" rel="noreferrer">Microsoft Security Blog</a></div></section>
+  return <section className="pulse-section" id="pulse"><div className="pulse-heading"><div><span className="eyebrow">Official Microsoft updates</span><h2><span className="pulse-signal" aria-hidden="true">●</span> Microsoft Pulse</h2><p>What changed, who it affects, and the original Microsoft source.</p></div><div className={`pulse-live ${status}`}><span className="live-dot" />{status === 'ready' ? `Official feeds ${sources.filter((source) => source.ok).length}/${sources.length}` : status === 'error' ? 'Feed unavailable' : status === 'empty' ? 'No feed items' : 'Checking official feeds'}</div></div><div className="pulse-controls">{categories.length > 1 && <div className="pulse-filters" aria-label="Filter official updates">{categories.map((category) => <button key={category} className={filter === category ? 'active' : ''} onClick={() => setFilter(category)}>{category}</button>)}</div>}<div className="pulse-scroll-actions"><span>Scroll to explore</span><button aria-label="Scroll updates left" onClick={() => scrollTrack(-1)}>←</button><button aria-label="Scroll updates right" onClick={() => scrollTrack(1)}>→</button></div></div>
+    {status === 'loading' && <div className="pulse-message" role="status">Checking Microsoft’s public update feeds…</div>}{status === 'error' && <div className="pulse-message" role="status"><strong>Couldn’t load the live feeds.</strong><span>Try again, or open one of the official Microsoft source pages below.</span><button className="button-secondary" onClick={loadUpdates}>Try again</button></div>}{status === 'empty' && <div className="pulse-message">No updates came back from the connected official feeds. Check the source pages below.</div>}{status === 'ready' && visibleUpdates.length === 0 && <div className="pulse-message">No updates in this category right now.</div>}
+    {status === 'ready' && visibleUpdates.length > 0 && <div className="pulse-track" ref={trackRef} aria-label="Latest Microsoft updates">{visibleUpdates.map((item) => <article className="pulse-card" key={item.url}><div className="pulse-card-meta"><span className="pulse-category">{item.category}</span><time dateTime={item.date}>{new Date(item.date).toLocaleDateString(undefined, { dateStyle: 'medium' })}</time></div><h3>{item.title}</h3><p>{item.summary || 'Open the official Microsoft update for details.'}</p><div className="pulse-source"><span>Official source · {item.source}</span><a href={item.url} target="_blank" rel="noreferrer">Read at Microsoft <span aria-hidden="true">↗</span></a></div></article>)}</div>}
+    <div className="pulse-footer"><span>{checkedLabel ? `Feed checked ${checkedLabel}` : 'Stories link directly to Microsoft-published pages.'} · Results come from connected public feeds and refresh periodically.</span><button className="button-secondary" onClick={loadUpdates}>Refresh updates</button></div><div className="pulse-sources"><strong>Official feeds</strong><a href="https://www.microsoft.com/en-us/microsoft-365/blog/" target="_blank" rel="noreferrer">Microsoft 365 Blog</a><a href="https://blogs.windows.com/" target="_blank" rel="noreferrer">Windows Blog</a><a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" rel="noreferrer">Microsoft Security Blog</a></div>
+  </section>
+}
+
+function FeedbackSection() {
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+  const [message, setMessage] = useState('')
+  const [challenge, setChallenge] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState('')
+
+  async function requestCode(event) {
+    event.preventDefault()
+    setNotice('')
+    setBusy(true)
+    try {
+      const response = await fetch('/api/feedback-code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Could not send verification code.')
+      setChallenge(result.challenge)
+      setNotice('Check your work inbox for a verification code. It expires in 10 minutes.')
+    } catch (error) { setNotice(error.message) } finally { setBusy(false) }
+  }
+
+  async function submitFeedback(event) {
+    event.preventDefault()
+    setNotice('')
+    setBusy(true)
+    try {
+      const response = await fetch('/api/feedback-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, code, challenge, message }) })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Could not send feedback.')
+      setNotice('Thanks! Your feedback was sent to the MLTS team.')
+      setCode(''); setMessage(''); setChallenge('')
+    } catch (error) { setNotice(error.message) } finally { setBusy(false) }
+  }
+
+  return <section className="feedback-section" id="feedback"><div className="feedback-copy"><span className="eyebrow">Help shape the next update</span><h2>Feedback, but make it useful.</h2><p>Share an idea, report a confusing exercise, or suggest a product topic. We’ll verify your work email before sending it.</p><div className="feedback-recipients"><span>Goes to</span><strong>mohammed.ulhasan@concentrix.com</strong><strong>v-moulhasan@microsoft.com</strong></div></div><form className="feedback-form" onSubmit={challenge ? submitFeedback : requestCode}><label>Work email<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@concentrix.com or you@microsoft.com" required pattern="^[^\s@]+@(concentrix\.com|microsoft\.com)$" title="Use a @concentrix.com or @microsoft.com address." /></label>{challenge && <label>Email verification code<input inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="8-digit code" required /></label>}<label>Your feedback<textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="What should we improve?" required maxLength={3000} /></label>{challenge ? <button className="button-primary" disabled={busy || !code || !message}>{busy ? 'Sending…' : 'Verify & send feedback'} <span aria-hidden="true">→</span></button> : <button className="button-primary" disabled={busy}>{busy ? 'Sending code…' : 'Verify work email'} <span aria-hidden="true">→</span></button>}<p className="feedback-privacy">Only verified @concentrix.com and @microsoft.com mailboxes can submit. Your message is sent to the two MLTS feedback recipients above.</p>{notice && <p className="feedback-notice" role="status">{notice}</p>}</form></section>
 }
 
 function App() {
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
+  const brand = <><MicrosoftMark /><span><strong>MLTS Consumer Simulator</strong><small>Microsoft learning, made practical</small></span></>
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
-    return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveSimulator(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Practice mode</span></header><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section><section className="simulator-frame"><iframe title={simulator.title} src={simulator.url} /></section></main></div>
+    return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveSimulator(null)}>{brand}</button><span className="status-pill"><span className="status-dot" />Practice mode</span></header><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section><section className="simulator-frame"><iframe title={simulator.title} src={simulator.url} /></section></main></div>
+  }
+  if (activeGame) {
+    const Game = activeGame === 'typing' ? TypingSprint : activeGame === 'arcade' ? SkillArcade : ReplyRemix
+    return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}>{brand}</button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><Game onBack={() => setActiveGame(null)} /></main></div>
   }
 
-  if (activeGame === 'typing') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><TypingSprint onBack={() => setActiveGame(null)} /></main></div>
-  if (activeGame === 'reply') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><QuickChallenge onBack={() => setActiveGame(null)} /></main></div>
-  if (activeGame === 'triage') return <div className="app-shell"><header className="topbar"><button className="brand" onClick={() => setActiveGame(null)}><MicrosoftMark /><span><strong>MLTS</strong><small>Learn by doing</small></span></button><span className="status-pill"><span className="status-dot" />Quick play</span></header><main><TriageDash onBack={() => setActiveGame(null)} /></main></div>
-
-  const gameCards = [
-    { id: 'typing', icon: '⌨️', tag: '30-second game', title: 'Typing Sprint', text: 'Race the clock, build accuracy, and see your words per minute.' },
-    { id: 'triage', icon: '🚦', tag: '3 quick rounds', title: 'Ticket Triage Dash', text: 'Sort support situations by urgency and choose the best first move.' },
-    { id: 'reply', icon: '💌', tag: 'Customer care', title: 'Reply Remix', text: 'Pick the most helpful, human response to a customer situation.' },
-  ]
-  const tracks = [
+  const simulatorsList = [
     { id: 'customer', icon: '💬', tag: 'Talk it out', title: 'Customer Conversation Lab', text: 'Practice listening, empathy, and clear next steps in a realistic chat.' },
     { id: 'quiz', icon: '⚡', tag: 'Ask & learn', title: 'Knowledge Sprint', text: 'Explore consumer Microsoft products with your Copilot Studio quiz.' },
   ]
+  const games = [
+    { id: 'typing', icon: '⌨️', tag: '30-second game', title: 'Typing Sprint', text: 'Race the clock, build accuracy, and see your words per minute.' },
+    { id: 'arcade', icon: '🎮', tag: '4 mini games', title: 'MLTS Skill Arcade', text: 'Myth or Fact, Shortcut Showdown, Settings Sprint, and Error Code Detective.' },
+    { id: 'reply', icon: '💌', tag: 'Customer care', title: 'Reply Remix', text: 'Pick a helpful, human response to a customer situation.' },
+  ]
 
-  return <div className="app-shell"><header className="topbar"><a className="brand" href="#home"><MicrosoftMark /><span><strong>MLTS</strong><small>Microsoft learning, made practical</small></span></a><a className="topbar-note" href="#pulse">Pulse <span aria-hidden="true">↘</span></a></header><main id="home">
-    <section className="hero"><div className="hero-copy"><span className="eyebrow light">Your support skills arcade</span><h1>Learn the products.<br /><span>Win the conversation.</span></h1><p>Quick games and realistic practice for the Microsoft products customers use every day.</p><div className="hero-actions"><button className="button-primary" onClick={() => setActiveGame('typing')}>Play a quick game <span aria-hidden="true">→</span></button><span className="tiny-note">Short rounds · useful skills · zero pressure</span></div></div><div className="hero-sticker" aria-label="Three ways to practice"><span className="sticker-spark">✦</span><strong>Pick your<br />power-up</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Progress</div></div></section>
-    <section className="learning-section"><div className="section-heading"><div><span className="eyebrow">Choose your mode</span><h2>Practice with people skills</h2></div><p>Realistic conversations, no awkward role-play required.</p></div><div className="module-grid">{tracks.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start conversation' : 'Start knowledge sprint'} <span aria-hidden="true">→</span></button></article>)}</div></section>
-    <section className="games-section"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build speed, empathy, and good support instincts in short rounds.</p></div><div className="game-grid">{gameCards.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
+  return <div className="app-shell"><Header nav /><main id="home"><section className="hero"><div className="hero-copy"><span className="eyebrow light">Your support skills arcade</span><h1>Learn the products.<br /><span>Win the conversation.</span></h1><p>Quick games and realistic practice for the Microsoft products customers use every day.</p><div className="hero-actions"><button className="button-primary" onClick={() => setActiveGame('arcade')}>Enter the Skill Arcade <span aria-hidden="true">→</span></button><span className="tiny-note">Short rounds · useful skills · zero pressure</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Choose your<br />power-up</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Level up</div></div></section>
+    <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build speed, confidence, and good support instincts in short rounds.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
+    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">MLTS Consumer Simulator</span><h2>Practice with people skills</h2></div><p>Realistic conversations and product knowledge, at your pace.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start conversation' : 'Start knowledge sprint'} <span aria-hidden="true">→</span></button></article>)}</div></section>
     <MicrosoftPulse />
-    <footer><div><strong>MLTS</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
+    <FeedbackSection />
+    <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
   </main></div>
 }
 
