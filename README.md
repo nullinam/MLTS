@@ -1,16 +1,54 @@
-# React + Vite
+# Support Academy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite and React learning site with two Copilot Studio practice modules:
 
-Currently, two official plugins are available:
+- **Customer Conversation Lab** for support conversation practice
+- **Knowledge Sprint** for product knowledge checks
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Each module opens its Copilot Studio Web Chat inside an iframe.
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js and npm
+- A Copilot Studio agent published for Web Chat
 
-## Expanding the ESLint configuration
+## Run locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Open a terminal in the project folder.
+2. Install the project dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Start the Vite development server:
+
+   ```sh
+   npm run dev
+   ```
+
+4. Open the local address printed in the terminal.
+
+To create a production build, run:
+
+```sh
+npm run build
+```
+
+Vite writes the production files to `dist/`. The project’s `package.json` must include the usual `dev` and `build` scripts for these commands.
+
+## Update the Copilot Studio chat URLs
+
+The simulator definitions are in `src/App.jsx` in the `simulators` object. Update the `url` for the relevant module with that agent’s Web Chat embed URL from Copilot Studio. Both current URLs use the `/webchat` route.
+
+The site displays each URL in an iframe. The iframe’s size and placement are controlled by `src/index.css`; the chat interface itself is provided by Copilot Studio.
+
+## Main files
+
+- `src/App.jsx` — home page, module cards, and simulator iframe
+- `src/index.css` — colors, layout, responsive styles, and reduced-motion behavior
+- `vite.config.js` — Vite configuration with the React plugin and `/` base path
+
+## Deployment
+
+Build the site with `npm run build`, then deploy the generated `dist/` folder using your hosting provider’s Vite/static-site instructions. The Vite config uses `base: '/'`, which is appropriate when the app is hosted at the root of a domain. If it is hosted under a subpath, update `base` in `vite.config.js` to match that path and rebuild.
