@@ -17,7 +17,7 @@ const simulators = {
       'Turn product knowledge into customer-ready confidence with quick challenges.',
     icon: '✦',
     accent: 'purple',
-    url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_quiz2_ROm8X/webchat?__version__=2&enableFileAttachment=false&cliAgent=true',
+    url: 'https://copilotstudio.microsoft.com/environments/Default-b4c546a4-7dac-46a6-a7dd-ed822a11efd3/bots/crbac_betaquiz_2nN7-S/canvas?__version__=2&enableFileAttachment=false&cliAgent=true',
   },
 }
 
