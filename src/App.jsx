@@ -44,7 +44,7 @@ function App() {
           <button className="brand" onClick={() => setActiveSimulator(null)}>
             <MicrosoftMark />
             <span>
-              <strong>Support Academy</strong>
+              <strong>Microsoft Training Simulator</strong>
               <small>Learn with confidence</small>
             </span>
           </button>
@@ -83,7 +83,7 @@ function App() {
         <div className="brand">
           <MicrosoftMark />
           <span>
-            <strong>Support Academy</strong>
+            <strong>Microsoft Training Simulator</strong>
             <small>Learn with confidence</small>
           </span>
         </div>
