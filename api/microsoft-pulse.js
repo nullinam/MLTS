@@ -1,17 +1,18 @@
 const SOURCES = [
   {
+    name: 'Official Microsoft Blog',
+    feed: 'https://blogs.microsoft.com/feed/',
+  },
+  {
     name: 'Microsoft 365 Blog',
-    category: 'Microsoft 365',
     feed: 'https://www.microsoft.com/en-us/microsoft-365/blog/feed/',
   },
   {
     name: 'Windows Blog',
-    category: 'Windows',
     feed: 'https://blogs.windows.com/feed/',
   },
   {
     name: 'Microsoft Security Blog',
-    category: 'Security',
     feed: 'https://www.microsoft.com/en-us/security/blog/feed/',
   },
 ]
@@ -59,6 +60,14 @@ function isOfficialUrl(value) {
   }
 }
 
+const consumerTopics = /\b(windows 11|microsoft 365|m365(?: personal| family| basic| premium)?|word|excel|powerpoint|outlook|onenote|onedrive|microsoft defender|microsoft editor|microsoft teams|clipchamp|designer|copilot|microsoft edge|surface|xbox|family safety)\b/i
+const orgTopics = /\b(enterprise|business|admin center|sharepoint admin|tenant|intune|endpoint manager|microsoft 365 admin|azure|dynamics 365|power platform|developer|devops|commercial|workloads)\b/i
+
+function classifyChannel(title, summary) {
+  const text = `${title} ${summary}`
+  return consumerTopics.test(text) && !orgTopics.test(text) ? 'Consumer' : 'Other Microsoft'
+}
+
 function parseFeed(xml, source) {
   const blocks = [...xml.matchAll(/<(item|entry)\b[^>]*>([\s\S]*?)<\/\1>/gi)]
   return blocks.map(([, , block]) => {
@@ -69,7 +78,7 @@ function parseFeed(xml, source) {
     const rawSummary = field(block, 'description') || field(block, 'summary') || field(block, 'content:encoded') || field(block, 'content')
     const summary = plainText(rawSummary).slice(0, 420)
     if (!title || !isOfficialUrl(link) || !Number.isFinite(date.getTime())) return null
-    return { title, url: link, date: date.toISOString(), summary, source: source.name, category: source.category }
+    return { title, url: link, date: date.toISOString(), summary, source: source.name, channel: classifyChannel(title, summary) }
   }).filter(Boolean)
 }
 
@@ -79,7 +88,7 @@ export default async function handler(request, response) {
     return response.status(405).json({ error: 'Method not allowed' })
   }
 
-  response.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=3600')
+  response.setHeader('Cache-Control', 'no-store')
   const results = await Promise.all(SOURCES.map(async (source) => {
     try {
       const result = await fetch(source.feed, {
@@ -99,7 +108,7 @@ export default async function handler(request, response) {
     if (seen.has(item.url)) return false
     seen.add(item.url)
     return true
-  }).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 30)
+  }).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 60)
 
   return response.status(200).json({
     checkedAt: new Date().toISOString(),
