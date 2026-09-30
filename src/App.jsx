@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const simulators = {
   customer: {
@@ -277,6 +277,54 @@ function SkillArcade({ onBack }) {
   return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Four mini games · One arcade</span><h1>MLTS Skill Arcade</h1><p>Questions, answer order, and the next mode shuffle as you play.</p></div><div className="arcade-modes" role="tablist" aria-label="Choose a mini game">{modeOrder.map((item) => <button key={item.id} role="tab" aria-selected={modeId === item.id} className={modeId === item.id ? 'active' : ''} onClick={() => changeMode(item.id)}><span>{item.icon}</span>{item.title}</button>)}</div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>{mode.icon} {mode.title}</span><span>Skill points {score}</span></div><h2>{question.prompt}</h2><div className="answer-options">{question.options.map((option, index) => <button key={option} className={choice !== null && index === question.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === question.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === question.answer ? 'Nice one!' : 'Here’s the answer.'}</strong><span>{question.explanation}{question.source && <> <a href={question.source} target="_blank" rel="noreferrer">Check Microsoft’s guide ↗</a></>}</span></div>}<button className="button-primary next-button" onClick={nextMode} disabled={choice === null}>Surprise me <span aria-hidden="true">→</span></button></section></div>
 }
 
+function MicrosoftChangeRadar() {
+  const [updates, setUpdates] = useState([])
+  const [sources, setSources] = useState([])
+  const [status, setStatus] = useState('loading')
+  const [checkedAt, setCheckedAt] = useState(null)
+  const [filter, setFilter] = useState('Consumer')
+  const trackRef = useRef(null)
+  const feedUrl = import.meta.env.VITE_PULSE_API_URL || '/api/microsoft-pulse'
+
+  async function refresh(force = false) {
+    setStatus('loading')
+    try {
+      const refreshParam = force ? `${feedUrl.includes('?') ? '&' : '?'}refresh=${Date.now()}` : ''
+      const response = await fetch(`${feedUrl}${refreshParam}`, { cache: 'no-store' })
+      if (!response.ok) throw new Error('Feed request failed')
+      const payload = await response.json()
+      setUpdates(Array.isArray(payload.updates) ? payload.updates : [])
+      setSources(Array.isArray(payload.sources) ? payload.sources : [])
+      setCheckedAt(payload.checkedAt || new Date().toISOString())
+      setStatus(payload.updates?.length ? 'ready' : 'empty')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  useEffect(() => {
+    refresh()
+    const timer = window.setInterval(refresh, 180000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const filtered = updates.filter((item) => item.channel === filter).slice(0, 30)
+  const checkedLabel = checkedAt ? new Date(checkedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : ''
+  function scrollTrack(direction) { trackRef.current?.scrollBy({ left: direction * trackRef.current.clientWidth * 0.82, behavior: 'smooth' }) }
+
+  return <section className="change-radar" aria-labelledby="change-radar-title">
+    <div className="change-radar-heading"><div><span className="eyebrow">Official Microsoft sources · trainer-ready</span><h2 id="change-radar-title">Microsoft Change Radar</h2><p>Latest updates, who they affect, and what support teams should know.</p></div><div className="change-radar-status"><span className={`live-dot ${status}`} />{status === 'ready' ? `${sources.filter((source) => source.ok).length}/${sources.length} feeds · checked ${checkedLabel}` : status === 'error' ? 'Feed unavailable' : status === 'empty' ? 'No recent updates found' : 'Checking Microsoft feeds'}</div></div>
+    <div className="change-radar-controls"><div className="change-radar-tabs" role="tablist" aria-label="Filter Microsoft updates">{['Consumer', 'Other Microsoft'].map((channel) => <button key={channel} role="tab" aria-selected={filter === channel} className={filter === channel ? 'active' : ''} onClick={() => setFilter(channel)}>{channel}</button>)}</div><div className="change-radar-scroll"><span>Scroll updates</span><button aria-label="Scroll cards left" onClick={() => scrollTrack(-1)}>←</button><button aria-label="Scroll cards right" onClick={() => scrollTrack(1)}>→</button></div></div>
+    {status === 'loading' && <div className="change-radar-message" role="status">Checking official Microsoft feeds…</div>}
+    {status === 'error' && <div className="change-radar-message" role="status"><strong>Couldn’t load the live updates.</strong><span>Try again, or open an official Microsoft source below.</span><button className="button-secondary" onClick={refresh}>Try again</button></div>}
+    {status === 'empty' && <div className="change-radar-message" role="status">No recent updates were returned by the connected official feeds. Use the source links below or check again shortly.</div>}
+    {status === 'ready' && filtered.length === 0 && <div className="change-radar-message" role="status">No updates are available in this channel right now.</div>}
+    {status === 'ready' && filtered.length > 0 && <div className="change-radar-track" ref={trackRef} aria-label={`${filter} Microsoft update cards`}>{filtered.map((item) => <article className="change-card" key={item.url}><div className="change-card-meta"><span>{item.channel}</span><time dateTime={item.date}>{new Date(item.date).toLocaleDateString(undefined, { dateStyle: 'medium' })}</time></div><h3>{item.title}</h3><p className="change-summary">{item.summary || 'Open the Microsoft article for the complete update.'}</p><div className="change-card-actions"><span>Official · {item.source}</span><a href={item.url} target="_blank" rel="noreferrer">Read Microsoft source ↗</a></div></article>)}</div>}
+    <div className="change-radar-footer"><span>Cards link to Microsoft-published pages. Feed timing depends on when Microsoft publishes each update.</span><button className="button-secondary" onClick={() => refresh(true)} disabled={status === 'loading'}>{status === 'loading' ? 'Checking…' : '↻ Refresh updates'}</button></div>
+    <div className="change-radar-sources"><strong>Official sources</strong><a href="https://blogs.windows.com/windowsexperience/" target="_blank" rel="noreferrer">Windows Experience Blog</a><a href="https://www.microsoft.com/en-us/microsoft-365/blog/" target="_blank" rel="noreferrer">Microsoft 365 Blog</a><a href="https://blogs.microsoft.com/" target="_blank" rel="noreferrer">Official Microsoft Blog</a><a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" rel="noreferrer">Microsoft Security Blog</a></div>
+  </section>
+}
+
 function App() {
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
@@ -335,15 +383,7 @@ function App() {
   return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero" onMouseEnter={() => setSpotlightPaused(true)} onMouseLeave={() => setSpotlightPaused(false)} onFocusCapture={() => setSpotlightPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSpotlightPaused(false) }}><div className="hero-copy" key={spotlightIndex}><span className="eyebrow light">{spotlight.eyebrow}</span><h1>{spotlight.title}</h1><p>{spotlight.text}</p><div className="hero-actions"><button className="button-primary" onClick={spotlight.action}>{spotlight.label} <span aria-hidden="true">→</span></button><span className="tiny-note">MLTS Consumer Simulator · Practice at your pace</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Explore the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div><div className="spotlight-dots"><span>{spotlightIndex + 1} / {spotlights.length}</span>{spotlights.map((item, index) => <button key={item.title} aria-label={`Show ${item.title}`} aria-current={spotlightIndex === index ? 'true' : undefined} onClick={() => setSpotlightIndex(index)} />)}</div></div></section>
     <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build speed, confidence, and good support instincts in short rounds.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
     <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">MLTS Consumer Simulator</span><h2>Practice with people skills</h2></div><p>Realistic conversations and product knowledge, at your pace.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
-    <section className="change-radar" aria-labelledby="change-radar-title">
-      <div className="change-radar-heading"><div><span className="eyebrow">Official Microsoft sources · trainer-ready</span><h2 id="change-radar-title">Microsoft Change Radar</h2><p>What changed, who it affects, and how to turn it into a useful support conversation.</p></div><span className="source-stamp"><span aria-hidden="true">●</span> Microsoft only</span></div>
-      <div className="change-radar-track" aria-label="Microsoft product update cards">
-        <article className="change-card"><div className="change-card-meta"><span>Windows 11</span><time dateTime="2026-09-29">29 Sep 2026</time></div><h3>Windows 11, version 26H2 is available</h3><p className="change-summary">Eligible 24H2 and 25H2 devices can get the update through a small enablement package. Availability is phased, so it may not appear for everyone at once.</p><div className="change-coaching"><strong>Support angle</strong><span>Confirm the current Windows version and eligibility before promising an update date.</span></div><div className="change-card-actions"><a href="https://blogs.windows.com/windowsexperience/2026/09/29/how-to-get-windows-11-2026-update/" target="_blank" rel="noreferrer">Read Microsoft source ↗</a><button onClick={() => setActiveSimulator('quiz')}>Practice the explanation <span aria-hidden="true">→</span></button></div></article>
-        <article className="change-card"><div className="change-card-meta"><span>Copilot</span><time dateTime="2026-09-25">25 Sep 2026</time></div><h3>New Copilot experiences are being introduced</h3><p className="change-summary">Microsoft announced Home, Code, and Autopilot capabilities. Home and Code are starting through the Frontier program; Autopilot is expanding to private preview.</p><div className="change-coaching"><strong>Support angle</strong><span>Separate an announcement or preview from a feature that is generally available to every customer.</span></div><div className="change-card-actions"><a href="https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/" target="_blank" rel="noreferrer">Read Microsoft source ↗</a><button onClick={() => setActiveGame('reply')}>Practice the response <span aria-hidden="true">→</span></button></div></article>
-        <article className="change-card"><div className="change-card-meta"><span>Microsoft Family</span><time dateTime="2026-09-08">8 Sep 2026</time></div><h3>Microsoft Family updates focus on clearer controls</h3><p className="change-summary">Microsoft described faster parental approvals, restored visibility in activity reporting, and more control for adults managing a family group.</p><div className="change-coaching"><strong>Support angle</strong><span>Ask which family account and device are involved, then verify what the customer can see before guiding them.</span></div><div className="change-card-actions"><a href="https://blogs.windows.com/windowsexperience/2026/09/08/listening-to-families-improving-microsoft-family/" target="_blank" rel="noreferrer">Read Microsoft source ↗</a><button onClick={() => setActiveGame('reply')}>Practice the response <span aria-hidden="true">→</span></button></div></article>
-      </div>
-      <p className="change-radar-note">Curated cards link to Microsoft-published articles. Updates are added manually; this section does not claim to be a live feed.</p>
-    </section>
+    <MicrosoftChangeRadar />
     <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
   </main></div>
 }

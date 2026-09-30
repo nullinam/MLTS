@@ -341,3 +341,32 @@ html[data-theme="light"] .change-card-actions button:hover { background: #dbe6ee
 html[data-theme="light"] .change-card-actions a { color: #3e607d; }
 @media (max-width: 700px) { .change-radar-heading { flex-direction: column; }.change-radar-track { grid-auto-columns: 88%; }.change-card { min-height: 320px; } }
 @media (prefers-reduced-motion: reduce) { .change-card { animation: none; transition: none; } }
+.change-radar-status { flex: 0 0 auto; padding: 7px 10px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); color: var(--ink); font-size: .66rem; font-weight: 750; }
+.change-radar-status .live-dot { width: 7px; height: 7px; flex: 0 0 auto; }.change-radar-status .live-dot.error, .change-radar-status .live-dot.loading { background: #e7a23c; }
+.change-radar-controls { margin: 14px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.change-radar-tabs, .change-radar-scroll { display: flex; align-items: center; gap: 7px; }
+.change-radar-tabs button { min-height: 32px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); color: var(--muted); font-size: .7rem; font-weight: 750; cursor: pointer; }
+.change-radar-tabs button.active { border-color: #8DA9C4; background: rgba(141,169,196,.2); color: var(--ink); }
+.change-radar-scroll { color: var(--muted); font-size: .67rem; }
+.change-radar-scroll button { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; background: var(--panel-2); color: var(--ink); cursor: pointer; transition: background .16s ease,transform .16s ease; }
+.change-radar-scroll button:hover { transform: translateY(-1px); background: rgba(141,169,196,.18); }
+.change-radar-track { grid-auto-columns: minmax(295px, 34%); }
+.change-card { min-height: 265px; }
+.change-card-actions { margin-top: auto; padding-top: 10px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); }
+.change-card-actions > span { color: var(--muted); font-size: .64rem; }
+.change-radar-message { min-height: 96px; padding: 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; border: 1px dashed var(--line); border-radius: 11px; background: var(--panel-2); color: var(--muted); font-size: .78rem; }
+.change-radar-message strong { color: var(--ink); }
+.change-radar-message .button-secondary { min-height: 35px; font-size: .7rem; }
+.change-radar-footer { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .67rem; }
+.change-radar-footer .button-secondary { flex: 0 0 auto; min-height: 36px; padding: 0 11px; font-size: .7rem; }
+.change-radar-sources { margin-top: 13px; padding-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; border-top: 1px solid var(--line); }
+.change-radar-sources strong { color: var(--ink); font-size: .67rem; }
+.change-radar-sources a { color: #8DA9C4; font-size: .68rem; font-weight: 750; text-decoration: none; }
+.change-radar-sources a:hover { text-decoration: underline; }
+html[data-theme="light"] .change-radar-status, html[data-theme="light"] .change-radar-tabs button, html[data-theme="light"] .change-radar-scroll button { border-color: #cbd6df; background: #fff; color: #334858; }
+html[data-theme="light"] .change-radar-tabs button.active { background: #e3ebf2; color: #1e2d3a; }
+html[data-theme="light"] .change-radar-message { border-color: #c9d5df; background: #fff; color: #536271; }
+html[data-theme="light"] .change-radar-message strong, html[data-theme="light"] .change-radar-sources strong { color: #1e2d3a; }
+html[data-theme="light"] .change-radar-sources a { color: #3e607d; }
+@media (max-width: 700px) { .change-radar-heading { flex-direction: column; }.change-radar-status { align-self: flex-start; }.change-radar-controls { align-items: flex-start; flex-direction: column; }.change-radar-scroll { align-self: flex-end; }.change-radar-track { grid-auto-columns: 88%; }.change-radar-footer { align-items: flex-start; flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { .change-radar-scroll button { transition: none; } }
