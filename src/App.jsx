@@ -473,7 +473,7 @@ function FixOfTheDay() {
   }, [])
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
-    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix in Focus</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
+    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix of The Day</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
     <article className="fix-card" key={`${card.id}-${slot.changesAt}`} style={{ '--card-accent': accent }}>
       <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div></div>
       <div className="fix-card-title-row"><div><span className="fix-card-kicker">FIELD GUIDE · {card.product.toUpperCase()}</span><h3>{card.subject}</h3></div><span className="fix-read-time">◷ {card.minutes} min read</span></div>
