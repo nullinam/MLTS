@@ -411,12 +411,46 @@ const fixCards = fixTopics.map(([product, subject, keyTerm, objective, knowledge
   id: index + 1, product, subject, keyTerm, objective, knowledge, knowThis, tip, scenario, minutes,
 }))
 
-function dailyFixIndex() {
-  const cycleStart = Date.UTC(2026, 8, 30)
-  const today = new Date()
-  const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-  const elapsedDays = Math.floor((todayUtc - cycleStart) / 86400000)
-  return ((elapsedDays % fixCards.length) + fixCards.length) % fixCards.length
+const FIX_CARD_EPOCH = Date.UTC(2026, 8, 30)
+const FIX_CARD_SEED = 0x4d4c5453
+
+function seededRandom(seed) {
+  let value = seed >>> 0
+  return () => {
+    value += 0x6D2B79F5
+    let mixed = value
+    mixed = Math.imul(mixed ^ (mixed >>> 15), mixed | 1)
+    mixed ^= mixed + Math.imul(mixed ^ (mixed >>> 7), mixed | 61)
+    return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function fixCardOrder(cycle) {
+  const random = seededRandom((FIX_CARD_SEED + Math.imul(cycle + 1, 0x9E3779B1)) >>> 0)
+  const order = fixCards.map((_, index) => index)
+  for (let index = order.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1))
+    ;[order[index], order[swapIndex]] = [order[swapIndex], order[index]]
+  }
+  return order
+}
+
+function sharedFixSlotAt(timestamp = Date.now()) {
+  const elapsed = Math.max(0, Math.floor((timestamp - FIX_CARD_EPOCH) / 1000))
+  let interval = 0
+  let elapsedInSchedule = 0
+  let duration = 300 + Math.floor(seededRandom((FIX_CARD_SEED + Math.imul(interval + 1, 0x85EBCA6B)) >>> 0)() * 301)
+  while (elapsedInSchedule + duration <= elapsed) {
+    elapsedInSchedule += duration
+    interval += 1
+    duration = 300 + Math.floor(seededRandom((FIX_CARD_SEED + Math.imul(interval + 1, 0x85EBCA6B)) >>> 0)() * 301)
+  }
+  const cycle = Math.floor(interval / fixCards.length)
+  const position = interval % fixCards.length
+  return {
+    index: fixCardOrder(cycle)[position],
+    changesAt: FIX_CARD_EPOCH + (elapsedInSchedule + duration) * 1000,
+  }
 }
 
 function ProductGlyph({ product }) {
@@ -427,22 +461,21 @@ function ProductGlyph({ product }) {
 }
 
 function FixOfTheDay() {
-  const [dailyIndex, setDailyIndex] = useState(dailyFixIndex)
-  const [cardIndex, setCardIndex] = useState(dailyFixIndex)
-  const card = fixCards[cardIndex]
-  const isToday = cardIndex === dailyIndex
+  const [slot, setSlot] = useState(() => sharedFixSlotAt())
+  const card = fixCards[slot.index]
   const accent = ({ Windows: '#1689e8', Word: '#185abd', Excel: '#107c41', PowerPoint: '#c43e1c', Outlook: '#0078d4', OneDrive: '#2b9bea', 'Microsoft 365': '#8764d8', 'Microsoft Defender': '#4b9b73', 'Microsoft Teams': '#6264a7', 'Microsoft account': '#1689e8', 'Microsoft billing': '#c9822b', 'Microsoft Store': '#43a77a', 'Family Safety': '#b76eac', 'Business licensing': '#687f98', 'Remote Desktop Services': '#7d70cb', Sales: '#29998d', Support: '#597a99' })[card.product] || '#6ba8e8'
   useEffect(() => {
-    const timer = window.setInterval(() => setDailyIndex(dailyFixIndex()), 60000)
+    const timer = window.setInterval(() => {
+      const timestamp = Date.now()
+      setSlot((current) => timestamp >= current.changesAt ? sharedFixSlotAt(timestamp) : current)
+    }, 1000)
     return () => window.clearInterval(timer)
   }, [])
-  useEffect(() => setCardIndex(dailyIndex), [dailyIndex])
-  function moveCard(direction) { setCardIndex((current) => (current + direction + fixCards.length) % fixCards.length) }
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
-    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · every day</span><h2 id="fix-deck-title">Fix of the Day</h2><p>A collectible-style learning card for real support conversations.</p></div><div className="fix-cycle-badge"><span>DAILY CARD</span><strong>{String(card.id).padStart(2, '0')} <small>/ {fixCards.length}</small></strong></div></div>
-    <article className="fix-card" key={card.id} style={{ '--card-accent': accent }}>
-      <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div><span className="fix-day-count">DAY {String(card.id).padStart(2, '0')} <i>✦</i></span></div>
+    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix in Focus</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
+    <article className="fix-card" key={`${card.id}-${slot.changesAt}`} style={{ '--card-accent': accent }}>
+      <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div></div>
       <div className="fix-card-title-row"><div><span className="fix-card-kicker">FIELD GUIDE · {card.product.toUpperCase()}</span><h3>{card.subject}</h3></div><span className="fix-read-time">◷ {card.minutes} min read</span></div>
       <div className="fix-learning-objective"><span>LEARNING OBJECTIVE</span><p>{card.objective}</p></div>
       <div className="fix-knowledge-grid">
@@ -452,9 +485,8 @@ function FixOfTheDay() {
         <section><span>PRO TIP</span><p>{card.tip}</p></section>
       </div>
       <div className="fix-scenario"><span>🎧 CUSTOMER SCENARIO</span><p>“{card.scenario}”</p></div>
-      <div className="fix-card-bottom"><span>{isToday ? 'Today’s shared card' : 'Browse the learning deck'} · Card {card.id} of {fixCards.length}</span><div><button type="button" onClick={() => moveCard(-1)} aria-label="Previous learning card">←</button><button type="button" onClick={() => setCardIndex(dailyIndex)} disabled={isToday}>Today</button><button type="button" onClick={() => moveCard(1)} aria-label="Next learning card">→</button></div></div>
     </article>
-    <p className="fix-deck-note">Everyone sees the same card each day. The deck advances daily and starts a fresh cycle after the final card.</p>
+    <p className="fix-deck-note">The card rotates automatically on a shared 5–10 minute schedule. The full deck reshuffles after each cycle.</p>
   </section>
 }
 
