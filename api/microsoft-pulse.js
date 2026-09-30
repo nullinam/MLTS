@@ -1,20 +1,8 @@
 const SOURCES = [
-  {
-    name: 'Official Microsoft Blog',
-    feed: 'https://blogs.microsoft.com/feed/',
-  },
-  {
-    name: 'Microsoft 365 Blog',
-    feed: 'https://www.microsoft.com/en-us/microsoft-365/blog/feed/',
-  },
-  {
-    name: 'Windows Blog',
-    feed: 'https://blogs.windows.com/feed/',
-  },
-  {
-    name: 'Microsoft Security Blog',
-    feed: 'https://www.microsoft.com/en-us/security/blog/feed/',
-  },
+  { name: 'Official Microsoft Blog', feed: 'https://blogs.microsoft.com/feed/' },
+  { name: 'Microsoft 365 Blog', feed: 'https://www.microsoft.com/en-us/microsoft-365/blog/feed/' },
+  { name: 'Windows Blog', feed: 'https://blogs.windows.com/feed/' },
+  { name: 'Microsoft Security Blog', feed: 'https://www.microsoft.com/en-us/security/blog/feed/' },
 ]
 
 function decodeXml(value = '') {
@@ -54,7 +42,10 @@ function isOfficialUrl(value) {
   try {
     const url = new URL(value)
     const host = url.hostname.toLowerCase()
-    return url.protocol === 'https:' && (host === 'microsoft.com' || host.endsWith('.microsoft.com') || host === 'windows.com' || host.endsWith('.windows.com'))
+    return url.protocol === 'https:' && (
+      host === 'microsoft.com' || host.endsWith('.microsoft.com') ||
+      host === 'windows.com' || host.endsWith('.windows.com')
+    )
   } catch {
     return false
   }
@@ -82,13 +73,7 @@ function parseFeed(xml, source) {
   }).filter(Boolean)
 }
 
-export default async function handler(request, response) {
-  if (request.method !== 'GET') {
-    response.setHeader('Allow', 'GET')
-    return response.status(405).json({ error: 'Method not allowed' })
-  }
-
-  response.setHeader('Cache-Control', 'no-store')
+export async function onRequestGet() {
   const results = await Promise.all(SOURCES.map(async (source) => {
     try {
       const result = await fetch(source.feed, {
@@ -110,9 +95,9 @@ export default async function handler(request, response) {
     return true
   }).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 60)
 
-  return response.status(200).json({
+  return Response.json({
     checkedAt: new Date().toISOString(),
     updates,
     sources: results.map(({ source, ok }) => ({ source, ok })),
-  })
+  }, { headers: { 'Cache-Control': 'no-store' } })
 }
