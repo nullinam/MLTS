@@ -280,20 +280,11 @@ function IndiaDayBox() {
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
-      { name: 'Mohammed Inam Ul Hassan', initials: 'IH', accent: 'blue', style: 'short-hair' },
-      { name: 'Mohammed Yasir Hasan', initials: 'YH', accent: 'pink', style: 'wave-hair' },
-      { name: 'Ganaraj Nayak', initials: 'GN', accent: 'green', style: 'beard' },
+      { name: 'Mohammed Inam Ul Hassan', initials: 'IH', accent: 'red', photo: '/team-inam.png' },
+      { name: 'Mohammed Yasir Hasan', initials: 'YH', accent: 'yellow', photo: '/team-yasir.png' },
+      { name: 'Ganaraj Nayak', initials: 'GN', accent: 'grey', photo: '/team-ganaraj.png' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>Three engineers helping Consumer support teams solve the tough cases.</p></div><section className="team-context"><MicrosoftMark /><div><strong>RFO Technical Tier 3</strong><span>Global Escalation Engineers for Consumer</span></div><span className="team-context-tag">MICROSOFT</span></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className={`team-member-card member-${member.accent}`} style={{ '--member-order': index }} key={member.name}><div className="team-portrait"><span className="portrait-orbit orbit-one" /><span className="portrait-orbit orbit-two" /><svg viewBox="0 0 180 160" role="img" aria-label={`Illustrated avatar for ${member.name}`}>
-      <path className="portrait-shoulders" d="M29 153c5-30 27-46 61-46s56 16 61 46" />
-      <path className="portrait-neck" d="M75 99v18c5 8 25 8 30 0V99" />
-      <path className="portrait-face" d="M57 63c0-29 14-44 33-44s33 15 33 44v18c0 22-15 36-33 36S57 103 57 81z" />
-      {member.style === 'short-hair' && <path className="portrait-hair" d="M55 65c-4-32 10-52 35-52 24 0 38 18 35 48-8-8-12-19-14-27-13 13-31 20-56 20z" />}
-      {member.style === 'wave-hair' && <path className="portrait-hair" d="M56 65c-7-26 6-52 31-54 27-3 44 20 38 52-6-5-9-13-12-22-12 11-30 17-57 24z" />}
-      {member.style === 'beard' && <><path className="portrait-hair" d="M56 66c-5-30 8-51 34-51 26 0 39 20 34 51-6-6-10-16-12-25-15 14-31 19-56 25z" /><path className="portrait-beard" d="M59 82c8 8 18 9 31 8 12 1 23 0 31-8-2 29-13 43-31 43S61 111 59 82z" /></>}
-      <path className="portrait-ear" d="M58 69c-10-5-13 1-10 12 2 7 6 10 11 9m64-21c10-5 13 1 10 12-2 7-6 10-11 9" />
-      <path className="portrait-collar" d="m69 112 21 18 21-18" />
-    </svg><span className="team-initials">{member.initials}</span></div><div className="team-member-copy"><span className="team-member-label">TEAM MEMBER 0{index + 1}</span><h2>{member.name}</h2><p>RFO Technical Tier 3</p><span className="team-member-org">Global Escalation Engineer · Consumer</span></div><span className="team-card-spark" aria-hidden="true">✦</span></article>)}</section><p className="team-footnote">Working together across global consumer escalations.</p></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>Three engineers helping Consumer support teams solve the tough cases.</p></div><section className="team-context"><MicrosoftMark /><div><strong>RFO Technical Tier 3</strong><span>Global Escalation Engineers for Consumer</span></div><span className="team-context-tag">MICROSOFT</span></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className={`team-member-card member-${member.accent} ${index === 0 ? 'team-member-featured' : ''}`} style={{ '--member-order': index }} key={member.name}><div className="team-portrait"><img src={member.photo} alt={`${member.name} profile portrait`} /><span className="team-initials">{member.initials}</span></div><div className="team-member-copy"><span className="team-member-label">{index === 0 ? 'FEATURED TEAMMATE' : `TEAM MEMBER 0${index + 1}`}</span><h2>{member.name}</h2><p>RFO Technical Tier 3</p><span className="team-member-org">Global Escalation Engineer · Consumer</span></div><span className="team-card-spark" aria-hidden="true">✦</span></article>)}</section><p className="team-footnote">Working together across global consumer escalations.</p></main>
   }
 
   const entries = [
