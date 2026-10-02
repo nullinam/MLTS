@@ -281,8 +281,8 @@ function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
       { name: 'Mohammed Inam Ul Hassan', initials: 'IH', accent: 'red', photo: '/team-inam.png' },
-      { name: 'Mohammed Yasir Hasan', initials: 'YH', accent: 'yellow', photo: '/team-yasir.png' },
-      { name: 'Ganaraj Nayak', initials: 'GN', accent: 'grey', photo: '/team-ganaraj.png' },
+      { name: 'Mohammed Yasir Hasan', initials: 'YH', accent: 'blue', photo: '/team-yasir.png' },
+      { name: 'Ganaraj Nayak', initials: 'GN', accent: 'green', photo: '/team-ganaraj.png' },
     ]
     return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>Three engineers helping Consumer support teams solve the tough cases.</p></div><section className="team-context"><MicrosoftMark /><div><strong>RFO Technical Tier 3</strong><span>Global Escalation Engineers for Consumer</span></div><span className="team-context-tag">MICROSOFT</span></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className={`team-member-card member-${member.accent}`} style={{ '--member-order': index }} key={member.name}><div className="team-portrait"><img src={member.photo} alt={`${member.name} profile portrait`} /><span className="team-initials">{member.initials}</span></div><div className="team-member-copy"><span className="team-member-label">Team Member {index + 1}</span><h2>{member.name}</h2><p>RFO Technical Tier 3</p><span className="team-member-org">Global Escalation Engineer · Consumer</span></div><span className="team-card-spark" aria-hidden="true">✦</span></article>)}</section><p className="team-footnote">Working together across global consumer escalations.</p></main>
   }
