@@ -1,54 +1,34 @@
-# Support Academy
+# MLTS Consumer Simulator
 
-A Vite and React learning site with two Copilot Studio practice modules:
+A browser-based Microsoft consumer support learning hub built with React and Vite. It combines Copilot Studio practice simulators with lightweight activities for typing, product knowledge, customer communication, and support fundamentals.
 
-- **Customer Conversation Lab** for support conversation practice
-- **Knowledge Sprint** for product knowledge checks
+## Features
 
-Each module opens its Copilot Studio Web Chat inside an iframe.
+- **Customer Chat Simulator** — Copilot Studio conversation practice for listening, clarifying customer needs, and giving clear next steps.
+- **Quiz Gauntlet** — a Copilot Studio quiz for exploring consumer Microsoft products and prompting product-knowledge recall.
+- **Typing Master** — a 90-second typing test. The timer starts on the first keystroke. Thirty varied passages are randomized, with live character highlighting, WPM, accuracy, and an animal skill badge.
+- **Skyfall** — an endless, colorful perspective-style parachute game. Steer with keyboard or touch controls, land on platforms, avoid wind gates and storms, and collect shields. It uses a canvas-based 3D-style perspective rather than a full 3D engine.
+- **Reply Remix** — 100+ randomized customer situations. Questions are shuffled without repeats until the question bank cycles.
+- **Fix for the Day** — a 69-card support learning deck covering Windows, Microsoft 365, accounts, billing, licensing, Remote Desktop Services, and sales topics. Cards rotate on a shared schedule every 5–10 minutes, reshuffle after each cycle, and have no manual navigation, visible countdown, or saved state. The cards are static learning content, not live Microsoft news, and do not redirect to external pages.
+- **India calendar** — a compact India date box that synchronizes its date from an internet time source, highlights public observances and Microsoft product milestones, and includes a Microsoft 50 Years badge. Festival dates may vary by region or moon sighting.
+- **Microsoft 50 Years theme** — a restrained anniversary-inspired theme, alongside light and dark modes. Light mode is the default.
+- **Website Manual** — explains the purpose of each learning feature.
+- **Meet the Team** — profile cards for Mohammed Inam Ul Hassan (red), Mohammed Yasir Hasan (blue), and Ganaraj Nayak (green). All are listed with RFO Technical Tier 3, Global Escalation Engineers for Consumer.
+- **Responsive and accessible presentation** — adapts to mobile screens, includes keyboard focus styles, and respects reduced-motion preferences.
+
+## Privacy and data
+
+Typing results, game scores, and the current Fix for the Day card are not saved. The learning activities run in the browser and do not require a database or a separate API service. The calendar needs an internet connection to synchronize its date and retrieve holiday data. Copilot Studio simulators load in embedded frames and are operated by their configured Copilot Studio agents.
 
 ## Requirements
 
 - Node.js and npm
-- A Copilot Studio agent published for Web Chat
+- Copilot Studio agents published for Web Chat
 
 ## Run locally
 
-1. Open a terminal in the project folder.
-2. Install the project dependencies:
-
-   ```sh
-   npm install
-   ```
-
-3. Start the Vite development server:
-
-   ```sh
-   npm run dev
-   ```
-
-4. Open the local address printed in the terminal.
-
-To create a production build, run:
+Install dependencies and start the Vite development server:
 
 ```sh
-npm run build
-```
-
-Vite writes the production files to `dist/`. The project’s `package.json` must include the usual `dev` and `build` scripts for these commands.
-
-## Update the Copilot Studio chat URLs
-
-The simulator definitions are in `src/App.jsx` in the `simulators` object. Update the `url` for the relevant module with that agent’s Web Chat embed URL from Copilot Studio. Both current URLs use the `/webchat` route.
-
-The site displays each URL in an iframe. The iframe’s size and placement are controlled by `src/index.css`; the chat interface itself is provided by Copilot Studio.
-
-## Main files
-
-- `src/App.jsx` — home page, module cards, and simulator iframe
-- `src/index.css` — colors, layout, responsive styles, and reduced-motion behavior
-- `vite.config.js` — Vite configuration with the React plugin and `/` base path
-
-## Deployment
-
-Build the site with `npm run build`, then deploy the generated `dist/` folder using your hosting provider’s Vite/static-site instructions. The Vite config uses `base: '/'`, which is appropriate when the app is hosted at the root of a domain. If it is hosted under a subpath, update `base` in `vite.config.js` to match that path and rebuild.
+npm install
+npm run dev
