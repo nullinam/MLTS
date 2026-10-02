@@ -266,19 +266,46 @@ function IndiaDayBox() {
               : 'festival'
     : milestone?.tone || 'quiet'
   const dateText = now ? new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(now)) : ''
-  let sakaDate = ''
-  if (now) {
-    try { sakaDate = new Intl.DateTimeFormat('en-IN-u-ca-indian', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(now)) } catch { sakaDate = '' }
-  }
 
   return <section className="india-day-box" data-vibe={eventTone} aria-label="India calendar and Microsoft milestones">
     <div className="india-date-face"><span className="india-date-label">TODAY · INDIA</span>{now ? <><strong>{new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit' }).format(new Date(now))}</strong><span>{new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', month: 'long', year: 'numeric' }).format(new Date(now))}</span></> : <strong className="india-date-loading">···</strong>}</div>
-    <div className="india-day-copy"><span className="eyebrow">{syncError ? 'Internet time unavailable' : 'India calendar · live sync'}</span><h2>{dateText || 'Syncing India time…'}</h2>{sakaDate && <p className="india-saka">Saka calendar · {sakaDate}</p>}
-      {syncError ? <button className="india-retry" onClick={() => setRetry((value) => value + 1)}>Retry sync</button> : eventName ? <div className="india-event"><span aria-hidden="true">✦</span><div><strong>{eventName}</strong><small>India observance</small></div></div> : milestone ? <div className="india-event"><span aria-hidden="true">✦</span><div><strong>{milestone.name}</strong><small>{milestone.product} milestone</small></div></div> : <p className="india-quiet">No featured holiday or Microsoft milestone today.</p>}
-      {eventName && milestone && <p className="india-milestone">Microsoft milestone · {milestone.name}</p>}
+    <div className="india-day-copy"><span className="eyebrow">{syncError ? 'India calendar · offline' : 'India · live calendar'}</span><h2>{syncError ? 'Date sync unavailable' : eventName || milestone?.name || dateText || 'Syncing India time…'}</h2>
+      {syncError && <button className="india-retry" onClick={() => setRetry((value) => value + 1)}>Retry sync</button>}
+      {eventName && milestone && <p className="india-milestone">{milestone.name}</p>}
     </div>
-    <div className="india-sync-status"><span className={clock && !syncError ? 'online' : ''} />{clock && !syncError ? 'Internet synced' : syncError ? 'Not synced' : 'Syncing'}</div>
+    <div className="india-anniversary"><span aria-hidden="true">✦</span><strong>Microsoft</strong><small>50 Years</small></div>
   </section>
+}
+
+function InfoPage({ kind, onBack }) {
+  if (kind === 'team') {
+    const members = [
+      { name: 'Mohammed Inam Ul Hassan', initials: 'IH', accent: 'blue', style: 'short-hair' },
+      { name: 'Mohammed Yasir Hasan', initials: 'YH', accent: 'pink', style: 'wave-hair' },
+      { name: 'Ganaraj Nayak', initials: 'GN', accent: 'green', style: 'beard' },
+    ]
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>Three engineers helping Consumer support teams solve the tough cases.</p></div><section className="team-context"><MicrosoftMark /><div><strong>RFO Technical Tier 3</strong><span>Global Escalation Engineers for Consumer</span></div><span className="team-context-tag">MICROSOFT</span></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className={`team-member-card member-${member.accent}`} style={{ '--member-order': index }} key={member.name}><div className="team-portrait"><span className="portrait-orbit orbit-one" /><span className="portrait-orbit orbit-two" /><svg viewBox="0 0 180 160" role="img" aria-label={`Illustrated avatar for ${member.name}`}>
+      <path className="portrait-shoulders" d="M29 153c5-30 27-46 61-46s56 16 61 46" />
+      <path className="portrait-neck" d="M75 99v18c5 8 25 8 30 0V99" />
+      <path className="portrait-face" d="M57 63c0-29 14-44 33-44s33 15 33 44v18c0 22-15 36-33 36S57 103 57 81z" />
+      {member.style === 'short-hair' && <path className="portrait-hair" d="M55 65c-4-32 10-52 35-52 24 0 38 18 35 48-8-8-12-19-14-27-13 13-31 20-56 20z" />}
+      {member.style === 'wave-hair' && <path className="portrait-hair" d="M56 65c-7-26 6-52 31-54 27-3 44 20 38 52-6-5-9-13-12-22-12 11-30 17-57 24z" />}
+      {member.style === 'beard' && <><path className="portrait-hair" d="M56 66c-5-30 8-51 34-51 26 0 39 20 34 51-6-6-10-16-12-25-15 14-31 19-56 25z" /><path className="portrait-beard" d="M59 82c8 8 18 9 31 8 12 1 23 0 31-8-2 29-13 43-31 43S61 111 59 82z" /></>}
+      <path className="portrait-ear" d="M58 69c-10-5-13 1-10 12 2 7 6 10 11 9m64-21c10-5 13 1 10 12-2 7-6 10-11 9" />
+      <path className="portrait-collar" d="m69 112 21 18 21-18" />
+    </svg><span className="team-initials">{member.initials}</span></div><div className="team-member-copy"><span className="team-member-label">TEAM MEMBER 0{index + 1}</span><h2>{member.name}</h2><p>RFO Technical Tier 3</p><span className="team-member-org">Global Escalation Engineer · Consumer</span></div><span className="team-card-spark" aria-hidden="true">✦</span></article>)}</section><p className="team-footnote">Working together across global consumer escalations.</p></main>
+  }
+
+  const entries = [
+    ['Microsoft 50 Years', 'Microsoft began in 1975 and celebrated 50 years in 2025. This theme highlights the company’s history and the products people use today.'],
+    ['Typing Master', 'Build typing speed and accuracy with a fresh passage and a timed practice run.'],
+    ['Fix for the Day', 'Learn one support concept at a time through a short, collectible-style scenario card.'],
+    ['Skyfall', 'A quick game break that adds movement, focus, and a little challenge to the learning hub.'],
+    ['Reply Remix', 'Practice choosing clear, empathetic replies and useful next steps for customer situations.'],
+    ['Customer Chat Simulator', 'Use a Copilot Studio conversation to practise listening, clarifying, and guiding a customer. It is a training simulation, not a live support channel.'],
+    ['Quiz Gauntlet', 'Explore consumer Microsoft products through quiz prompts that encourage recall and discussion.'],
+  ]
+  return <main className="info-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">A quick guide</span><h1>Website Manual</h1><p>What each feature is for and how to use it.</p></div><section className="manual-grid">{entries.map(([title, description], index) => <article className="manual-card" key={title}><span>{String(index + 1).padStart(2, '0')}</span><div><h2>{title}</h2><p>{description}</p></div></article>)}</section></main>
 }
 
 function TypingSprint({ onBack }) {
@@ -706,7 +733,7 @@ function FixOfTheDay() {
   }, [])
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
-    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix in Focus</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
+    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix for the Day</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
     <article className="fix-card" key={`${card.id}-${slot.changesAt}`} style={{ '--card-accent': accent }}>
       <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div></div>
       <div className="fix-card-title-row"><div><span className="fix-card-kicker">FIELD GUIDE · {card.product.toUpperCase()}</span><h3>{card.subject}</h3></div><span className="fix-read-time">◷ {card.minutes} min read</span></div>
@@ -726,6 +753,7 @@ function FixOfTheDay() {
 function App() {
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
+  const [infoPage, setInfoPage] = useState(null)
   const [theme, setTheme] = useState(() => window.localStorage.getItem('mlts-theme-v2') || 'light')
   const [spotlightIndex, setSpotlightIndex] = useState(0)
   const [spotlightPaused, setSpotlightPaused] = useState(false)
@@ -754,10 +782,12 @@ function App() {
   ]
   const spotlight = spotlights[spotlightIndex]
   useEffect(() => {
-    if (spotlightPaused || activeGame || activeSimulator) return undefined
+    if (spotlightPaused || activeGame || activeSimulator || infoPage) return undefined
     const timer = window.setInterval(() => setSpotlightIndex((index) => (index + 1) % spotlights.length), 5200)
     return () => window.clearInterval(timer)
-  }, [spotlightPaused, activeGame, activeSimulator])
+  }, [spotlightPaused, activeGame, activeSimulator, infoPage])
+
+  if (infoPage) return <div className="app-shell"><Header onHome={() => setInfoPage(null)} theme={theme} onToggleTheme={toggleTheme} /><InfoPage kind={infoPage} onBack={() => setInfoPage(null)} /><footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div></footer></div>
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
@@ -782,7 +812,7 @@ function App() {
     <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build a skill in a few minutes.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
     <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">MLTS Consumer Simulator</span><h2>Practice with people skills</h2></div><p>Realistic conversations and product knowledge, at your pace.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
     <FixOfTheDay />
-    <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><span>Practice at your pace.</span></footer>
+    <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><nav className="footer-links" aria-label="More information"><button onClick={() => setInfoPage('manual')}>Manual</button><button onClick={() => setInfoPage('team')}>Meet the Team</button></nav><span>Practice at your pace.</span></footer>
   </main></div>
 }
 

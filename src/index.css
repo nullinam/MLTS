@@ -416,3 +416,81 @@ html[data-theme="anniversary"] .theme-toggle > span { color: #e4bd76; }
 html[data-theme="anniversary"] .india-day-box { --india-accent: #e4bd76; }
 html[data-theme="anniversary"] .game-card, html[data-theme="anniversary"] .module-card, html[data-theme="anniversary"] .activity-panel { border-color: #413b39; background: linear-gradient(150deg,#1c1b22,#15151b); }
 @media (max-width: 650px) { .india-day-box { grid-template-columns: 84px minmax(0,1fr); gap: 12px; padding: 13px; }.india-date-face { min-height: 104px; padding: 9px 5px; }.india-date-face strong { font-size: 2rem; }.india-sync-status { grid-column: 2; } }
+
+/* Compact calendar and footer information pages. */
+.india-day-box { width: min(100%, 430px); min-height: 0; margin: 8px 0 16px auto; padding: 9px 11px; grid-template-columns: 54px minmax(0,1fr) 74px; gap: 11px; border-radius: 12px; box-shadow: 0 7px 20px rgba(0,0,0,.13); }
+.india-day-box::after { right: 22%; top: -112px; width: 190px; height: 190px; opacity: .55; }
+.india-date-face { min-height: 54px; padding: 5px 3px; border-radius: 9px; }
+.india-date-label { font-size: .39rem; letter-spacing: .08em; }
+.india-date-face strong { margin: 0; font-size: 1.35rem; }
+.india-date-face > span:last-child { font-size: .51rem; }
+.india-day-copy .eyebrow { font-size: .48rem; }
+.india-day-copy h2 { margin-top: 2px; font-size: .78rem; line-height: 1.2; }
+.india-retry { margin-top: 3px; padding: 3px 6px; font-size: .55rem; }
+.india-milestone { margin-top: 3px; font-size: .53rem; }
+.india-anniversary { position: relative; z-index: 1; min-height: 46px; padding-left: 9px; display: grid; grid-template-columns: 14px 1fr; align-content: center; column-gap: 4px; border-left: 1px solid color-mix(in srgb,var(--india-accent) 42%,transparent); }
+.india-anniversary > span { grid-row: span 2; align-self: center; color: var(--india-accent); font-size: .82rem; }
+.india-anniversary strong { color: #e7edf3; font-size: .55rem; }
+.india-anniversary small { color: var(--india-accent); font-size: .52rem; font-weight: 800; }
+html[data-theme="light"] .india-anniversary strong { color: #34495a; }
+footer { flex-wrap: wrap; }
+.footer-links { display: flex; align-items: center; gap: 14px; }
+.footer-links button { padding: 5px 0; border: 0; background: transparent; color: var(--muted); font-size: .7rem; font-weight: 700; cursor: pointer; }
+.footer-links button:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.info-page { min-height: 65vh; padding: 28px 0 56px; }
+.manual-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.manual-card { min-height: 112px; padding: 17px; display: grid; grid-template-columns: 32px 1fr; gap: 13px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); box-shadow: 0 10px 24px rgba(0,0,0,.08); animation: rise-in .35s ease both; }
+.manual-card > span { color: var(--cyan); font-size: .7rem; font-weight: 850; }
+.manual-card h2 { margin: 0; color: var(--ink); font: 700 1rem/1.25 Inter,sans-serif; }
+.manual-card p { margin: 6px 0 0; color: var(--muted); font-size: .78rem; line-height: 1.55; }
+.team-placeholder { min-height: 48vh; }
+.team-context { margin: -3px 0 18px; padding: 13px 16px; display: flex; align-items: center; gap: 11px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.team-context .microsoft-mark { width: 19px; height: 19px; }
+.team-context > div { display: grid; gap: 3px; }
+.team-context strong { color: var(--ink); font-size: .82rem; }
+.team-context > div span { color: var(--muted); font-size: .7rem; }
+.team-context-tag { margin-left: auto; color: var(--muted); font-size: .55rem; font-weight: 850; letter-spacing: .12em; }
+.team-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
+.team-member-card { --member-accent: #1594d0; min-width: 0; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); box-shadow: 0 12px 30px rgba(0,0,0,.09); text-align: center; animation: team-card-enter .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--member-order) * 90ms); transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+.team-member-card.member-pink { --member-accent: #d84d9d; }
+.team-member-card.member-green { --member-accent: #31a678; }
+.team-member-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb,var(--member-accent) 55%,var(--line)); box-shadow: 0 20px 42px rgba(0,0,0,.16); }
+.team-portrait { height: 208px; position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 13%,transparent),transparent 62%),linear-gradient(145deg,color-mix(in srgb,var(--member-accent) 5%,var(--panel)),var(--panel)); }
+.team-portrait::before { content: ""; position: absolute; width: 158px; height: 158px; top: 25px; border: 1px solid color-mix(in srgb,var(--member-accent) 18%,transparent); border-radius: 50%; box-shadow: 0 0 0 16px color-mix(in srgb,var(--member-accent) 4%,transparent),0 0 0 34px color-mix(in srgb,var(--member-accent) 3%,transparent); }
+.team-portrait svg { width: min(190px,78%); height: 164px; position: relative; z-index: 1; overflow: visible; filter: drop-shadow(0 7px 7px rgba(0,0,0,.08)); transition: transform .25s ease; }
+.team-member-card:hover .team-portrait svg { transform: translateY(-4px) scale(1.035); }
+.portrait-shoulders { fill: color-mix(in srgb,var(--member-accent) 83%,#fff); stroke: color-mix(in srgb,var(--member-accent) 75%,#334); stroke-width: 2; }
+.portrait-neck,.portrait-face { fill: #efc6a7; stroke: #4c525a; stroke-width: 1.8; stroke-linejoin: round; }
+.portrait-hair,.portrait-beard { fill: #263547; stroke: #303943; stroke-width: 1.5; stroke-linejoin: round; }
+.portrait-ear { fill: none; stroke: #4c525a; stroke-width: 2; stroke-linecap: round; }
+.portrait-collar { fill: none; stroke: #f2f6f8; stroke-width: 4; stroke-linejoin: round; }
+.team-initials { position: absolute; right: 13px; bottom: 12px; z-index: 2; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--member-accent) 38%,transparent); border-radius: 50%; background: var(--panel); color: var(--member-accent); font-size: .58rem; font-weight: 850; }
+.team-member-copy { min-height: 122px; padding: 14px 13px 17px; border-top: 1px solid var(--line); }
+.team-member-label { color: var(--member-accent); font-size: .54rem; font-weight: 850; letter-spacing: .12em; }
+.team-member-copy h2 { margin: 7px 0 5px; color: var(--ink); font: 700 clamp(.94rem,1.35vw,1.12rem)/1.2 Inter,sans-serif; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.team-member-copy p { margin: 0; color: var(--member-accent); font-size: .75rem; font-weight: 750; }
+.team-member-org { display: block; margin-top: 5px; color: var(--muted); font-size: .65rem; }
+.team-card-spark { position: absolute; top: 12px; right: 15px; color: var(--member-accent); font-size: .9rem; opacity: .8; animation: team-sparkle 2.4s ease-in-out infinite; }
+.team-footnote { margin: 17px 0 0; color: var(--muted); font-size: .72rem; text-align: center; }
+html[data-theme="light"] .team-member-card { background: #fff; box-shadow: 0 12px 30px rgba(36,58,78,.08); }
+html[data-theme="light"] .team-portrait { background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 14%,transparent),transparent 62%),linear-gradient(145deg,#f9fbfd,#f0f4f7); }
+html[data-theme="anniversary"] .team-member-card { --member-accent: #e4bd76; border-color: #51463a; background: linear-gradient(150deg,#211e21,#17161b); }
+html[data-theme="anniversary"] .team-portrait { background: radial-gradient(ellipse at 50% 78%,rgba(228,189,118,.15),transparent 62%),linear-gradient(145deg,#262126,#19181d); }
+html[data-theme="anniversary"] .team-context { border-color: #51463a; background: #1a181c; }
+@keyframes team-card-enter { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes team-sparkle { 50% { transform: rotate(35deg) scale(1.2); opacity: .48; } }
+@media (max-width: 650px) {
+  .india-day-box { width: min(100%, 430px); min-height: 0; margin: 8px 0 14px auto; padding: 8px; grid-template-columns: 49px minmax(0,1fr) 66px; gap: 8px; }
+  .india-date-face { min-height: 49px; }
+  .india-date-face strong { font-size: 1.2rem; }
+  .india-anniversary { min-height: 42px; padding-left: 6px; }
+  .manual-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; max-width: 430px; margin: 0 auto; }
+  .team-portrait { height: 192px; }
+  .team-member-copy h2 { font-size: 1.05rem; }
+  .team-context { padding: 11px; }
+  .team-context > div span { line-height: 1.4; }
+  footer { align-items: flex-start; }
+  .footer-links { order: 3; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .team-member-card, .team-portrait svg, .team-card-spark { animation: none; transition: none; } }
