@@ -17,7 +17,10 @@ function signedChallenge(email, code, secret) {
 async function sendEmail(apiKey, from, to, subject, text) {
   const result = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: 'Bearer ' + apiKey,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ from, to, subject, text }),
   })
   if (!result.ok) throw new Error('Email provider request failed')
