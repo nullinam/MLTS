@@ -367,45 +367,6 @@ html[data-theme="dark"] .skyfall-mobile-controls button { border-color: #425a6d;
 @media (max-width: 620px) { .typing-stage { min-height: 260px; padding: 14px; }.typing-copy { font-size: .97rem; line-height: 1.9; }.typing-toolbar { align-items: flex-start; }.typing-clock { font-size: .9rem; }.skyfall-hud { gap: 12px; }.skyfall-stage canvas { min-height: 260px; object-fit: cover; }.skyfall-overlay-card { padding: 15px; }.skyfall-overlay-card strong { font-size: 1.12rem; } }
 @media (prefers-reduced-motion: reduce) { .typing-clock.urgent, .skyfall-emoji { animation: none; } }
 
-/* India calendar with internet-synced IST and restrained day themes. */
-.india-day-box { --india-accent: #8da9c4; margin: 14px 0 24px; min-height: 158px; padding: 18px 20px; position: relative; display: grid; grid-template-columns: 116px minmax(0,1fr) auto; align-items: center; gap: 20px; overflow: hidden; border: 1px solid #2c3947; border-radius: 14px; background: linear-gradient(120deg,#121923,#10151c 62%,#18212b); box-shadow: 0 14px 34px rgba(0,0,0,.2); animation: rise-in .45s ease both; }
-.india-day-box::after { content: ""; position: absolute; right: 9%; top: -86px; width: 250px; height: 250px; border: 1px solid color-mix(in srgb,var(--india-accent) 28%,transparent); border-radius: 50%; box-shadow: 0 0 0 23px color-mix(in srgb,var(--india-accent) 5%,transparent),0 0 0 50px color-mix(in srgb,var(--india-accent) 4%,transparent); pointer-events: none; }
-.india-date-face { min-height: 118px; padding: 13px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid color-mix(in srgb,var(--india-accent) 48%,#334252); border-radius: 12px; background: color-mix(in srgb,var(--india-accent) 12%,#111821); text-align: center; }
-.india-date-label { color: #93a8ba; font-size: .54rem; font-weight: 850; letter-spacing: .12em; }
-.india-date-face strong { margin: 1px 0 -3px; color: #f2f6fa; font: 750 2.35rem/1 Inter,sans-serif; letter-spacing: -.07em; font-variant-numeric: tabular-nums; }
-.india-date-face > span:last-child { color: #d3dce5; font-size: .69rem; font-weight: 700; }
-.india-date-face .india-date-loading { color: #9eacb9; font-size: 1.7rem; }
-.india-day-copy { position: relative; z-index: 1; }
-.india-day-copy .eyebrow { color: var(--india-accent); font-size: .6rem; }
-.india-day-copy h2 { margin: 4px 0 0; color: #eef3f7; font: 720 clamp(1.05rem,2vw,1.38rem)/1.2 Inter,sans-serif; letter-spacing: -.035em; }
-.india-saka { margin: 5px 0 0; color: #9cabb9; font-size: .67rem; }
-.india-event { margin-top: 10px; display: flex; align-items: center; gap: 9px; color: var(--india-accent); }
-.india-event > span { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--india-accent) 38%,transparent); border-radius: 9px; background: color-mix(in srgb,var(--india-accent) 12%,transparent); }
-.india-event strong, .india-event small { display: block; }
-.india-event strong { color: #e6edf4; font-size: .76rem; }
-.india-event small { margin-top: 2px; color: #9cabb9; font-size: .59rem; }
-.india-milestone, .india-quiet { margin: 9px 0 0; color: #aab6c2; font-size: .67rem; }
-.india-sync-status { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; color: #94a4b3; font-size: .6rem; white-space: nowrap; }
-.india-sync-status > span { width: 7px; height: 7px; border-radius: 50%; background: #cf9850; }
-.india-sync-status > span.online { background: #5bbf91; box-shadow: 0 0 10px rgba(91,191,145,.48); }
-.india-retry { margin-top: 8px; padding: 5px 9px; border: 1px solid #52677b; border-radius: 7px; background: transparent; color: #dae5ee; font-size: .65rem; cursor: pointer; }
-.india-day-box[data-vibe="festival"] { --india-accent: #e4b66d; background: radial-gradient(ellipse at 90% 10%,rgba(212,157,72,.12),transparent 19rem),linear-gradient(120deg,#1c1a18,#11171b 68%,#20221e); }
-.india-day-box[data-vibe="holi"] { --india-accent: #d79ae3; background: radial-gradient(ellipse at 88% 8%,rgba(206,121,208,.15),transparent 15rem),radial-gradient(ellipse at 72% 82%,rgba(88,170,222,.12),transparent 16rem),linear-gradient(120deg,#1c1922,#11171b 68%,#20202a); }
-.india-day-box[data-vibe="eid"] { --india-accent: #71c8b1; background: radial-gradient(ellipse at 90% 10%,rgba(55,163,131,.15),transparent 18rem),linear-gradient(120deg,#141e1c,#11171b 68%,#182521); }
-.india-day-box[data-vibe="diwali"] { --india-accent: #edbd69; background: radial-gradient(ellipse at 90% 10%,rgba(234,153,63,.18),transparent 19rem),linear-gradient(120deg,#211b17,#11171b 68%,#2a2118); }
-.india-day-box[data-vibe="christmas"] { --india-accent: #8cc69c; background: radial-gradient(ellipse at 90% 10%,rgba(78,152,99,.14),transparent 19rem),linear-gradient(120deg,#16201b,#11171b 68%,#1e2822); }
-.india-day-box[data-vibe="national"] { --india-accent: #82b7cf; }
-.india-day-box[data-vibe="windows"] { --india-accent: #4ca9e9; }
-.india-day-box[data-vibe="office"] { --india-accent: #d87962; }
-.india-day-box[data-vibe="xbox"] { --india-accent: #74bd7f; }
-.india-day-box[data-vibe="research"] { --india-accent: #a89be7; }
-.india-day-box[data-vibe="anniversary"] { --india-accent: #dbad61; }
-html[data-theme="light"] .india-day-box { border-color: #d2dbe3; background: linear-gradient(120deg,#fff,#f1f5f8 70%,#e8eff4); box-shadow: 0 12px 28px rgba(41,62,80,.08); }
-html[data-theme="light"] .india-date-face { background: color-mix(in srgb,var(--india-accent) 12%,#fff); }
-html[data-theme="light"] .india-date-face strong, html[data-theme="light"] .india-day-copy h2 { color: #1d2b37; }
-html[data-theme="light"] .india-date-face > span:last-child, html[data-theme="light"] .india-event strong { color: #34495a; }
-html[data-theme="light"] .india-event small, html[data-theme="light"] .india-saka, html[data-theme="light"] .india-milestone, html[data-theme="light"] .india-quiet { color: #607180; }
-html[data-theme="light"] .india-retry { border-color: #b8c7d3; color: #354c5e; }
 html[data-theme="anniversary"] { color-scheme: dark; --bg: #100f15; --panel: #191821; --panel-2: #211f29; --ink: #f5f0e6; --muted: #bdb3a5; --line: #403a35; --cyan: #e4bd76; --purple: #cf9b75; --purple-dark: #b5755d; --focus: #f1d7a4; }
 html[data-theme="anniversary"] body { background: radial-gradient(ellipse at 90% 0%,rgba(205,142,90,.11),transparent 30rem),#100f15; }
 html[data-theme="anniversary"] .hero { border-color: #62503f; background: linear-gradient(118deg,#201c20 0%,#2a2326 64%,#362a25 100%); }
@@ -413,26 +374,8 @@ html[data-theme="anniversary"] .hero h1 span, html[data-theme="anniversary"] .st
 html[data-theme="anniversary"] .button-primary { background: #e4bd76; color: #211b13; box-shadow: 0 7px 20px rgba(228,189,118,.13); }
 html[data-theme="anniversary"] .theme-toggle { border-color: #62503f; background: #201c20; color: #f0e7da; }
 html[data-theme="anniversary"] .theme-toggle > span { color: #e4bd76; }
-html[data-theme="anniversary"] .india-day-box { --india-accent: #e4bd76; }
 html[data-theme="anniversary"] .game-card, html[data-theme="anniversary"] .module-card, html[data-theme="anniversary"] .activity-panel { border-color: #413b39; background: linear-gradient(150deg,#1c1b22,#15151b); }
-@media (max-width: 650px) { .india-day-box { grid-template-columns: 84px minmax(0,1fr); gap: 12px; padding: 13px; }.india-date-face { min-height: 104px; padding: 9px 5px; }.india-date-face strong { font-size: 2rem; }.india-sync-status { grid-column: 2; } }
 
-/* Compact calendar and footer information pages. */
-.india-day-box { width: min(100%, 430px); min-height: 0; margin: 8px 0 16px auto; padding: 9px 11px; grid-template-columns: 54px minmax(0,1fr) 74px; gap: 11px; border-radius: 12px; box-shadow: 0 7px 20px rgba(0,0,0,.13); }
-.india-day-box::after { right: 22%; top: -112px; width: 190px; height: 190px; opacity: .55; }
-.india-date-face { min-height: 54px; padding: 5px 3px; border-radius: 9px; }
-.india-date-label { font-size: .39rem; letter-spacing: .08em; }
-.india-date-face strong { margin: 0; font-size: 1.35rem; }
-.india-date-face > span:last-child { font-size: .51rem; }
-.india-day-copy .eyebrow { font-size: .48rem; }
-.india-day-copy h2 { margin-top: 2px; font-size: .78rem; line-height: 1.2; }
-.india-retry { margin-top: 3px; padding: 3px 6px; font-size: .55rem; }
-.india-milestone { margin-top: 3px; font-size: .53rem; }
-.india-anniversary { position: relative; z-index: 1; min-height: 46px; padding-left: 9px; display: grid; grid-template-columns: 14px 1fr; align-content: center; column-gap: 4px; border-left: 1px solid color-mix(in srgb,var(--india-accent) 42%,transparent); }
-.india-anniversary > span { grid-row: span 2; align-self: center; color: var(--india-accent); font-size: .82rem; }
-.india-anniversary strong { color: #e7edf3; font-size: .55rem; }
-.india-anniversary small { color: var(--india-accent); font-size: .52rem; font-weight: 800; }
-html[data-theme="light"] .india-anniversary strong { color: #34495a; }
 footer { flex-wrap: wrap; }
 .footer-links { display: flex; align-items: center; gap: 14px; }
 .footer-links button { padding: 5px 0; border: 0; background: transparent; color: var(--muted); font-size: .7rem; font-weight: 700; cursor: pointer; }
@@ -444,32 +387,21 @@ footer { flex-wrap: wrap; }
 .manual-card h2 { margin: 0; color: var(--ink); font: 700 1rem/1.25 Inter,sans-serif; }
 .manual-card p { margin: 6px 0 0; color: var(--muted); font-size: .78rem; line-height: 1.55; }
 .team-placeholder { min-height: 48vh; }
-.team-context { margin: -3px 0 18px; padding: 13px 16px; display: flex; align-items: center; gap: 11px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
-.team-context .microsoft-mark { width: 19px; height: 19px; }
-.team-context > div { display: grid; gap: 3px; }
-.team-context strong { color: var(--ink); font-size: .82rem; }
-.team-context > div span { color: var(--muted); font-size: .7rem; }
-.team-context-tag { margin-left: auto; color: var(--muted); font-size: .55rem; font-weight: 850; letter-spacing: .12em; }
 .team-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
 .team-member-card { --member-accent: #8da9c4; min-width: 0; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); box-shadow: 0 12px 30px rgba(0,0,0,.09); text-align: center; animation: team-card-enter .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--member-order) * 90ms); transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
 .team-member-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb,var(--member-accent) 55%,var(--line)); box-shadow: 0 20px 42px rgba(0,0,0,.16); }
-.team-portrait { height: 208px; position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 13%,transparent),transparent 62%),linear-gradient(145deg,color-mix(in srgb,var(--member-accent) 5%,var(--panel)),var(--panel)); }
+.team-portrait { height: 230px; position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 13%,transparent),transparent 62%),linear-gradient(145deg,color-mix(in srgb,var(--member-accent) 5%,var(--panel)),var(--panel)); }
 .team-portrait::before { content: ""; position: absolute; width: 158px; height: 158px; top: 25px; border: 1px solid color-mix(in srgb,var(--member-accent) 18%,transparent); border-radius: 50%; box-shadow: 0 0 0 16px color-mix(in srgb,var(--member-accent) 4%,transparent),0 0 0 34px color-mix(in srgb,var(--member-accent) 3%,transparent); animation: portrait-orbit 18s ease-in-out infinite; }
-.team-portrait img { width: min(176px,78%); aspect-ratio: 1; position: relative; z-index: 1; display: block; border: 1px solid color-mix(in srgb,var(--member-accent) 32%,transparent); border-radius: 15px; object-fit: cover; box-shadow: 0 11px 28px rgba(0,0,0,.18); transition: transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease; }
+.team-portrait img { width: min(184px,78%); aspect-ratio: 1; position: relative; z-index: 1; display: block; border: 1px solid color-mix(in srgb,var(--member-accent) 32%,transparent); border-radius: 15px; object-fit: cover; box-shadow: 0 11px 28px rgba(0,0,0,.18); transition: transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease; }
 .team-member-card:hover .team-portrait img { transform: translateY(-5px) scale(1.045) rotate(-1deg); box-shadow: 0 17px 34px rgba(0,0,0,.22); }
 .team-initials { position: absolute; right: 13px; bottom: 12px; z-index: 2; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--member-accent) 38%,transparent); border-radius: 50%; background: var(--panel); color: var(--member-accent); font-size: .58rem; font-weight: 850; }
 .team-member-copy { min-height: 122px; padding: 14px 13px 17px; border-top: 1px solid var(--line); }
-.team-member-label { color: var(--member-accent); font-size: .54rem; font-weight: 850; letter-spacing: .12em; }
 .team-member-copy h2 { margin: 7px 0 5px; color: var(--ink); font: 700 clamp(.94rem,1.35vw,1.12rem)/1.2 Inter,sans-serif; letter-spacing: -.025em; overflow-wrap: anywhere; }
-.team-member-copy p { margin: 0; color: var(--member-accent); font-size: .75rem; font-weight: 750; }
-.team-member-org { display: block; margin-top: 5px; color: var(--muted); font-size: .65rem; }
 .team-card-spark { position: absolute; top: 12px; right: 15px; z-index: 1; color: var(--member-accent); font-size: .9rem; opacity: .8; animation: team-sparkle 2.4s ease-in-out infinite; }
-.team-footnote { margin: 17px 0 0; color: var(--muted); font-size: .72rem; text-align: center; }
 html[data-theme="light"] .team-member-card { background: #fff; box-shadow: 0 12px 30px rgba(36,58,78,.08); }
 html[data-theme="light"] .team-portrait { background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 14%,transparent),transparent 62%),linear-gradient(145deg,#f9fbfd,#f0f4f7); }
 html[data-theme="anniversary"] .team-member-card { border-color: color-mix(in srgb,var(--member-accent) 38%,#51463a); background: linear-gradient(150deg,#211e21,#17161b); }
 html[data-theme="anniversary"] .team-portrait { background: radial-gradient(ellipse at 50% 78%,rgba(228,189,118,.15),transparent 62%),linear-gradient(145deg,#262126,#19181d); }
-html[data-theme="anniversary"] .team-context { border-color: #51463a; background: #1a181c; }
 @keyframes team-card-enter { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes team-sparkle { 50% { transform: rotate(35deg) scale(1.2); opacity: .48; } }
 @keyframes portrait-orbit { 0%,100% { transform: scale(.96); opacity: .72; } 50% { transform: scale(1.04); opacity: 1; } }
@@ -478,16 +410,10 @@ html[data-theme="anniversary"] .team-context { border-color: #51463a; background
 @keyframes icon-pop { 45% { transform: translateY(-4px) rotate(-7deg) scale(1.12); } }
 @keyframes sparkle-turn { to { transform: rotate(90deg) scale(1.25); } }
 @media (max-width: 650px) {
-  .india-day-box { width: min(100%, 430px); min-height: 0; margin: 8px 0 14px auto; padding: 8px; grid-template-columns: 49px minmax(0,1fr) 66px; gap: 8px; }
-  .india-date-face { min-height: 49px; }
-  .india-date-face strong { font-size: 1.2rem; }
-  .india-anniversary { min-height: 42px; padding-left: 6px; }
   .manual-grid { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: 1fr; max-width: 430px; margin: 0 auto; }
   .team-portrait { height: 192px; }
   .team-member-copy h2 { font-size: 1.05rem; }
-  .team-context { padding: 11px; }
-  .team-context > div span { line-height: 1.4; }
   footer { align-items: flex-start; }
   .footer-links { order: 3; width: 100%; }
 }
@@ -503,88 +429,11 @@ html[data-theme="anniversary"] .team-context { border-color: #51463a; background
 .start-here-action:hover { transform: translateY(-2px); border-color: var(--purple); background: color-mix(in srgb,var(--panel-2) 82%,var(--purple) 18%); }
 .start-here-dismiss { width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 1.25rem; cursor: pointer; }
 .start-here-dismiss:hover { background: color-mix(in srgb,var(--panel-2) 80%,var(--line) 20%); color: var(--ink); }
+@media (max-width: 620px) { .start-here { grid-template-columns: 38px minmax(0,1fr) 30px; gap: 9px; padding: 12px; }.start-here-action { grid-column: 2; justify-self: start; }.start-here-dismiss { grid-column: 3; grid-row: 1; }.start-here-icon { grid-row: span 2; } }
 .game-icon, .module-icon { color: var(--purple); }
 .game-card, .module-card { border-radius: 16px; }
 .game-launch, .module-card button { transition: transform .18s ease,background .18s ease,border-color .18s ease; }
 .game-launch:hover, .module-card button:hover { transform: translateY(-1px); }
-
-/* The team page gives portrait and name most of the attention. */
-.team-page .page-heading { margin-bottom: 16px; }
-.team-context { margin: 0 0 24px; padding: 0; display: flex; align-items: center; gap: 10px; border: 0; background: transparent; color: var(--muted); font-size: .76rem; }
-.team-context > span:first-child { color: var(--ink); font-weight: 750; }
-.team-context i { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
-.team-grid { gap: 22px; }
-.team-member-card { border-radius: 16px; box-shadow: 0 9px 24px rgba(0,0,0,.07); }
-.team-member-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(0,0,0,.13); }
-.team-portrait { height: 260px; background: var(--panel-2); }
-.team-portrait::before { display: none; }
-.team-portrait img { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none; object-fit: cover; object-position: center 38%; transition: transform .28s ease; }
-.team-member-card:hover .team-portrait img { transform: scale(1.025); box-shadow: none; }
-.team-member-copy { min-height: 0; padding: 18px 18px 20px; text-align: left; }
-.team-member-copy h2 { margin: 0; font-size: clamp(1.05rem,1.6vw,1.27rem); line-height: 1.25; }
-.team-member-copy p { margin-top: 7px; color: var(--muted); font-size: .72rem; font-weight: 600; }
-html[data-theme="light"] .team-portrait { background: #edf2f5; }
-html[data-theme="anniversary"] .team-member-card { border-color: var(--line); }
-@media (max-width: 650px) { .team-grid { max-width: 460px; gap: 17px; }.team-portrait { height: 270px; } }
-
-/* Calendar grid, category marks, and event context. */
-.india-calendar { --calendar-accent: #8da9c4; margin: 26px 0 8px; padding: clamp(18px,3vw,28px); border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(145deg,var(--panel),color-mix(in srgb,var(--bg) 86%,var(--panel) 14%)); box-shadow: 0 18px 42px rgba(0,0,0,.11); }
-.calendar-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
-.calendar-heading .eyebrow { margin-bottom: 6px; }
-.calendar-heading h2 { margin: 0; color: var(--ink); font: 700 clamp(1.45rem,3vw,2rem)/1.1 "Outfit",sans-serif; letter-spacing: -.04em; }
-.calendar-heading p { margin: 7px 0 0; color: var(--muted); font-size: .78rem; }
-.calendar-live-state { max-width: 46%; padding: 7px 10px; display: flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb,var(--panel-2) 80%,transparent); color: var(--muted); font-size: .6rem; line-height: 1.3; }
-.calendar-live-state i { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #5da985; box-shadow: 0 0 0 3px color-mix(in srgb,#5da985 17%,transparent); }
-.calendar-live-state.is-loading i { background: #d2a85c; box-shadow: 0 0 0 3px color-mix(in srgb,#d2a85c 17%,transparent); }
-.calendar-controls { margin-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.calendar-month-controls { display: flex; align-items: center; gap: 8px; }
-.calendar-month-controls h3 { min-width: 142px; margin: 0 4px; color: var(--ink); font: 700 1rem "Outfit",sans-serif; }
-.calendar-month-controls button { min-width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); color: var(--ink); font-size: 1.1rem; cursor: pointer; transition: border-color .16s ease,background .16s ease,transform .16s ease; }
-.calendar-month-controls button:hover { transform: translateY(-1px); border-color: var(--calendar-accent); }
-.calendar-month-controls .calendar-today-button { min-width: 52px; margin-left: 2px; padding: 0 9px; font-size: .65rem; font-weight: 800; }
-.calendar-region-picker { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .65rem; }
-.calendar-region-picker select { max-width: min(260px,44vw); height: 36px; padding: 0 28px 0 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); color: var(--ink); font: inherit; cursor: pointer; }
-.calendar-filters { margin: 17px 0 14px; display: flex; flex-wrap: wrap; gap: 7px; }
-.calendar-filters button { min-height: 31px; padding: 0 10px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); font-size: .63rem; font-weight: 750; cursor: pointer; transition: background .16s ease,border-color .16s ease,color .16s ease; }
-.calendar-filters button:hover, .calendar-filters button.active { border-color: color-mix(in srgb,var(--calendar-accent) 55%,var(--line)); background: color-mix(in srgb,var(--calendar-accent) 13%,var(--panel)); color: var(--ink); }
-.calendar-dot { width: 7px; height: 7px; display: inline-block; flex: 0 0 auto; border-radius: 50%; background: #8da9c4; }
-.dot-india { background: #dda95e; }.dot-tech { background: #79b8df; }.dot-world { background: #86b996; }.dot-microsoft { background: #b49adf; }
-.calendar-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(250px, .72fr); align-items: stretch; gap: 18px; }
-.calendar-grid { min-width: 0; display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
-.calendar-weekday { min-height: 27px; display: grid; place-items: center; color: var(--muted); font-size: .59rem; font-weight: 750; }
-.calendar-day { min-width: 0; min-height: 48px; padding: 5px 4px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; border: 1px solid transparent; border-radius: 9px; background: color-mix(in srgb,var(--panel-2) 45%,transparent); color: var(--ink); font-size: .7rem; cursor: pointer; transition: background .16s ease,border-color .16s ease,transform .16s ease; }
-.calendar-day:hover { transform: translateY(-1px); border-color: var(--line); background: var(--panel-2); }
-.calendar-day.is-outside { color: color-mix(in srgb,var(--muted) 56%,transparent); background: transparent; }
-.calendar-day.is-today > span:first-child { color: var(--calendar-accent); font-weight: 900; }
-.calendar-day.is-selected { border-color: color-mix(in srgb,var(--calendar-accent) 70%,var(--line)); background: color-mix(in srgb,var(--calendar-accent) 15%,var(--panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--calendar-accent) 12%,transparent); }
-.calendar-day small { position: absolute; right: 4px; bottom: 3px; color: var(--calendar-accent); font-size: .43rem; font-weight: 800; }
-.calendar-day-dots { min-height: 5px; display: flex; justify-content: center; gap: 3px; }
-.calendar-day-dots i { width: 5px; height: 5px; border-radius: 50%; background: #8da9c4; }
-.calendar-day-dots .dot-india { background: #dda95e; }.calendar-day-dots .dot-tech { background: #79b8df; }.calendar-day-dots .dot-world { background: #86b996; }.calendar-day-dots .dot-microsoft { background: #b49adf; }
-.calendar-day-detail { min-width: 0; padding: 17px; border: 1px solid var(--line); border-radius: 13px; background: color-mix(in srgb,var(--panel-2) 62%,var(--bg) 38%); }
-.calendar-detail-label { color: var(--calendar-accent); font-size: .57rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
-.calendar-day-detail > h3 { margin: 5px 0 13px; color: var(--ink); font: 700 1rem/1.25 "Outfit",sans-serif; }
-.calendar-event-list { display: grid; gap: 10px; }
-.calendar-event { padding: 11px 12px; border: 1px solid var(--line); border-left: 2px solid var(--calendar-accent); border-radius: 9px; background: color-mix(in srgb,var(--panel) 82%,transparent); }
-.calendar-event-india { border-left-color: #dda95e; }.calendar-event-tech { border-left-color: #79b8df; }.calendar-event-world { border-left-color: #86b996; }.calendar-event-microsoft { border-left-color: #b49adf; }
-.calendar-event-category { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .53rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; }
-.calendar-event h4 { margin: 6px 0 0; color: var(--ink); font: 700 .85rem/1.3 "Outfit",sans-serif; }
-.calendar-event-alt { display: block; margin-top: 3px; color: var(--muted); font-size: .64rem; }
-.calendar-event p { margin: 6px 0 0; color: var(--muted); font-size: .65rem; line-height: 1.48; }
-.calendar-event-note { margin-top: 6px; display: block; color: var(--muted); font-size: .58rem; line-height: 1.45; }
-.calendar-event a { margin-top: 8px; display: inline-block; color: var(--calendar-accent); font-size: .58rem; font-weight: 750; text-decoration: none; }
-.calendar-event a:hover, .calendar-footnote a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.calendar-no-events { margin: 0; color: var(--muted); font-size: .7rem; line-height: 1.55; }
-.calendar-retry { margin-top: 11px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font-size: .63rem; font-weight: 750; cursor: pointer; }
-.calendar-footnote { margin: 12px 0 0; color: var(--muted); font-size: .59rem; line-height: 1.5; }
-.calendar-footnote a { margin-left: 4px; color: var(--calendar-accent); text-decoration: none; }
-html[data-theme="light"] .india-calendar { background: linear-gradient(145deg,#fff,#f3f6f8); box-shadow: 0 12px 28px rgba(36,55,72,.08); }
-html[data-theme="light"] .calendar-day { background: #f1f4f6; }
-html[data-theme="light"] .calendar-day.is-outside { background: transparent; }
-html[data-theme="light"] .calendar-day-detail { background: #f7f9fa; }
-html[data-theme="light"] .calendar-event { background: #fff; }
-@media (max-width: 860px) { .calendar-layout { grid-template-columns: 1fr; }.calendar-day-detail { min-height: 140px; }.calendar-live-state { max-width: 100%; } }
-@media (max-width: 620px) { .start-here { grid-template-columns: 38px minmax(0,1fr) 30px; gap: 9px; padding: 12px; }.start-here-action { grid-column: 2; justify-self: start; }.start-here-dismiss { grid-column: 3; grid-row: 1; }.start-here-icon { grid-row: span 2; }.calendar-heading { flex-direction: column; }.calendar-live-state { max-width: 100%; }.calendar-controls { align-items: flex-start; flex-direction: column; }.calendar-month-controls h3 { min-width: 130px; }.calendar-region-picker { width: 100%; align-items: flex-start; flex-direction: column; gap: 6px; }.calendar-region-picker select { width: 100%; max-width: none; }.calendar-day { min-height: 44px; padding: 4px 2px; }.calendar-day small { display: none; }.calendar-day-detail { padding: 14px; } }
 
 /* Theme palettes: developer tools and consumer support, each with a matching glyph. */
 .theme-icon { width: 18px; height: 18px; display: inline-grid; place-items: center; }
@@ -595,18 +444,16 @@ html[data-theme="dev"] .hero { border-color: #36594d; background: linear-gradien
 html[data-theme="dev"] .hero h1 span, html[data-theme="dev"] .sticker-spark { color: #a5edc3; }
 html[data-theme="dev"] .hero-sticker, html[data-theme="dev"] .game-card, html[data-theme="dev"] .module-card, html[data-theme="dev"] .activity-panel { border-color: #2d4840; background: linear-gradient(150deg,#172522,#111b1a); }
 html[data-theme="dev"] .button-primary { background: #a5e6be; color: #0f241b; }
-html[data-theme="dev"] .theme-toggle, html[data-theme="dev"] .calendar-month-controls button, html[data-theme="dev"] .calendar-region-picker select { border-color: #355349; background: #152320; color: #dcefe5; }
+html[data-theme="dev"] .theme-toggle { border-color: #355349; background: #152320; color: #dcefe5; }
 html[data-theme="dev"] .game-icon, html[data-theme="dev"] .module-icon, html[data-theme="dev"] .start-here-icon { border-color: #365248; background: #1a2b26; color: #8bd6b4; }
-html[data-theme="dev"] .india-calendar { --calendar-accent: #83d7b5; border-color: #2f493f; background: linear-gradient(145deg,#152220,#101918); }
-html[data-theme="dev"] .calendar-day-detail, html[data-theme="dev"] .calendar-event { background: #182523; }
 html[data-theme="support"] { color-scheme: dark; --bg: #111821; --panel: #192431; --panel-2: #202f3d; --ink: #edf4f8; --muted: #aebdca; --line: #354858; --purple: #a5c6df; --purple-dark: #648dac; --lime: #c2e2f4; --pink: #b6d2e7; --cyan: #8fc4d8; --focus: #f3cf7b; }
 html[data-theme="support"] body { background: radial-gradient(ellipse at 88% 3%,rgba(85,142,177,.17),transparent 32rem),#111821; }
 html[data-theme="support"] .hero { border-color: #405c70; background: linear-gradient(120deg,#1a2733,#223d50 62%,#2c4b60); box-shadow: 0 22px 64px rgba(0,0,0,.24); }
 html[data-theme="support"] .hero h1 span, html[data-theme="support"] .sticker-spark { color: #c5e3f4; }
 html[data-theme="support"] .hero-sticker, html[data-theme="support"] .game-card, html[data-theme="support"] .module-card, html[data-theme="support"] .activity-panel { border-color: #374d5e; background: linear-gradient(150deg,#1d2b38,#17222d); }
 html[data-theme="support"] .button-primary { background: #c4e2f3; color: #14212b; }
-html[data-theme="support"] .theme-toggle, html[data-theme="support"] .calendar-month-controls button, html[data-theme="support"] .calendar-region-picker select { border-color: #415a6d; background: #1a2936; color: #e6f1f8; }
+html[data-theme="support"] .theme-toggle { border-color: #415a6d; background: #1a2936; color: #e6f1f8; }
 html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, html[data-theme="support"] .start-here-icon { border-color: #3d586b; background: #213342; color: #a7d0e8; }
-html[data-theme="support"] .india-calendar { --calendar-accent: #a5c6df; border-color: #354b5b; background: linear-gradient(145deg,#1a2733,#141e28); }
-html[data-theme="support"] .calendar-day-detail, html[data-theme="support"] .calendar-event { background: #202f3d; }
-@media (prefers-reduced-motion: reduce) { .start-here-action, .calendar-month-controls button, .calendar-filters button, .calendar-day, .team-member-card, .team-member-card:hover .team-portrait img { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { .start-here-action, .team-member-card, .team-member-card:hover .team-portrait img { transition: none; animation: none; } }
+
+
