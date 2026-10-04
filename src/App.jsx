@@ -164,42 +164,112 @@ function Brand({ onHome = null }) {
   return onHome ? <button className="brand" onClick={onHome}>{content}</button> : <a className="brand" href="#home">{content}</a>
 }
 
+const THEMES = [
+  { id: 'light', label: 'Light' },
+  { id: 'dark', label: 'Dark' },
+  { id: 'anniversary', label: '50 Years' },
+  { id: 'dev', label: 'Developer' },
+  { id: 'support', label: 'Support' },
+]
+
+function ThemeGlyph({ theme }) {
+  const common = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+  if (theme === 'dev') return <svg {...common}><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14" /></svg>
+  if (theme === 'support') return <svg {...common}><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 13a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2Zm16 0a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM7 18h6" /><path d="M13 18a2 2 0 0 1-2 2H9" /></svg>
+  if (theme === 'anniversary') return <svg {...common}><path d="m12 3 2.2 5.5L20 11l-5.8 2.4L12 19l-2.3-5.6L4 11l5.7-2.5L12 3Z" /><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16Z" /></svg>
+  if (theme === 'dark') return <svg {...common}><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" /></svg>
+  return <svg {...common}><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+}
+
+function ActivityIcon({ name }) {
+  const common = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+  if (name === 'chat') return <svg {...common}><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5 8 8 0 0 1-3.4-.8L4 20l1.6-4.1A7.4 7.4 0 0 1 5 12a7.5 7.5 0 1 1 15 0Z" /><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" /></svg>
+  if (name === 'spark') return <svg {...common}><path d="m12 3 2.1 5.8L20 11l-5.9 2.2L12 19l-2.1-5.8L4 11l5.9-2.2L12 3Z" /><path d="m19 16 .7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7L19 16Z" /></svg>
+  if (name === 'keyboard') return <svg {...common}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 9h.01M10 9h.01M13 9h.01M16 9h.01M7 12h.01M10 12h.01M13 12h.01M16 12h.01M8 15h8" /></svg>
+  if (name === 'parachute') return <svg {...common}><path d="M3 10a9 9 0 0 1 18 0H3Z" /><path d="m3 10 7 4m11-4-7 4m-4-4 1 4m3-4-1 4m-2 0-2 4h7l-2-4m-1 0v-3" /></svg>
+  return <svg {...common}><path d="M4 5h16v12H9l-5 3V5Z" /><path d="m8 9 2 2-2 2m4 0h4" /></svg>
+}
+
 function Header({ onHome = null, theme = 'light', onToggleTheme }) {
-  const nextTheme = theme === 'light' ? 'dark' : theme === 'dark' ? '50 years' : 'light'
-  const themeName = theme === 'anniversary' ? '50 years' : theme
-  const icon = theme === 'dark' ? '☀' : theme === 'anniversary' ? '✦' : '☾'
-  return <header className="topbar"><Brand onHome={onHome} /><button className="theme-toggle" onClick={onToggleTheme} aria-label={`Theme: ${themeName}. Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}><span aria-hidden="true">{icon}</span>{themeName === '50 years' ? '50 Years' : `${themeName[0].toUpperCase()}${themeName.slice(1)} mode`}</button></header>
+  const themeIndex = Math.max(0, THEMES.findIndex((item) => item.id === theme))
+  const themeName = THEMES[themeIndex].label
+  const nextTheme = THEMES[(themeIndex + 1) % THEMES.length]
+  return <header className="topbar"><Brand onHome={onHome} /><button className="theme-toggle" onClick={onToggleTheme} aria-label={`Current theme: ${themeName}. Switch to ${nextTheme.label} theme`} title={`Switch to ${nextTheme.label} theme`}><span className={`theme-icon theme-icon-${theme}`}><ThemeGlyph theme={theme} /></span>{themeName}</button></header>
 }
 
-const INDIA_HOLIDAY_FALLBACK = {
-  '2026-01-14': ['Makara Sankranthi / Pongal', 'festival'],
-  '2026-01-26': ['Republic Day', 'national'],
-  '2026-03-04': ['Holi', 'festival'],
-  '2026-03-21': ['Id-ul-Fitr', 'festival'],
-  '2026-03-26': ['Ram Navami', 'festival'],
-  '2026-03-31': ['Mahavir Jayanti', 'festival'],
-  '2026-04-03': ['Good Friday', 'festival'],
-  '2026-05-01': ['Buddha Purnima', 'festival'],
-  '2026-05-27': ['Id-ul-Zuha (Bakrid)', 'festival'],
-  '2026-06-26': ['Muharram', 'festival'],
-  '2026-08-15': ['Independence Day', 'national'],
-  '2026-08-26': ['Milad-un-Nabi', 'festival'],
-  '2026-09-04': ['Janmashtami', 'festival'],
-  '2026-09-14': ['Ganesh Chaturthi', 'festival'],
-  '2026-10-02': ['Gandhi Jayanti', 'national'],
-  '2026-10-20': ['Dussehra', 'festival'],
-  '2026-11-08': ['Diwali', 'festival'],
-  '2026-11-24': ['Guru Nanak Jayanti', 'festival'],
-  '2026-12-25': ['Christmas Day', 'festival'],
+const CALENDAR_FILTERS = [
+  { id: 'india', label: 'India', color: 'india' },
+  { id: 'tech', label: 'Tech & science', color: 'tech' },
+  { id: 'world', label: 'World days', color: 'world' },
+  { id: 'microsoft', label: 'Microsoft', color: 'microsoft' },
+]
+
+const INDIA_REGIONS = [
+  ['all', 'All India'], ['IN-AN', 'Andaman and Nicobar Islands'], ['IN-AP', 'Andhra Pradesh'], ['IN-AR', 'Arunachal Pradesh'], ['IN-AS', 'Assam'], ['IN-BR', 'Bihar'], ['IN-CH', 'Chandigarh'], ['IN-CG', 'Chhattisgarh'], ['IN-DH', 'Dadra and Nagar Haveli and Daman and Diu'], ['IN-DL', 'Delhi'], ['IN-GA', 'Goa'], ['IN-GJ', 'Gujarat'], ['IN-HR', 'Haryana'], ['IN-HP', 'Himachal Pradesh'], ['IN-JK', 'Jammu and Kashmir'], ['IN-JH', 'Jharkhand'], ['IN-KA', 'Karnataka'], ['IN-KL', 'Kerala'], ['IN-LA', 'Ladakh'], ['IN-LD', 'Lakshadweep'], ['IN-MP', 'Madhya Pradesh'], ['IN-MH', 'Maharashtra'], ['IN-MN', 'Manipur'], ['IN-ML', 'Meghalaya'], ['IN-MZ', 'Mizoram'], ['IN-NL', 'Nagaland'], ['IN-OD', 'Odisha'], ['IN-PY', 'Puducherry'], ['IN-PB', 'Punjab'], ['IN-RJ', 'Rajasthan'], ['IN-SK', 'Sikkim'], ['IN-TN', 'Tamil Nadu'], ['IN-TG', 'Telangana'], ['IN-TR', 'Tripura'], ['IN-UP', 'Uttar Pradesh'], ['IN-UT', 'Uttarakhand'], ['IN-WB', 'West Bengal'],
+]
+
+const INDIA_EVENT_WHY = [
+  [/diwali|deepavali/i, 'A festival of lights celebrated in several Indian traditions. Families gather, light lamps, and mark themes of renewal and hope.'],
+  [/holi/i, 'A spring festival celebrated across many communities, known for colour, gathering, and stories of renewal.'],
+  [/eid.?ul.?fitr|id.?ul.?fitr/i, 'Eid al-Fitr marks the end of Ramadan with prayer, family visits, generosity, and shared meals.'],
+  [/eid.?ul.?adha|bakrid|zuha/i, 'Eid al-Adha is observed with prayer and acts of charity and sharing; its date follows the Islamic lunar calendar.'],
+  [/muharram|ashura/i, 'Muharram is a sacred month in Islam; observance and remembrance practices differ among communities.'],
+  [/milad|eid.?e.?milad|mawlid/i, 'Many Muslims mark the birth of Prophet Muhammad through prayer and community gatherings.'],
+  [/pongal/i, 'Pongal is a Tamil harvest thanksgiving, honouring the sun, cattle, family, and the season’s new rice.'],
+  [/makara sankranti|sankranthi/i, 'A harvest and seasonal festival observed in many regions, with local names and customs such as Sankranti and Uttarayan.'],
+  [/baisakhi|vaisakhi/i, 'Vaisakhi marks the spring harvest in Punjab and is also an important date in Sikh history.'],
+  [/onam/i, 'Onam is Kerala’s harvest festival, celebrated through feasts, floral designs, arts, and community traditions.'],
+  [/ugadi|gudi padwa/i, 'Ugadi and Gudi Padwa mark the new year in several Deccan and western Indian traditions.'],
+  [/ganesh/i, 'Ganesh Chaturthi celebrates Ganesha and is observed through prayer, community art, and gatherings.'],
+  [/durga|navratri|dussehra|vijayadashami/i, 'These observances honour stories of devotion and the triumph of good; names and practices vary by region.'],
+  [/guru nanak/i, 'Gurpurab commemorates Guru Nanak’s life and teachings, often with prayer, singing, and langar.'],
+  [/mahavir/i, 'Mahavir Jayanti honours Mahavira, the 24th Jain Tirthankara, and teachings including non-violence.'],
+  [/buddha|vesak/i, 'Buddha Purnima commemorates key moments in the life of Gautama Buddha for Buddhist communities.'],
+  [/christmas/i, 'Christmas celebrates the birth of Jesus Christ and is observed by Christian communities across India.'],
+  [/republic day/i, 'India marks the date its Constitution came into effect in 1950, with public ceremonies and a national parade.'],
+  [/independence day/i, 'India marks independence from British rule in 1947 with flag ceremonies and community events.'],
+  [/gandhi jayanti/i, 'A national observance of Mahatma Gandhi’s birth and his legacy of non-violent civic action.'],
+]
+
+function whyIndiaEvent(name = '') {
+  return INDIA_EVENT_WHY.find(([pattern]) => pattern.test(name))?.[1] || 'A public or regional observance listed for India. Customs, names, and dates can differ across states, communities, and local calendars.'
 }
 
-const MICROSOFT_MILESTONES = {
-  '04-04': { name: 'Microsoft was founded · 1975', product: 'Microsoft', tone: 'anniversary' },
-  '06-19': { name: 'Office for Mac launched · 1989', product: 'Office', tone: 'office' },
-  '08-24': { name: 'Windows 95 launched · 1995', product: 'Windows', tone: 'windows' },
-  '09-01': { name: 'Microsoft Research began · 1991', product: 'Research', tone: 'research' },
-  '10-05': { name: 'Windows 11 became available · 2021', product: 'Windows', tone: 'windows' },
-  '11-15': { name: 'Xbox launched · 2001', product: 'Xbox', tone: 'xbox' },
+function nthWeekday(year, month, weekday, occurrence) {
+  const firstWeekday = new Date(Date.UTC(year, month - 1, 1)).getUTCDay()
+  return 1 + ((weekday - firstWeekday + 7) % 7) + (occurrence - 1) * 7
+}
+
+function getCalendarObservances(year) {
+  const event = (monthDay, name, category, description, source, sourceUrl, extra = {}) => ({ date: `${year}-${monthDay}`, name, category, description, source, sourceUrl, ...extra })
+  const events = [
+    event('01-28', 'Data Protection Day', 'tech', 'Marks the anniversary of Convention 108 and raises awareness of privacy and the protection of personal data.', 'Council of Europe', 'https://www.coe.int/en/web/data-protection/data-protection-day'),
+    event('01-24', 'International Day of Education', 'world', 'Highlights education as a human right and a foundation for inclusive, lifelong learning.', 'United Nations', 'https://www.un.org/en/observances/education-day'),
+    event('02-11', 'International Day of Women and Girls in Science', 'tech', 'Recognises the contribution of women and girls in science and calls for equal access to STEM education and careers.', 'United Nations', 'https://www.un.org/en/observances/women-and-girls-in-science-day'),
+    event('03-14', 'International Day of Mathematics', 'tech', 'Celebrates the role mathematics plays in science, technology, education, and everyday life.', 'UNESCO', 'https://www.unesco.org/en/days/mathematics'),
+    event('03-14', 'Pi Day', 'tech', 'A playful celebration of the mathematical constant pi and the ideas it helps describe.', 'UNESCO', 'https://www.unesco.org/en/days/mathematics'),
+    event('03-22', 'World Water Day', 'world', 'Draws attention to freshwater and the need for sustainable management of water resources.', 'United Nations', 'https://www.un.org/en/observances/water-day'),
+    event('04-04', 'Microsoft founded · 1975', 'microsoft', 'A company anniversary: Microsoft was founded on 4 April 1975.', 'Microsoft', 'https://blogs.microsoft.com/blog/2025/04/04/celebrating-microsofts-50-years/'),
+    event(`04-${String(nthWeekday(year, 4, 4, 4)).padStart(2, '0')}`, 'International Girls in ICT Day', 'tech', 'Encourages girls and young women to explore education and careers in information and communication technology.', 'International Telecommunication Union', 'https://www.itu.int/itu-d/sites/digital-inclusion-women-and-girls/home/girls-in-ict-day/'),
+    event('04-22', 'Earth Day', 'world', 'A global call to protect the environment and support practical action for a healthier planet.', 'EarthDay.org', 'https://www.earthday.org/'),
+    event('04-26', 'World Intellectual Property Day', 'tech', 'Explores how intellectual property can support creativity, invention, and technological innovation.', 'World Intellectual Property Organization', 'https://www.wipo.int/en/web/ipday'),
+    event('04-22', 'Microsoft & Earth Day', 'microsoft', 'Microsoft has publicly marked Earth Day and connected it with its sustainability commitments.', 'Microsoft', 'https://blogs.microsoft.com/blog/2021/04/21/building-a-more-sustainable-world-together/'),
+    event('05-17', 'World Telecommunication and Information Society Day', 'tech', 'Highlights how information and communication technologies can support social and economic development.', 'United Nations', 'https://www.un.org/en/observances/telecommunication-day'),
+    event('06-05', 'World Environment Day', 'world', 'A worldwide platform for environmental awareness and action, led by the UN Environment Programme.', 'United Nations / UNEP', 'https://www.un.org/en/observances/environment-day'),
+    event('06-08', 'World Oceans Day', 'world', 'Raises awareness of the ocean’s role in life on Earth and encourages care for marine ecosystems.', 'United Nations', 'https://www.un.org/en/observances/oceans-day'),
+    event('06-21', 'International Day of Yoga', 'world', 'Recognises yoga’s long history in India and its practice for physical and mental wellbeing.', 'United Nations', 'https://www.un.org/en/observances/yoga-day'),
+    event('08-12', 'International Youth Day', 'world', 'Spotlights issues affecting young people and their participation in public life.', 'United Nations', 'https://www.un.org/en/observances/youth-day'),
+    event('09-16', 'International Day of Science, Technology and Innovation for the South', 'tech', 'Highlights how science, technology, and innovation can support development across the Global South.', 'United Nations', 'https://www.un.org/en/observances'),
+    event('10-04', 'World Space Week begins', 'tech', 'A UN-recognised week celebrating how space science and technology contribute to society.', 'United Nations', 'https://www.un.org/en/observances/world-space-week'),
+    event('10-05', 'Windows 11 became available · 2021', 'microsoft', 'A product-history milestone: Windows 11 became generally available on 5 October 2021.', 'Microsoft', 'https://news.microsoft.com/microsoft-50/'),
+    event('11-10', 'World Science Day for Peace and Development', 'tech', 'Connects scientific progress with peaceful, sustainable development and public engagement with science.', 'UNESCO', 'https://www.unesco.org/en/days/science-peace-development'),
+    event('11-15', 'Xbox launched · 2001', 'microsoft', 'A product-history milestone: the original Xbox went on sale on 15 November 2001.', 'Microsoft', 'https://news.microsoft.com/microsoft-50/'),
+    event('12-03', 'International Day of Persons with Disabilities', 'world', 'Promotes the rights, inclusion, and wellbeing of persons with disabilities in every part of society.', 'United Nations', 'https://www.un.org/en/observances/day-of-persons-with-disabilities'),
+  ]
+  events.push(event(`02-${String(nthWeekday(year, 2, 2, 2)).padStart(2, '0')}`, 'Safer Internet Day', 'tech', 'Promotes a safer, more respectful internet for children, young people, and everyone online.', 'Safer Internet Day', 'https://www.saferinternetday.org/'))
+  events.push(event('06-19', 'Office for Mac launched · 1989', 'microsoft', 'A product-history milestone: the first Microsoft Office for Macintosh became available in 1989.', 'Microsoft Learn', 'https://learn.microsoft.com/en-us/shows/history/history-of-microsoft-1989'))
+  events.push(event('08-24', 'Windows 95 announced · 1995', 'microsoft', 'A product-history milestone: Microsoft announced Windows 95 on 24 August 1995.', 'Microsoft', 'https://news.microsoft.com/microsoft-50/'))
+  return events
 }
 
 function dateKeyForIndia(epoch) {
@@ -209,15 +279,19 @@ function dateKeyForIndia(epoch) {
 }
 
 function IndiaDayBox() {
-  const [clock, setClock] = useState(null)
-  const [holidayResult, setHolidayResult] = useState(null)
-  const [time, setTime] = useState(null)
-  const [syncError, setSyncError] = useState(false)
+  const [time, setTime] = useState(() => Date.now())
+  const [clockSource, setClockSource] = useState('device')
+  const [calendarMonth, setCalendarMonth] = useState(() => dateKeyForIndia(Date.now()).slice(0, 7))
+  const [selectedDate, setSelectedDate] = useState(() => dateKeyForIndia(Date.now()))
+  const [activeFilters, setActiveFilters] = useState(() => new Set(CALENDAR_FILTERS.map(({ id }) => id)))
+  const [region, setRegion] = useState('all')
+  const [holidayResult, setHolidayResult] = useState({ year: null, events: [], source: 'loading' })
   const [retry, setRetry] = useState(0)
+  const [followingToday, setFollowingToday] = useState(true)
 
   useEffect(() => {
     let active = true
-    async function syncFromInternet() {
+    async function syncTime() {
       try {
         const response = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=Asia%2FKolkata', { cache: 'no-store' })
         if (!response.ok) throw new Error('Clock request failed')
@@ -225,66 +299,130 @@ function IndiaDayBox() {
         const hasZone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(data.dateTime || '')
         const instant = hasZone ? Date.parse(data.dateTime) : Date.UTC(data.year, data.month - 1, data.day, data.hour, data.minute, data.seconds || 0) - 330 * 60 * 1000
         if (!Number.isFinite(instant)) throw new Error('Clock response was incomplete')
-        if (!active) return
-        setClock({ instant })
-        setTime(instant)
-        setSyncError(false)
-        const year = Number(new Intl.DateTimeFormat('en', { timeZone: 'Asia/Kolkata', year: 'numeric' }).format(new Date(instant)))
-        try {
-          const holidays = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/IN`, { cache: 'no-store' })
-          if (!holidays.ok) throw new Error('Holiday lookup failed')
-          const events = await holidays.json()
-          if (active && Array.isArray(events)) setHolidayResult({ year, events })
-        } catch {
-          if (active) setHolidayResult({ year, events: [] })
-        }
-      } catch {
-        if (active) setSyncError(true)
-      }
+        if (active) { setTime(instant); setClockSource('live') }
+      } catch { if (active) setClockSource('device') }
     }
-    syncFromInternet()
-    const syncTimer = window.setInterval(syncFromInternet, 30 * 60 * 1000)
-    const minuteTimer = window.setInterval(() => setTime((value) => value === null ? value : value + 60 * 1000), 60 * 1000)
+    syncTime()
+    const syncTimer = window.setInterval(syncTime, 30 * 60 * 1000)
+    const minuteTimer = window.setInterval(() => setTime((value) => value + 60 * 1000), 60 * 1000)
     return () => { active = false; window.clearInterval(syncTimer); window.clearInterval(minuteTimer) }
   }, [retry])
 
-  const now = clock ? time ?? clock.instant : null
-  const dateKey = now ? dateKeyForIndia(now) : ''
-  const holiday = holidayResult?.year === Number(dateKey.slice(0, 4))
-    ? holidayResult.events.find((event) => event.date === dateKey)
-    : null
-  const fallback = INDIA_HOLIDAY_FALLBACK[dateKey]
-  const milestone = dateKey ? MICROSOFT_MILESTONES[dateKey.slice(5)] : null
-  const eventName = holiday?.localName || holiday?.name || fallback?.[0]
-  const eventKey = (eventName || '').toLowerCase()
-  const eventTone = eventName
-    ? eventKey.includes('holi') ? 'holi'
-      : eventKey.includes('diwali') || eventKey.includes('deepavali') ? 'diwali'
-        : eventKey.includes('eid') || eventKey.includes('id-ul') || eventKey.includes('bakrid') || eventKey.includes('muharram') ? 'eid'
-          : eventKey.includes('christmas') ? 'christmas'
-            : eventKey.includes('republic') || eventKey.includes('independence') || eventKey.includes('gandhi') ? 'national'
-              : 'festival'
-    : milestone?.tone || 'quiet'
-  const dateText = now ? new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(now)) : ''
+  const todayKey = dateKeyForIndia(time)
+  const calendarYear = Number(calendarMonth.slice(0, 4))
+  useEffect(() => {
+    let active = true
+    async function loadHolidays() {
+      setHolidayResult((current) => ({ ...current, year: calendarYear, source: 'loading' }))
+      try {
+        const response = await fetch(`/api/india-calendar?year=${calendarYear}`, { cache: 'no-store' })
+        if (!response.ok) throw new Error('Calendar service unavailable')
+        const data = await response.json()
+        if (active && Array.isArray(data.events)) setHolidayResult({ year: calendarYear, events: data.events, source: data.source || 'Live India calendar' })
+      } catch {
+        try {
+          const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${calendarYear}/IN`, { cache: 'no-store' })
+          if (!response.ok) throw new Error('Holiday lookup failed')
+          const events = await response.json()
+          if (active && Array.isArray(events)) setHolidayResult({ year: calendarYear, events, source: 'Nager.Date · public holiday feed' })
+        } catch {
+          if (active) setHolidayResult({ year: calendarYear, events: [], source: 'Calendar feed unavailable' })
+        }
+      }
+    }
+    loadHolidays()
+    return () => { active = false }
+  }, [calendarYear, retry])
 
-  return <section className="india-day-box" data-vibe={eventTone} aria-label="India calendar and Microsoft milestones">
-    <div className="india-date-face"><span className="india-date-label">TODAY · INDIA</span>{now ? <><strong>{new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit' }).format(new Date(now))}</strong><span>{new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', month: 'long', year: 'numeric' }).format(new Date(now))}</span></> : <strong className="india-date-loading">···</strong>}</div>
-    <div className="india-day-copy"><span className="eyebrow">{syncError ? 'India calendar · offline' : 'India · live calendar'}</span><h2>{syncError ? 'Date sync unavailable' : eventName || milestone?.name || dateText || 'Syncing India time…'}</h2>
-      {syncError && <button className="india-retry" onClick={() => setRetry((value) => value + 1)}>Retry sync</button>}
-      {eventName && milestone && <p className="india-milestone">{milestone.name}</p>}
+  useEffect(() => {
+    if (followingToday) { setSelectedDate(todayKey); setCalendarMonth(todayKey.slice(0, 7)) }
+  }, [todayKey, followingToday])
+
+  const curated = getCalendarObservances(calendarYear)
+  const indiaEvents = holidayResult.year === calendarYear ? holidayResult.events.map((item) => ({
+    date: item.date,
+    name: item.localName || item.name,
+    englishName: item.name,
+    category: 'india',
+    description: whyIndiaEvent(item.localName || item.name),
+    source: item.source || 'Nager.Date · public holiday feed',
+    sourceUrl: item.sourceUrl || 'https://date.nager.at/Api',
+    counties: item.counties || item.subdivisionCodes || null,
+    global: item.global ?? item.nationalHoliday ?? false,
+    note: 'Festival dates and customs can vary by state, local tradition, calendar calculation, or moon sighting.',
+  })) : []
+  const allEvents = [...indiaEvents, ...curated]
+  const visibleEvents = allEvents.filter((event) => {
+    if (!activeFilters.has(event.category)) return false
+    if (event.category === 'india' && region !== 'all' && event.counties?.length && !event.counties.includes(region) && !event.global) return false
+    return true
+  })
+  const eventsByDate = new Map()
+  visibleEvents.forEach((event) => eventsByDate.set(event.date, [...(eventsByDate.get(event.date) || []), event]))
+  const [yearText, monthText] = calendarMonth.split('-')
+  const monthIndex = Number(monthText) - 1
+  const firstOfMonth = new Date(Date.UTC(Number(yearText), monthIndex, 1))
+  const monthStart = Date.UTC(Number(yearText), monthIndex, 1 - firstOfMonth.getUTCDay())
+  const calendarDays = Array.from({ length: 42 }, (_, index) => dateKeyForUtc(monthStart + index * 86400000))
+  const selectedEvents = eventsByDate.get(selectedDate) || []
+  const selectedDateLabel = new Intl.DateTimeFormat('en-IN', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${selectedDate}T00:00:00Z`))
+
+  function changeMonth(amount) {
+    setFollowingToday(false)
+    const next = new Date(Date.UTC(Number(yearText), monthIndex + amount, 1))
+    const key = `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}`
+    setCalendarMonth(key)
+    setSelectedDate(`${key}-01`)
+  }
+
+  function goToToday() {
+    setFollowingToday(true)
+    setCalendarMonth(todayKey.slice(0, 7))
+    setSelectedDate(todayKey)
+  }
+
+  return <section className="india-calendar" aria-label="India festivals and special days">
+    <div className="calendar-heading">
+      <div><span className="eyebrow">India · culture · technology</span><h2>Days worth knowing</h2><p>Festivals, public holidays, global observances, and Microsoft history.</p></div>
+      <span className={`calendar-live-state ${holidayResult.source === 'loading' ? 'is-loading' : ''}`}><i />{clockSource === 'live' ? 'India time live' : 'India time · device'} · {holidayResult.source === 'loading' ? 'updating dates' : holidayResult.source}</span>
     </div>
-    <div className="india-anniversary"><span aria-hidden="true">✦</span><strong>Microsoft</strong><small>50 Years</small></div>
+    <div className="calendar-controls">
+      <div className="calendar-month-controls"><button type="button" aria-label="Previous month" onClick={() => changeMonth(-1)}>‹</button><h3>{new Intl.DateTimeFormat('en-IN', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(firstOfMonth)}</h3><button type="button" aria-label="Next month" onClick={() => changeMonth(1)}>›</button><button type="button" className="calendar-today-button" onClick={goToToday}>Today</button></div>
+      <label className="calendar-region-picker">Show India dates for<select value={region} onChange={(event) => setRegion(event.target.value)}>{INDIA_REGIONS.map(([id, name]) => <option value={id} key={id}>{name}</option>)}</select></label>
+    </div>
+    <div className="calendar-filters" role="group" aria-label="Filter calendar categories">{CALENDAR_FILTERS.map((filter) => <button type="button" key={filter.id} className={activeFilters.has(filter.id) ? 'active' : ''} aria-pressed={activeFilters.has(filter.id)} onClick={() => setActiveFilters((current) => { const next = new Set(current); if (next.has(filter.id)) next.delete(filter.id); else next.add(filter.id); return next })}><i className={`calendar-dot dot-${filter.color}`} />{filter.label}</button>)}</div>
+    <div className="calendar-layout">
+      <div className="calendar-grid" role="group" aria-label={`${new Intl.DateTimeFormat('en-IN', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(firstOfMonth)} calendar`}>
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => <span className="calendar-weekday" key={day}>{day}</span>)}
+        {calendarDays.map((day) => {
+          const [dayYear, dayMonth] = day.split('-')
+          const dayEvents = eventsByDate.get(day) || []
+          return <button type="button" key={day} className={`calendar-day ${dayMonth !== monthText ? 'is-outside' : ''} ${day === selectedDate ? 'is-selected' : ''} ${day === todayKey ? 'is-today' : ''}`} aria-label={`${new Intl.DateTimeFormat('en-IN', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${day}T00:00:00Z`))}${dayEvents.length ? `, ${dayEvents.map((event) => event.name).join(', ')}` : ''}`} aria-pressed={day === selectedDate} onClick={() => { setFollowingToday(false); setSelectedDate(day); if (dayYear !== yearText) setCalendarMonth(`${dayYear}-${dayMonth}`) }}><span>{Number(day.slice(-2))}</span>{dayEvents.length > 0 && <span className="calendar-day-dots" aria-hidden="true">{[...new Set(dayEvents.map((event) => event.category))].map((category) => <i key={category} className={`dot-${category}`} />)}</span>}{day === todayKey && <small>Today</small>}</button>
+        })}
+      </div>
+      <aside className="calendar-day-detail" aria-live="polite">
+        <span className="calendar-detail-label">{selectedDate === todayKey ? 'Today in India' : 'Selected day'}</span><h3>{selectedDateLabel}</h3>
+        {selectedEvents.length ? <div className="calendar-event-list">{selectedEvents.map((event, index) => <article className={`calendar-event calendar-event-${event.category}`} key={`${event.date}-${event.name}-${index}`}><span className="calendar-event-category"><i className={`calendar-dot dot-${event.category}`} />{CALENDAR_FILTERS.find((filter) => filter.id === event.category)?.label}</span><h4>{event.name}</h4>{event.englishName && event.englishName !== event.name && <span className="calendar-event-alt">{event.englishName}</span>}<p>{event.description}</p>{event.note && <small className="calendar-event-note">{event.note}</small>}<a href={event.sourceUrl} target="_blank" rel="noreferrer">Source: {event.source} <span aria-hidden="true">↗</span></a></article>)}</div> : <p className="calendar-no-events">No dates from the selected feeds on this day. Try another day or turn on more categories.</p>}
+        {holidayResult.source === 'Calendar feed unavailable' && <button type="button" className="calendar-retry" onClick={() => setRetry((value) => value + 1)}>Retry live holiday feed</button>}
+      </aside>
+    </div>
+    <p className="calendar-footnote">Coverage depends on published public calendars. Dates for lunar and regional festivals can differ by location and tradition. <a href="https://www.india.gov.in/calendar" target="_blank" rel="noreferrer">India government holiday calendar ↗</a></p>
   </section>
+}
+
+function dateKeyForUtc(epoch) {
+  const date = new Date(epoch)
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
 }
 
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
-      { name: 'Mohammed Inam Ul Hassan', initials: 'IH', photo: '/team-inam.png' },
-      { name: 'Mohammed Yasir Hasan', initials: 'YH', photo: '/team-yasir.png' },
-      { name: 'Ganaraj Nayak', initials: 'GN', photo: '/team-ganaraj.png' },
+      { name: 'Mohammed Inam Ul Hassan', photo: '/team-inam.png' },
+      { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png' },
+      { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-context"><MicrosoftMark /><div><strong>RFO Technical Tier 3</strong><span>Global Escalation Engineers for Consumer</span></div><span className="team-context-tag">MICROSOFT</span></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" style={{ '--member-order': index }} key={member.name}><div className="team-portrait"><img src={member.photo} alt={`${member.name} profile portrait`} /><span className="team-initials">{member.initials}</span></div><div className="team-member-copy"><span className="team-member-label">Team Member {index + 1}</span><h2>{member.name}</h2><p>RFO Technical Tier 3</p><span className="team-member-org">Global Escalation Engineer · Consumer</span></div><span className="team-card-spark" aria-hidden="true">✦</span></article>)}</section></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member) => <article className="team-member-card" key={member.name}><div className="team-portrait"><img src={member.photo} alt={`${member.name} profile portrait`} /></div><div className="team-member-copy"><h2>{member.name}</h2></div></article>)}</section></main>
   }
 
   const entries = [
@@ -745,13 +883,21 @@ function App() {
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
   const [infoPage, setInfoPage] = useState(null)
-  const [theme, setTheme] = useState(() => window.localStorage.getItem('mlts-theme-v2') || 'light')
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem('mlts-theme-v2')
+      return THEMES.some((item) => item.id === saved) ? saved : 'light'
+    } catch { return 'light' }
+  })
   const [spotlightIndex, setSpotlightIndex] = useState(0)
   const [spotlightPaused, setSpotlightPaused] = useState(false)
+  const [showStartHere, setShowStartHere] = useState(() => {
+    try { return window.localStorage.getItem('mlts-start-here-dismissed') !== 'yes' } catch { return true }
+  })
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    window.localStorage.setItem('mlts-theme-v2', theme)
+    try { window.localStorage.setItem('mlts-theme-v2', theme) } catch { /* Theme still applies for this visit. */ }
   }, [theme])
 
   useEffect(() => {
@@ -764,7 +910,14 @@ function App() {
     return () => observer.disconnect()
   }, [activeGame, activeSimulator])
 
-  const toggleTheme = () => setTheme((current) => current === 'light' ? 'dark' : current === 'dark' ? 'anniversary' : 'light')
+  const toggleTheme = () => setTheme((current) => {
+    const currentIndex = THEMES.findIndex((item) => item.id === current)
+    return THEMES[(currentIndex + 1 + THEMES.length) % THEMES.length].id
+  })
+  const dismissStartHere = () => {
+    setShowStartHere(false)
+    try { window.localStorage.setItem('mlts-start-here-dismissed', 'yes') } catch { /* Dismiss for this visit even if storage is disabled. */ }
+  }
   const spotlights = [
     { eyebrow: 'Practice · customer care', title: 'Customer Chat Simulator', text: 'Build calm, clear customer conversations with a realistic simulator.', label: 'Start a conversation', action: () => setActiveSimulator('customer') },
     { eyebrow: 'Play · endless landing challenge', title: 'Skyfall', text: 'Steer your parachutist, land on each platform, and dodge storm clouds.', label: 'Start the descent', action: () => setActiveGame('skyfall') },
@@ -790,18 +943,20 @@ function App() {
   }
 
   const simulatorsList = [
-    { id: 'customer', icon: '💬', tag: 'Talk it out', title: 'Customer Chat Simulator', text: 'Practice listening, empathy, and clear next steps in a realistic chat.' },
-    { id: 'quiz', icon: '✦', tag: 'Ask & learn', title: 'Quiz Gauntlet', text: 'Explore consumer Microsoft products with your Copilot Studio quiz.' },
+    { id: 'customer', icon: 'chat', tag: 'Talk it out', title: 'Customer Chat Simulator', text: 'Practice calm, helpful customer conversations.' },
+    { id: 'quiz', icon: 'spark', tag: 'Ask & learn', title: 'Quiz Gauntlet', text: 'Recall consumer Microsoft product knowledge.' },
   ]
   const games = [
-    { id: 'typing', icon: '⌨️', tag: '90 seconds', title: 'Typing Master', text: 'Type a fresh passage. See your speed, accuracy, and badge.' },
-    { id: 'skyfall', icon: '🪂', tag: '3D-style landing game', title: 'Skyfall', text: 'Land, collect shields, and dodge wind and storms.' },
-    { id: 'reply', icon: '💌', tag: '100+ scenarios', title: 'Reply Remix', text: 'Choose a clear, customer-first response.' },
+    { id: 'typing', icon: 'keyboard', tag: '90 seconds', title: 'Typing Master', text: 'Test your speed and accuracy.' },
+    { id: 'skyfall', icon: 'parachute', tag: 'Landing challenge', title: 'Skyfall', text: 'Steer, land, and collect shields.' },
+    { id: 'reply', icon: 'reply', tag: '100+ scenarios', title: 'Reply Remix', text: 'Choose calm, useful responses.' },
   ]
 
-  return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><IndiaDayBox /><section className="hero" onMouseEnter={() => setSpotlightPaused(true)} onMouseLeave={() => setSpotlightPaused(false)} onFocusCapture={() => setSpotlightPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSpotlightPaused(false) }}><div className="hero-copy" key={spotlightIndex}><span className="eyebrow light">{spotlight.eyebrow}</span><h1>{spotlight.title}</h1><p>{spotlight.text}</p><div className="hero-actions"><button className="button-primary" onClick={spotlight.action}>{spotlight.label} <span aria-hidden="true">→</span></button><span className="tiny-note">MLTS Consumer Simulator · Practice at your pace</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Explore the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div><div className="spotlight-dots"><span>{spotlightIndex + 1} / {spotlights.length}</span>{spotlights.map((item, index) => <button key={item.title} aria-label={`Show ${item.title}`} aria-current={spotlightIndex === index ? 'true' : undefined} onClick={() => setSpotlightIndex(index)} />)}</div></div></section>
-    <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Tiny games, real skills</span><h2>Quick play</h2></div><p>Build a skill in a few minutes.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
-    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">MLTS Consumer Simulator</span><h2>Practice with people skills</h2></div><p>Realistic conversations and product knowledge, at your pace.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon">{item.icon}</span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
+  return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero" onMouseEnter={() => setSpotlightPaused(true)} onMouseLeave={() => setSpotlightPaused(false)} onFocusCapture={() => setSpotlightPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSpotlightPaused(false) }}><div className="hero-copy" key={spotlightIndex}><span className="eyebrow light">{spotlight.eyebrow}</span><h1>{spotlight.title}</h1><p>{spotlight.text}</p><div className="hero-actions"><button className="button-primary" onClick={spotlight.action}>{spotlight.label} <span aria-hidden="true">→</span></button><span className="tiny-note">MLTS Consumer Simulator · Practice at your pace</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Explore the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div><div className="spotlight-dots"><span>{spotlightIndex + 1} / {spotlights.length}</span>{spotlights.map((item, index) => <button key={item.title} aria-label={`Show ${item.title}`} aria-current={spotlightIndex === index ? 'true' : undefined} onClick={() => setSpotlightIndex(index)} />)}</div></div></section>
+    {showStartHere && <aside className="start-here" aria-label="Getting started"><span className="start-here-icon"><ActivityIcon name="chat" /></span><div><strong>New to the hub?</strong><p>Start with a short customer conversation practice.</p></div><button className="start-here-action" onClick={() => { dismissStartHere(); setActiveSimulator('customer') }}>Try Customer Chat <span aria-hidden="true">→</span></button><button className="start-here-dismiss" aria-label="Dismiss getting started suggestion" onClick={dismissStartHere}>×</button></aside>}
+    <IndiaDayBox />
+    <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Quick practice</span><h2>Play & build a skill</h2></div><p>Short activities, ready when you are.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
+    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">Practice with guidance</span><h2>Learn through conversation</h2></div><p>Practice support skills and product knowledge.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
     <FixOfTheDay />
     <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><nav className="footer-links" aria-label="More information"><button onClick={() => setInfoPage('manual')}>Manual</button><button onClick={() => setInfoPage('team')}>Meet the Team</button></nav><span>Practice at your pace.</span></footer>
   </main></div>

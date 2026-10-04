@@ -10,10 +10,10 @@ A browser-based Microsoft consumer support learning hub built with React and Vit
 - **Skyfall** — an endless, colorful perspective-style parachute game. Steer with keyboard or touch controls, land on platforms, avoid wind gates and storms, and collect shields. It uses a canvas-based 3D-style perspective rather than a full 3D engine.
 - **Reply Remix** — 100+ randomized customer situations. Questions are shuffled without repeats until the question bank cycles.
 - **Fix for the Day** — a 69-card support learning deck covering Windows, Microsoft 365, accounts, billing, licensing, Remote Desktop Services, and sales topics. Cards rotate on a shared schedule every 5–10 minutes, reshuffle after each cycle, and have no manual navigation, visible countdown, or saved state. The cards are static learning content, not live Microsoft news, and do not redirect to external pages.
-- **India calendar** — a compact India date box that synchronizes its date from an internet time source, highlights public observances and Microsoft product milestones, and includes a Microsoft 50 Years badge. Festival dates may vary by region or moon sighting.
-- **Microsoft 50 Years theme** — a restrained anniversary-inspired theme, alongside light and dark modes. Light mode is the default.
+- **India calendar** — a month view with live India time, public holiday feeds, region filters, and context for global, technology, and Microsoft observances. Regional and lunar festival dates can vary by source and tradition.
+- **Themes** — light and dark modes, a restrained Microsoft 50 Years theme, plus developer and customer support themes with matching icons. Light mode is the default.
 - **Website Manual** — explains the purpose of each learning feature.
-- **Meet the Team** — profile cards for Mohammed Inam Ul Hassan (red), Mohammed Yasir Hasan (blue), and Ganaraj Nayak (green). All are listed with RFO Technical Tier 3, Global Escalation Engineers for Consumer.
+- **Meet the Team** — calm, consistent profile cards that foreground each team member’s portrait and name.
 - **Responsive and accessible presentation** — adapts to mobile screens, includes keyboard focus styles, and respects reduced-motion preferences.
 
 ## Privacy and data
