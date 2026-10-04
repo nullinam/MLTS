@@ -200,11 +200,11 @@ function Header({ onHome = null, theme = 'light', onToggleTheme }) {
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
-      { name: 'Mohammed Inam Ul Hassan', photo: '/team-inam.png', accent: '#e46f72', initials: 'MI' },
-      { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#6b9fe5', initials: 'MY' },
-      { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#78b887', initials: 'GN' },
+      { name: 'Mohammed Inam Ul Hassan', photo: '/team-inam.png', accent: '#8DA9C4', initials: 'MI' },
+      { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
+      { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2></div></article>)}</section></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
   }
 
   const entries = [
@@ -406,78 +406,209 @@ function SkyDropGame({ onBack }) {
       }
     }
 
-    function drawCloud(x, y, scale = 1, color = '#eaf7ff') {
-      context.fillStyle = color
-      context.beginPath(); context.ellipse(x, y, 28 * scale, 12 * scale, 0, 0, Math.PI * 2); context.ellipse(x - 15 * scale, y - 5 * scale, 15 * scale, 14 * scale, 0, 0, Math.PI * 2); context.ellipse(x + 3 * scale, y - 10 * scale, 17 * scale, 18 * scale, 0, 0, Math.PI * 2); context.ellipse(x + 19 * scale, y - 4 * scale, 14 * scale, 13 * scale, 0, 0, Math.PI * 2); context.fill()
+    function drawCloud(x, y, scale = 1, shade = '#f5f7f4') {
+      context.save()
+      context.translate(x, y)
+      context.scale(scale, scale)
+      context.shadowColor = 'rgba(43,64,75,.15)'
+      context.shadowBlur = 10
+      context.fillStyle = shade
+      context.beginPath()
+      context.ellipse(0, 5, 33, 14, 0, 0, Math.PI * 2)
+      context.ellipse(-19, 1, 18, 17, 0, 0, Math.PI * 2)
+      context.ellipse(1, -8, 23, 23, 0, 0, Math.PI * 2)
+      context.ellipse(22, 1, 17, 16, 0, 0, Math.PI * 2)
+      context.fill()
+      context.shadowBlur = 0
+      context.globalAlpha = .12
+      context.fillStyle = '#344955'
+      context.beginPath()
+      context.ellipse(1, 12, 26, 5, 0, 0, Math.PI * 2)
+      context.fill()
+      context.restore()
     }
 
     function draw() {
       const game = gameRef.current
+      const elapsed = game?.elapsed || 0
       const sky = context.createLinearGradient(0, 0, 0, height)
-      sky.addColorStop(0, '#63c6ef'); sky.addColorStop(.6, '#b5e4f4'); sky.addColorStop(1, '#f4dfa5')
-      context.fillStyle = sky; context.fillRect(0, 0, width, height)
-      context.fillStyle = 'rgba(255,255,255,.3)'
-      for (let i = 0; i < 9; i++) {
-        const cloudY = ((i * 91 + (game?.elapsed || 0) * 16) % (height + 90)) - 35
-        drawCloud((i * 137 + 47) % width, cloudY, .56 + (i % 3) * .14)
+      sky.addColorStop(0, '#5d9fbd')
+      sky.addColorStop(.44, '#b5ced1')
+      sky.addColorStop(.7, '#e1d9c3')
+      sky.addColorStop(1, '#a8b99b')
+      context.fillStyle = sky
+      context.fillRect(0, 0, width, height)
+
+      const sunlight = context.createRadialGradient(760, 90, 8, 760, 90, 210)
+      sunlight.addColorStop(0, 'rgba(255,239,195,.62)')
+      sunlight.addColorStop(1, 'rgba(255,239,195,0)')
+      context.fillStyle = sunlight
+      context.fillRect(535, 0, 425, 300)
+
+      // Distant ridges use soft atmospheric color; nearer slopes have deeper, natural greens.
+      context.fillStyle = '#829eaa'
+      context.beginPath()
+      context.moveTo(0, 290); context.lineTo(72, 208); context.lineTo(127, 248); context.lineTo(222, 169); context.lineTo(301, 247); context.lineTo(408, 186); context.lineTo(484, 242); context.lineTo(580, 157); context.lineTo(669, 242); context.lineTo(777, 183); context.lineTo(865, 245); context.lineTo(960, 190); context.lineTo(960, 420); context.lineTo(0, 420); context.closePath(); context.fill()
+      context.fillStyle = 'rgba(237,241,231,.42)'
+      context.beginPath()
+      context.moveTo(182, 203); context.lineTo(222, 169); context.lineTo(261, 209); context.lineTo(238, 199); context.lineTo(222, 205); context.lineTo(207, 193); context.closePath(); context.fill()
+      context.beginPath()
+      context.moveTo(545, 188); context.lineTo(580, 157); context.lineTo(620, 196); context.lineTo(599, 187); context.lineTo(581, 195); context.lineTo(566, 181); context.closePath(); context.fill()
+      context.fillStyle = '#718c79'
+      context.beginPath()
+      context.moveTo(0, 300); context.quadraticCurveTo(124, 250, 230, 302); context.quadraticCurveTo(360, 356, 483, 294); context.quadraticCurveTo(614, 242, 740, 303); context.quadraticCurveTo(850, 355, 960, 285); context.lineTo(960, 540); context.lineTo(0, 540); context.closePath(); context.fill()
+      context.fillStyle = '#91a27c'
+      context.beginPath()
+      context.moveTo(0, 365); context.quadraticCurveTo(140, 309, 276, 371); context.quadraticCurveTo(428, 431, 570, 360); context.quadraticCurveTo(714, 306, 840, 367); context.quadraticCurveTo(913, 399, 960, 377); context.lineTo(960, 540); context.lineTo(0, 540); context.closePath(); context.fill()
+
+      // Patchwork fields and tree lines give the landing area a readable ground plane.
+      context.fillStyle = 'rgba(190,181,132,.42)'
+      context.beginPath(); context.moveTo(82, 414); context.lineTo(257, 388); context.lineTo(319, 540); context.lineTo(142, 540); context.closePath(); context.fill()
+      context.fillStyle = 'rgba(197,205,160,.38)'
+      context.beginPath(); context.moveTo(610, 411); context.lineTo(817, 393); context.lineTo(910, 540); context.lineTo(690, 540); context.closePath(); context.fill()
+      context.strokeStyle = 'rgba(229,229,195,.34)'
+      context.lineWidth = 2
+      for (let row = 0; row < 5; row += 1) {
+        const y = 438 + row * 22
+        context.beginPath(); context.moveTo(0, y); context.quadraticCurveTo(470, y - 20, width, y + 4); context.stroke()
       }
-      context.fillStyle = 'rgba(255,255,255,.32)'
-      context.beginPath(); context.ellipse(width - 110, 120, 75, 75, 0, 0, Math.PI * 2); context.fill()
+      for (let tree = 0; tree < 26; tree += 1) {
+        const x = (tree * 113 + 38) % width
+        const y = 324 + (tree * 47) % 142
+        const size = 3 + (tree % 4)
+        context.fillStyle = tree % 3 === 0 ? '#435f50' : '#526f59'
+        context.beginPath(); context.arc(x, y, size, 0, Math.PI * 2); context.fill()
+      }
 
-      // Layered ridgelines and converging tracks create a perspective flight corridor.
-      context.fillStyle = 'rgba(83,145,166,.24)'
-      context.beginPath(); context.moveTo(0, 300); context.lineTo(135, 264); context.lineTo(245, 294); context.lineTo(378, 248); context.lineTo(520, 292); context.lineTo(682, 255); context.lineTo(828, 296); context.lineTo(960, 258); context.lineTo(960, 540); context.lineTo(0, 540); context.fill()
-      context.fillStyle = 'rgba(255,255,255,.13)'
-      context.beginPath(); context.moveTo(0, 335); context.lineTo(130, 303); context.lineTo(276, 327); context.lineTo(430, 295); context.lineTo(570, 330); context.lineTo(740, 296); context.lineTo(960, 332); context.lineTo(960, 540); context.lineTo(0, 540); context.fill()
-      context.strokeStyle = 'rgba(255,255,255,.12)'; context.lineWidth = 1
-      for (let lane = -4; lane <= 4; lane += 1) { context.beginPath(); context.moveTo(480 + lane * 8, 245); context.lineTo(480 + lane * 148, height); context.stroke() }
-      for (let grid = 0; grid < 5; grid += 1) { const y = 285 + grid * grid * 16 + ((game?.elapsed || 0) * 34 % 72); context.beginPath(); context.moveTo(0, y); context.quadraticCurveTo(480, y - 25, width, y); context.stroke() }
+      // High clouds drift slowly past the canopy; their soft shadows add depth without grid effects.
+      for (let index = 0; index < 7; index += 1) {
+        const x = (index * 177 + 76 + Math.sin(elapsed * .12 + index) * 18 + width) % width
+        const y = 68 + (index * 61) % 176
+        drawCloud(x, y, .48 + (index % 3) * .14)
+      }
+      context.fillStyle = 'rgba(248,250,244,.25)'
+      context.fillRect(0, 270, width, 35)
 
-      if (game) {
-        game.gusts.forEach((gust) => {
-          const wobble = Math.sin(gust.phase) * 18
-          context.fillStyle = 'rgba(96,210,226,.14)'
-          context.beginPath(); context.moveTo(gust.x - gust.width / 2, gust.y); context.lineTo(gust.x + gust.width / 2, gust.y - 12); context.lineTo(gust.x + gust.width / 2 - 24, gust.y + 62); context.lineTo(gust.x - gust.width / 2 - 24, gust.y + 74); context.closePath(); context.fill()
-          context.strokeStyle = 'rgba(89,193,218,.72)'; context.lineWidth = 3; context.setLineDash([12, 8])
-          context.beginPath(); context.moveTo(gust.x - gust.width / 2 + wobble, gust.y + 12); context.bezierCurveTo(gust.x - 25, gust.y + 42, gust.x + 35, gust.y + 4, gust.x + gust.width / 2 - 15, gust.y + 42); context.stroke(); context.setLineDash([])
-        })
-        game.boosts.forEach((boost) => {
-          const bob = Math.sin(boost.phase) * 5
-          context.save(); context.translate(boost.x, boost.y + bob); context.rotate(boost.phase * .4)
-          context.shadowColor = '#ffe18a'; context.shadowBlur = 16; context.strokeStyle = '#ffe18a'; context.lineWidth = 6
-          context.beginPath(); context.ellipse(0, 0, 18, 25, 0, 0, Math.PI * 2); context.stroke(); context.shadowBlur = 0
-          context.fillStyle = '#fff4c6'; context.beginPath(); context.arc(0, 0, 4, 0, Math.PI * 2); context.fill(); context.restore()
-        })
-        game.hazards.forEach((hazard) => {
-          drawCloud(hazard.x, hazard.y, .95, '#63748b')
-          context.strokeStyle = '#ffd35f'; context.lineWidth = 5; context.lineCap = 'round'
-          context.beginPath(); context.moveTo(hazard.x + 2, hazard.y - 2); context.lineTo(hazard.x - 5, hazard.y + 9); context.lineTo(hazard.x + 2, hazard.y + 9); context.lineTo(hazard.x - 2, hazard.y + 19); context.stroke()
-        })
-        const target = game.target
-        if (target) {
-          const left = target.x - target.width / 2; const right = target.x + target.width / 2; const depth = 22; const lip = 12
-          context.fillStyle = 'rgba(21,45,52,.3)'; context.beginPath(); context.ellipse(target.x - 8, target.y + 22, target.width * .62, 18, 0, 0, Math.PI * 2); context.fill()
-          context.fillStyle = '#176b58'; context.beginPath(); context.moveTo(left, target.y); context.lineTo(right, target.y); context.lineTo(right - depth, target.y + lip); context.lineTo(left - depth, target.y + lip); context.closePath(); context.fill()
-          context.fillStyle = '#125044'; context.beginPath(); context.moveTo(left - depth, target.y + lip); context.lineTo(right - depth, target.y + lip); context.lineTo(right - depth, target.y + lip + target.height); context.lineTo(left - depth, target.y + lip + target.height); context.closePath(); context.fill()
-          context.fillStyle = game.flash > 0 ? '#fff4b5' : '#38a76b'; context.beginPath(); context.moveTo(left, target.y); context.lineTo(right, target.y); context.lineTo(right - depth, target.y + lip); context.lineTo(left - depth, target.y + lip); context.closePath(); context.fill()
-          context.strokeStyle = '#baf77a'; context.lineWidth = 3; context.beginPath(); context.moveTo(left + 5, target.y + 2); context.lineTo(right - 4, target.y + 2); context.stroke()
-          for (let i = 0; i < 5; i++) { context.fillStyle = 'rgba(255,255,255,.55)'; context.fillRect(left - depth + 12 + i * 27, target.y + 6, 12, 2) }
+      if (!game) return
+
+      game.gusts.forEach((gust) => {
+        const sway = Math.sin(gust.phase) * 15
+        context.save()
+        context.globalAlpha = .38
+        context.strokeStyle = '#f3f5e9'
+        context.lineWidth = 2
+        for (let line = 0; line < 3; line += 1) {
+          const y = gust.y + line * 12
+          context.beginPath()
+          context.moveTo(gust.x - gust.width / 2 + sway, y)
+          context.bezierCurveTo(gust.x - 25, y - 12, gust.x + 20, y + 13, gust.x + gust.width / 2, y - 2)
+          context.stroke()
         }
-        // Parachute canopy, suspension lines, and a compact skydiver sprite.
-        const x = game.playerX
-        const canopyY = playerY - 33
-        context.strokeStyle = 'rgba(37,60,82,.7)'; context.lineWidth = 2
-        context.beginPath(); context.moveTo(x - 26, canopyY + 3); context.lineTo(x - 8, playerY + 2); context.moveTo(x + 26, canopyY + 3); context.lineTo(x + 8, playerY + 2); context.stroke()
-        const canopy = context.createLinearGradient(x - 30, canopyY - 34, x + 25, canopyY + 8); canopy.addColorStop(0, '#ff9c63'); canopy.addColorStop(.55, '#ee6148'); canopy.addColorStop(1, '#b83c55')
-        context.fillStyle = canopy; context.beginPath(); context.moveTo(x - 38, canopyY + 4); context.quadraticCurveTo(x - 31, canopyY - 38, x, canopyY - 36); context.quadraticCurveTo(x + 31, canopyY - 38, x + 38, canopyY + 4); context.quadraticCurveTo(x, canopyY + 16, x - 38, canopyY + 4); context.fill()
-        context.fillStyle = '#ffd166'; context.beginPath(); context.moveTo(x - 5, canopyY - 34); context.quadraticCurveTo(x + 20, canopyY - 32, x + 37, canopyY + 4); context.quadraticCurveTo(x + 12, canopyY + 11, x - 5, canopyY + 7); context.fill()
-        context.strokeStyle = '#fff4df'; context.lineWidth = 1.5; context.beginPath(); context.moveTo(x - 22, canopyY + 7); context.lineTo(x - 5, playerY + 2); context.moveTo(x + 22, canopyY + 7); context.lineTo(x + 5, playerY + 2); context.stroke()
-        context.fillStyle = '#f6ba86'; context.beginPath(); context.arc(x, playerY + 8, 8, 0, Math.PI * 2); context.fill()
-        context.fillStyle = '#36587a'; context.fillRect(x - 9, playerY + 15, 18, 19)
-        context.strokeStyle = '#243b55'; context.lineWidth = 4; context.beginPath(); context.moveTo(x - 5, playerY + 31); context.lineTo(x - 10, playerY + 40); context.moveTo(x + 5, playerY + 31); context.lineTo(x + 10, playerY + 40); context.stroke()
-        context.fillStyle = '#fff'; context.font = '700 15px Inter, sans-serif'; context.fillText(`LANDINGS  ${game.score}`, 24, 34)
-        context.fillStyle = '#31546d'; context.font = '600 12px Inter, sans-serif'; context.fillText(`DESCENT SPEED  ${Math.round(112 + game.score * 5 + 150 * (1 - Math.exp(-game.score / 12)))}`, 24, 54)
-        context.fillStyle = game.shield ? '#fff0a7' : 'rgba(255,255,255,.76)'; context.font = '700 11px Inter, sans-serif'; context.fillText(game.shield ? '✦ WIND SHIELD READY' : '✦ FIND A GOLD RING FOR A SHIELD', 24, 74)
+        context.restore()
+      })
+
+      game.boosts.forEach((boost) => {
+        const bob = Math.sin(boost.phase) * 4
+        context.save()
+        context.translate(boost.x, boost.y + bob)
+        context.shadowColor = 'rgba(234,190,99,.7)'
+        context.shadowBlur = 12
+        context.strokeStyle = '#d8a84e'
+        context.lineWidth = 7
+        context.beginPath(); context.ellipse(0, 0, 17, 22, Math.sin(boost.phase) * .12, 0, Math.PI * 2); context.stroke()
+        context.shadowBlur = 0
+        context.strokeStyle = 'rgba(255,249,214,.88)'
+        context.lineWidth = 2
+        context.beginPath(); context.ellipse(-2, -2, 11, 16, 0, -.7, 1.8); context.stroke()
+        context.restore()
+      })
+
+      game.hazards.forEach((hazard) => {
+        drawCloud(hazard.x, hazard.y, .9, '#909da0')
+        context.save()
+        context.strokeStyle = 'rgba(75,91,101,.66)'
+        context.lineWidth = 2
+        for (let drop = -1; drop <= 1; drop += 1) {
+          const x = hazard.x + drop * 13
+          context.beginPath(); context.moveTo(x, hazard.y + 13); context.lineTo(x - 4, hazard.y + 22); context.stroke()
+        }
+        context.restore()
+      })
+
+      const target = game.target
+      if (target) {
+        const left = target.x - target.width / 2
+        const top = target.y
+        context.save()
+        context.shadowColor = 'rgba(37,55,42,.25)'
+        context.shadowBlur = 12
+        context.fillStyle = '#496847'
+        context.beginPath(); context.roundRect(left, top, target.width, 30, 5); context.fill()
+        context.shadowBlur = 0
+        context.fillStyle = '#81936b'
+        context.fillRect(left + 4, top + 4, target.width - 8, 22)
+        context.strokeStyle = 'rgba(241,239,210,.86)'
+        context.lineWidth = 2
+        context.setLineDash([9, 6])
+        context.beginPath(); context.moveTo(left + 8, top + 15); context.lineTo(left + target.width - 8, top + 15); context.stroke()
+        context.setLineDash([])
+        context.fillStyle = 'rgba(248,246,222,.82)'
+        context.font = '700 9px Inter, sans-serif'
+        context.textAlign = 'center'
+        context.fillText('LANDING ZONE', target.x, top + 27)
+        context.restore()
+      }
+
+      // A fabric canopy, suspension lines, harness, and bent legs make the skydiver read as a 2D figure.
+      const x = game.playerX + Math.sin(elapsed * 2.1) * 2
+      const canopyY = playerY - 37
+      const canopyWidth = 82
+      context.save()
+      context.strokeStyle = 'rgba(42,54,61,.82)'
+      context.lineWidth = 1.6
+      context.beginPath()
+      context.moveTo(x - 34, canopyY + 6); context.lineTo(x - 10, playerY + 13)
+      context.moveTo(x - 14, canopyY - 1); context.lineTo(x - 5, playerY + 12)
+      context.moveTo(x + 14, canopyY - 1); context.lineTo(x + 5, playerY + 12)
+      context.moveTo(x + 34, canopyY + 6); context.lineTo(x + 10, playerY + 13)
+      context.stroke()
+      const canopy = context.createLinearGradient(x - 40, canopyY - 35, x + 40, canopyY + 12)
+      canopy.addColorStop(0, '#a94c3e'); canopy.addColorStop(.48, '#df8060'); canopy.addColorStop(1, '#8d3f3a')
+      context.fillStyle = canopy
+      context.beginPath()
+      context.moveTo(x - canopyWidth / 2, canopyY + 6)
+      context.quadraticCurveTo(x - 32, canopyY - 37, x, canopyY - 39)
+      context.quadraticCurveTo(x + 32, canopyY - 37, x + canopyWidth / 2, canopyY + 6)
+      context.quadraticCurveTo(x, canopyY + 17, x - canopyWidth / 2, canopyY + 6)
+      context.closePath(); context.fill()
+      context.strokeStyle = 'rgba(255,225,202,.7)'
+      context.lineWidth = 1
+      context.beginPath()
+      context.moveTo(x - 25, canopyY - 27); context.quadraticCurveTo(x - 20, canopyY - 4, x - 14, canopyY + 10)
+      context.moveTo(x, canopyY - 38); context.lineTo(x, canopyY + 13)
+      context.moveTo(x + 25, canopyY - 27); context.quadraticCurveTo(x + 20, canopyY - 4, x + 14, canopyY + 10)
+      context.stroke()
+      context.strokeStyle = '#f0d2bd'; context.lineWidth = 3; context.lineCap = 'round'
+      context.beginPath(); context.moveTo(x - 7, playerY + 26); context.lineTo(x - 13, playerY + 36); context.lineTo(x - 10, playerY + 42); context.moveTo(x + 7, playerY + 26); context.lineTo(x + 13, playerY + 35); context.lineTo(x + 11, playerY + 42); context.stroke()
+      context.strokeStyle = '#314959'; context.lineWidth = 5
+      context.beginPath(); context.moveTo(x - 9, playerY + 18); context.lineTo(x - 17, playerY + 23); context.lineTo(x - 22, playerY + 17); context.moveTo(x + 9, playerY + 18); context.lineTo(x + 17, playerY + 23); context.lineTo(x + 22, playerY + 17); context.stroke()
+      context.fillStyle = '#334f61'
+      context.beginPath(); context.roundRect(x - 8, playerY + 12, 16, 19, 5); context.fill()
+      context.fillStyle = '#b86645'
+      context.beginPath(); context.roundRect(x - 6, playerY + 13, 12, 14, 4); context.fill()
+      context.strokeStyle = '#d8c49c'; context.lineWidth = 2
+      context.beginPath(); context.moveTo(x - 6, playerY + 15); context.lineTo(x + 6, playerY + 15); context.moveTo(x, playerY + 15); context.lineTo(x, playerY + 27); context.stroke()
+      context.fillStyle = '#d4b08d'
+      context.beginPath(); context.arc(x, playerY + 6, 6, 0, Math.PI * 2); context.fill()
+      context.fillStyle = '#425460'
+      context.beginPath(); context.ellipse(x, playerY + 3, 7, 4, 0, Math.PI, Math.PI * 2); context.fill()
+      context.fillStyle = game.shield ? '#e9c574' : '#d8e1df'
+      context.beginPath(); context.arc(x + 15, playerY + 22, 2.5, 0, Math.PI * 2); context.fill()
+      context.restore()
+
+      if (game.flash > 0) {
+        context.fillStyle = 'rgba(246,230,176,' + Math.min(.18, game.flash * .2) + ')'
+        context.fillRect(0, 0, width, height)
       }
     }
 
@@ -503,7 +634,7 @@ function SkyDropGame({ onBack }) {
     else keys.delete(key)
   }
 
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">3D-style descent · endless run</span><h1>Skyfall</h1><p>Land, dodge wind and storms, and grab a gold ring for one shield.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div><span className="skyfall-no-save">No scores saved</span></div><div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="Perspective parachute game with raised platforms, wind gates, storm clouds, and shield rings" />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${gameRef.current?.reason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D. Touch arrows work on mobile.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Try again' : 'Start descent'} <span>→</span></button></div></div>}</div><div className="skyfall-mobile-controls"><button onPointerDown={(event) => { event.preventDefault(); holdDirection('left', true) }} onPointerUp={() => holdDirection('left', false)} onPointerCancel={() => holdDirection('left', false)} onPointerLeave={() => holdDirection('left', false)} aria-label="Steer left">←</button><span>STEER</span><button onPointerDown={(event) => { event.preventDefault(); holdDirection('right', true) }} onPointerUp={() => holdDirection('right', false)} onPointerCancel={() => holdDirection('right', false)} onPointerLeave={() => holdDirection('right', false)} aria-label="Steer right">→</button></div><p className="skyfall-caption">Miss a platform or hit a storm without a shield and the run ends.</p></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2D skydiving · endless run</span><h1>Skyfall</h1><p>Land safely, dodge storms, and collect shield rings.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div></div><div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2D parachute landing game with hills, clouds, landing zones, and shield rings. Use left/right arrows or A/D to steer." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${gameRef.current?.reason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D. Touch arrows work on mobile.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Try again' : 'Start descent'} <span>→</span></button></div></div>}</div><div className="skyfall-mobile-controls"><button onPointerDown={(event) => { event.preventDefault(); holdDirection('left', true) }} onPointerUp={() => holdDirection('left', false)} onPointerCancel={() => holdDirection('left', false)} onPointerLeave={() => holdDirection('left', false)} aria-label="Steer left">←</button><span>STEER</span><button onPointerDown={(event) => { event.preventDefault(); holdDirection('right', true) }} onPointerUp={() => holdDirection('right', false)} onPointerCancel={() => holdDirection('right', false)} onPointerLeave={() => holdDirection('right', false)} aria-label="Steer right">→</button></div></section></div>
 }
 
 const fixTopics = [
@@ -644,20 +775,19 @@ function FixOfTheDay() {
   }, [])
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
-    <div className="fix-deck-heading"><div><span className="eyebrow">One useful skill · shuffled every 5–10 minutes</span><h2 id="fix-deck-title">Fix for the Day</h2><p>A collectible-style learning card for real support conversations.</p></div></div>
+    <div className="fix-deck-heading"><div><span className="eyebrow">Support skill</span><h2 id="fix-deck-title">Fix for the Day</h2></div></div>
     <article className="fix-card" key={`${card.id}-${slot.changesAt}`} style={{ '--card-accent': accent }}>
       <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div></div>
       <div className="fix-card-title-row"><div><span className="fix-card-kicker">FIELD GUIDE · {card.product.toUpperCase()}</span><h3>{card.subject}</h3></div><span className="fix-read-time">◷ {card.minutes} min read</span></div>
-      <div className="fix-learning-objective"><span>LEARNING OBJECTIVE</span><p>{card.objective}</p></div>
-      <div className="fix-knowledge-grid">
+      <div className="fix-learning-objective"><span>PRACTICE POINT</span><p>{card.objective}</p></div>
+      <div className="fix-scenario"><span>🎧 CUSTOMER SCENARIO</span><p>“{card.scenario}”</p></div>
+      <details className="fix-more-details"><summary>More product detail <span aria-hidden="true">＋</span></summary><div className="fix-knowledge-grid">
         <section><span>THE KNOWLEDGE</span><p>{card.knowledge}</p></section>
         <section><span>KEY TERM</span><strong>{card.keyTerm}</strong></section>
         <section><span>KNOW THIS</span><p>{card.knowThis}</p></section>
         <section><span>PRO TIP</span><p>{card.tip}</p></section>
-      </div>
-      <div className="fix-scenario"><span>🎧 CUSTOMER SCENARIO</span><p>“{card.scenario}”</p></div>
+      </div></details>
     </article>
-    <p className="fix-deck-note">The card rotates automatically on a shared 5–10 minute schedule. The full deck reshuffles after each cycle.</p>
   </section>
 }
 
@@ -671,8 +801,8 @@ function App() {
       return THEMES.some((item) => item.id === saved) ? saved : 'light'
     } catch { return 'light' }
   })
-  const [spotlightIndex, setSpotlightIndex] = useState(0)
-  const [spotlightPaused, setSpotlightPaused] = useState(false)
+  const [simulatorLoad, setSimulatorLoad] = useState('loading')
+  const [simulatorAttempt, setSimulatorAttempt] = useState(0)
   const [showStartHere, setShowStartHere] = useState(() => {
     try { return window.localStorage.getItem('mlts-start-here-dismissed') !== 'yes' } catch { return true }
   })
@@ -700,24 +830,19 @@ function App() {
     setShowStartHere(false)
     try { window.localStorage.setItem('mlts-start-here-dismissed', 'yes') } catch { /* Dismiss for this visit even if storage is disabled. */ }
   }
-  const spotlights = [
-    { eyebrow: 'Practice · customer care', title: 'Customer Chat Simulator', text: 'Build calm, clear customer conversations with a realistic simulator.', label: 'Start a conversation', action: () => setActiveSimulator('customer') },
-    { eyebrow: 'Play · endless landing challenge', title: 'Skyfall', text: 'Steer your parachutist, land on each platform, and dodge storm clouds.', label: 'Start the descent', action: () => setActiveGame('skyfall') },
-    { eyebrow: 'Practice · consumer Microsoft', title: 'Quiz Gauntlet', text: 'Explore everyday Microsoft products with your quiz simulator.', label: 'Start the quiz', action: () => setActiveSimulator('quiz') },
-    { eyebrow: 'Practice · typing lab', title: 'Typing Master', text: 'A 90-second typing test with live speed and accuracy.', label: 'Start typing', action: () => setActiveGame('typing') },
-  ]
-  const spotlight = spotlights[spotlightIndex]
+
   useEffect(() => {
-    if (spotlightPaused || activeGame || activeSimulator || infoPage) return undefined
-    const timer = window.setInterval(() => setSpotlightIndex((index) => (index + 1) % spotlights.length), 5200)
-    return () => window.clearInterval(timer)
-  }, [spotlightPaused, activeGame, activeSimulator, infoPage])
+    if (!activeSimulator) return undefined
+    setSimulatorLoad('loading')
+    const timer = window.setTimeout(() => setSimulatorLoad((current) => current === 'loading' ? 'delayed' : current), 12000)
+    return () => window.clearTimeout(timer)
+  }, [activeSimulator, simulatorAttempt])
 
   if (infoPage) return <div className="app-shell"><Header onHome={() => setInfoPage(null)} theme={theme} onToggleTheme={toggleTheme} /><InfoPage kind={infoPage} onBack={() => setInfoPage(null)} /><footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div></footer></div>
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
-    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p><span className="chat-compat-note">Copilot Studio chat.</span></section><section className="simulator-frame"><iframe title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" /></section></main></div>
+    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section>{simulatorLoad === 'delayed' && <div className="simulator-load-message" role="status"><span>This simulator is taking a while to load.</span><button className="button-secondary" onClick={() => setSimulatorAttempt((value) => value + 1)}>Reload</button></div>}<section className="simulator-frame"><iframe key={activeSimulator + '-' + simulatorAttempt} title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" onLoad={() => setSimulatorLoad('loaded')} onError={() => setSimulatorLoad('delayed')} /></section></main></div>
   }
   if (activeGame) {
     const Game = activeGame === 'typing' ? TypingSprint : activeGame === 'skyfall' ? SkyDropGame : ReplyRemix
@@ -734,10 +859,9 @@ function App() {
     { id: 'reply', icon: 'reply', tag: '100+ scenarios', title: 'Reply Remix', text: 'Choose calm, useful responses.' },
   ]
 
-  return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero" onMouseEnter={() => setSpotlightPaused(true)} onMouseLeave={() => setSpotlightPaused(false)} onFocusCapture={() => setSpotlightPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSpotlightPaused(false) }}><div className="hero-copy" key={spotlightIndex}><span className="eyebrow light">{spotlight.eyebrow}</span><h1>{spotlight.title}</h1><p>{spotlight.text}</p><div className="hero-actions"><button className="button-primary" onClick={spotlight.action}>{spotlight.label} <span aria-hidden="true">→</span></button><span className="tiny-note">MLTS Consumer Simulator · Practice at your pace</span></div></div><div className="hero-sticker"><span className="sticker-spark">✦</span><strong>Explore the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div><div className="spotlight-dots"><span>{spotlightIndex + 1} / {spotlights.length}</span>{spotlights.map((item, index) => <button key={item.title} aria-label={`Show ${item.title}`} aria-current={spotlightIndex === index ? 'true' : undefined} onClick={() => setSpotlightIndex(index)} />)}</div></div></section>
-    {showStartHere && <aside className="start-here" aria-label="Getting started"><span className="start-here-icon"><ActivityIcon name="chat" /></span><div><strong>New to the hub?</strong><p>Start with a short customer conversation practice.</p></div><button className="start-here-action" onClick={() => { dismissStartHere(); setActiveSimulator('customer') }}>Try Customer Chat <span aria-hidden="true">→</span></button><button className="start-here-dismiss" aria-label="Dismiss getting started suggestion" onClick={dismissStartHere}>×</button></aside>}
-    <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Quick practice</span><h2>Play & build a skill</h2></div><p>Short activities, ready when you are.</p></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
-    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">Practice with guidance</span><h2>Learn through conversation</h2></div><p>Practice support skills and product knowledge.</p></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
+  return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero"><div className="hero-copy"><span className="eyebrow light">{showStartHere ? 'Start here · consumer support' : 'Consumer support practice'}</span><h1>Build confident support conversations.</h1><p>Practise customer chat, product knowledge, and support skills.</p><div className="hero-actions"><button className="button-primary" onClick={() => { dismissStartHere(); setActiveSimulator('customer') }}>Start Customer Chat <span aria-hidden="true">→</span></button><a className="button-secondary hero-secondary" href="#activities">Browse activities</a></div></div><div className="hero-sticker" aria-label="Practice, play, and build support skills"><span className="sticker-spark" aria-hidden="true">✦</span><strong>Inside the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div></div></section>
+    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">Practice</span><h2>Customer simulators</h2></div></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
+    <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Quick practice</span><h2>Activities</h2></div></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
     <FixOfTheDay />
     <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><nav className="footer-links" aria-label="More information"><button onClick={() => setInfoPage('manual')}>Manual</button><button onClick={() => setInfoPage('team')}>Meet the Team</button></nav><span>Practice at your pace.</span></footer>
   </main></div>

@@ -100,9 +100,9 @@ footer { min-height: 78px; padding: 18px 0 24px; display: flex; align-items: cen
 body { background: radial-gradient(ellipse at 88% 0%, rgba(94,120,147,.12), transparent 32rem), #080b10; }
 .brand strong, footer strong, .hero h1, .page-heading h1, .simulator-intro h1, .section-heading h2, .pulse-heading h2, .feedback-drawer h2, .module-card h3, .game-card h3, .pulse-card h3 { font-family: Inter, Geist, -apple-system, sans-serif; }
 .top-nav a:hover { background: #17212c; color: #fff; }
-.hero { min-height: 330px; border-color: #2d3b49; border-radius: 12px; background: linear-gradient(118deg,#111821 0%,#172330 65%,#202d3b 100%); box-shadow: 0 22px 60px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.045); }
+.hero { min-height: 250px; border-color: #2d3b49; border-radius: 12px; background: linear-gradient(118deg,#111821 0%,#172330 65%,#202d3b 100%); box-shadow: 0 22px 60px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.045); }
 .hero::before { border-color: rgba(141,169,196,.13); box-shadow: 0 0 0 34px rgba(141,169,196,.025), 0 0 0 74px rgba(141,169,196,.018), 0 0 0 116px rgba(141,169,196,.012); }
-.hero h1 { max-width: 750px; font-size: clamp(2.25rem, 5vw, 4rem); line-height: 1.06; letter-spacing: -.05em; animation: spotlight-in .42s ease both; }
+.hero h1 { max-width: 750px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.06; letter-spacing: -.05em; }
 .hero h1 span { color: var(--cyan); }
 .hero p { color: #b6c2ce; }
 .eyebrow, .eyebrow.light { color: var(--cyan); }
@@ -114,10 +114,6 @@ body { background: radial-gradient(ellipse at 88% 0%, rgba(94,120,147,.12), tran
 .hero-sticker:hover { transform: translateY(-2px); }
 .sticker-spark { color: var(--cyan); }
 .hero-sticker div { border-color: #283441; color: #cad4df; }
-.spotlight-dots { display: flex; align-items: center; gap: 7px; color: var(--muted); }
-.spotlight-dots span { margin-right: auto; color: #9baaba; font-size: .66rem; }
-.spotlight-dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: #526172; cursor: pointer; }
-.spotlight-dots button[aria-current="true"] { width: 18px; border-radius: 8px; background: var(--cyan); }
 .game-card, .module-card, .activity-panel { border-color: var(--line); border-radius: 12px; background: linear-gradient(150deg,#121923,#0e131a); box-shadow: 0 12px 28px rgba(0,0,0,.28); }
 .game-card:hover, .module-card:hover { border-color: #5e7893; box-shadow: 0 17px 38px rgba(0,0,0,.4), 0 0 20px rgba(141,169,196,.08); }
 .module-1, .module-2 { border-top: 2px solid var(--cyan); }
@@ -166,7 +162,6 @@ body { background: radial-gradient(ellipse at 88% 0%, rgba(94,120,147,.12), tran
 .typing-stats div { border-color: #344352; background: #151e27; }
 .correct-char { color: #d1e4f5; background: rgba(141,169,196,.18); }.wrong-char { color: #ffd2d2; background: rgba(255,120,120,.12); }
 footer { border-color: #26313d; }
-@keyframes spotlight-in { from { opacity: .4; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes drawer-in { from { opacity: .5; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
 @media (max-width: 800px) { .hero { grid-template-columns: minmax(0,1.15fr) minmax(200px,.85fr); }.feedback-drawer { width: min(440px, 100%); } }
@@ -340,10 +335,9 @@ html[data-theme="dark"] .typing-copy .current-char { color: #f1f7fc; background:
 html[data-theme="dark"] .typing-clock { border-color: #344352; background: #111820; }
 
 /* Endless 2D parachute landing game. */
-.skyfall-panel { margin-top: 20px; padding: clamp(12px, 2vw, 20px); border: 1px solid #cad7e1; border-radius: 16px; background: linear-gradient(145deg,#fff,#f2f6f9); box-shadow: 0 18px 42px rgba(36,55,72,.12); }
+.skyfall-panel { margin-top: 20px; padding: clamp(12px, 2vw, 20px); border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(145deg,var(--panel),var(--panel-2)); box-shadow: 0 18px 42px rgba(36,55,72,.12); }
 .skyfall-hud { margin-bottom: 11px; display: flex; align-items: center; gap: 22px; }
 .skyfall-hud > div { display: grid; gap: 3px; }.skyfall-hud > div span { color: #677989; font-size: .61rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }.skyfall-hud > div strong { color: #1b2c3a; font-size: .98rem; }
-.skyfall-no-save { margin-left: auto; padding: 6px 9px; border: 1px solid #d4e0e8; border-radius: 999px; color: #61798b; font-size: .65rem; font-weight: 750; }
 .skyfall-stage { position: relative; overflow: hidden; border: 1px solid #c5d6e2; border-radius: 12px; background: #85d4f0; box-shadow: inset 0 1px 8px rgba(37,71,96,.12); }
 .skyfall-stage canvas { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9; }
 .skyfall-overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; background: rgba(28,55,79,.19); backdrop-filter: blur(3px); animation: fade-in .2s ease both; }
@@ -352,19 +346,13 @@ html[data-theme="dark"] .typing-clock { border-color: #344352; background: #1118
 .skyfall-emoji { font-size: 2.4rem; filter: drop-shadow(0 5px 6px rgba(26,65,96,.14)); animation: parachute-bob 1.8s ease-in-out infinite; }
 .skyfall-mobile-controls { margin: 10px auto 0; display: flex; align-items: center; justify-content: center; gap: 12px; touch-action: none; }
 .skyfall-mobile-controls span { color: #687b89; font-size: .6rem; font-weight: 850; letter-spacing: .13em; }
-.skyfall-mobile-controls button { width: 52px; height: 42px; border: 1px solid #bacbd8; border-radius: 12px; background: #e5eef4; color: #28465c; font-size: 1.3rem; font-weight: 850; box-shadow: 0 4px 12px rgba(31,61,84,.1); touch-action: none; user-select: none; }
+.skyfall-mobile-controls button { width: 52px; height: 48px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); color: var(--ink); font-size: 1.3rem; font-weight: 850; box-shadow: 0 4px 12px rgba(31,61,84,.1); touch-action: none; user-select: none; }
 .skyfall-mobile-controls button:active { transform: translateY(2px); background: #d1e1ec; }
-.skyfall-caption { margin: 10px 2px 0; color: #687987; font-size: .68rem; text-align: center; }
-html[data-theme="dark"] .skyfall-panel { border-color: #2d3c49; background: linear-gradient(145deg,#121a22,#0b1016); box-shadow: 0 20px 44px rgba(0,0,0,.3); }
-html[data-theme="dark"] .skyfall-hud > div span, html[data-theme="dark"] .skyfall-caption { color: #9eacb8; }
-html[data-theme="dark"] .skyfall-hud > div strong { color: #eaf1f7; }
-html[data-theme="dark"] .skyfall-no-save { border-color: #344352; color: #a7bac9; }
+.skyfall-caption { margin: 10px 2px 0; color: var(--muted); font-size: .68rem; text-align: center; }
 html[data-theme="dark"] .skyfall-stage { border-color: #354a5a; }
-html[data-theme="dark"] .skyfall-mobile-controls span { color: #9aaab8; }
-html[data-theme="dark"] .skyfall-mobile-controls button { border-color: #425a6d; background: #1a2a37; color: #e1eef8; }
 @keyframes clock-pulse { to { box-shadow: 0 0 0 4px rgba(236,112,93,.12); } }
 @keyframes parachute-bob { 50% { transform: translateY(-4px) rotate(-4deg); } }
-@media (max-width: 620px) { .typing-stage { min-height: 260px; padding: 14px; }.typing-copy { font-size: .97rem; line-height: 1.9; }.typing-toolbar { align-items: flex-start; }.typing-clock { font-size: .9rem; }.skyfall-hud { gap: 12px; }.skyfall-stage canvas { min-height: 260px; object-fit: cover; }.skyfall-overlay-card { padding: 15px; }.skyfall-overlay-card strong { font-size: 1.12rem; } }
+@media (max-width: 620px) { .typing-stage { min-height: 260px; padding: 14px; }.typing-copy { font-size: .97rem; line-height: 1.9; }.typing-toolbar { align-items: flex-start; }.typing-clock { font-size: .9rem; }.skyfall-hud { gap: 12px; }.skyfall-overlay-card { padding: 15px; }.skyfall-overlay-card strong { font-size: 1.12rem; } }
 @media (prefers-reduced-motion: reduce) { .typing-clock.urgent, .skyfall-emoji { animation: none; } }
 
 html[data-theme="anniversary"] { color-scheme: dark; --bg: #100f15; --panel: #191821; --panel-2: #211f29; --ink: #f5f0e6; --muted: #bdb3a5; --line: #403a35; --cyan: #e4bd76; --purple: #cf9b75; --purple-dark: #b5755d; --focus: #f1d7a4; }
@@ -455,5 +443,24 @@ html[data-theme="support"] .button-primary { background: #c4e2f3; color: #14212b
 html[data-theme="support"] .theme-toggle { border-color: #415a6d; background: #1a2936; color: #e6f1f8; }
 html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, html[data-theme="support"] .start-here-icon { border-color: #3d586b; background: #213342; color: #a7d0e8; }
 @media (prefers-reduced-motion: reduce) { .start-here-action, .team-member-card, .team-member-card:hover .team-portrait img { transition: none; animation: none; } }
+
+/* Final compact layout and shared team styling. */
+.games-section, .learning-section { padding-top: 34px; }
+.game-card, .module-card { min-height: 194px; }
+.hero { min-height: 250px; }
+.hero-sticker { padding: 17px; }
+.team-member-org { max-width: 250px; margin: 0 auto; color: var(--muted); font-size: .69rem; font-weight: 650; line-height: 1.45; }
+.team-member-copy { min-height: 136px; }
+.fix-deck-section { margin-top: 40px; }
+.fix-more-details { margin-top: 14px; border-top: 1px solid color-mix(in srgb,var(--card-accent) 28%,var(--line)); }
+.fix-more-details summary { padding: 11px 2px 2px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .75rem; font-weight: 750; cursor: pointer; list-style: none; }
+.fix-more-details summary::-webkit-details-marker { display: none; }
+.fix-more-details summary span { color: var(--cyan); transition: transform .18s ease; }
+.fix-more-details[open] summary span { transform: rotate(45deg); }
+.fix-more-details summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+.simulator-load-message { margin: 0 0 12px; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--muted); font-size: .8rem; }
+@media (max-width: 800px) { .hero { min-height: 230px; } }
+@media (max-width: 560px) { .hero h1 { font-size: clamp(2rem, 9vw, 2.45rem); }.games-section, .learning-section { padding-top: 32px; }.game-card, .module-card { min-height: 180px; }.team-member-copy { min-height: unset; }.simulator-load-message { align-items: flex-start; flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { .fix-more-details summary span { transition: none; } }
 
 
