@@ -1,72 +1,70 @@
-# MLTS Consumer Simulator
+# MLTS Consumer Support Learning Hub
 
-MLTS is a browser-based learning hub for practicing Microsoft consumer support conversations and skills. The front end is built with React and Vite. Customer chat and product quiz activities open published Microsoft Copilot Studio bots in embedded web chat frames.
+A desktop-only learning hub for practicing Microsoft consumer support conversations and skills. It is a practice site, not a live support service.
 
-## What’s included
+## What’s in the hub
 
-- **Customer Chat Simulator** — practice asking questions, understanding a customer’s issue, and explaining a useful next step.
-- **Quiz Gauntlet** — practice recalling Microsoft consumer product information with a Copilot Studio quiz.
-- **Typing Master** — complete a 90-second typing session and review speed and accuracy.
-- **Reply Remix** — work through randomized customer-support situations and choose a helpful response.
-- **Skyfall** — play a canvas-based landing game using keyboard or touch controls.
-- **Fix for the Day** — read a rotating support learning card with a short explanation and customer scenario. The deck is curated learning content, not live product news or troubleshooting advice.
-- **Meet the Team** and **Website Manual** — view team profiles and explanations of the learning activities.
-- **Themes** — switch between Light, Dark, Microsoft 50 Years, Developer, and Customer Support appearances.
-- **Start here** — a first-visit prompt that takes new visitors to the Customer Chat Simulator.
+- **Customer Chat Simulator** — Copilot Studio, version **10.1** (project-owner reported); Windows, Office, product activation, volume licensing, and Remote Desktop Server license management.
+- **Quiz Gauntlet** — Copilot Studio, version **6.2** (project-owner reported); Windows and Office.
+- **Typing Master** — 90-second typing practice with a results dialog.
+- **Reply Remix** — 250 randomized support scenarios; an answer is required before continuing.
+- **Skyfall** — 2.5D canvas landing game with three difficulty settings and hazards.
+- **Fix for the Day** — curated support-learning cards rotate every 360 seconds.
+- **Meet the Team** — team profiles and a read-only Life Cycle timeline of website milestones and Copilot Studio updates.
+- **Seven themes** and a first-visit “Start here” prompt.
 
-The simulators are practice experiences, not a live support channel. They depend on the Copilot Studio bots being published and available to the visitor.
+Simulator versions and feedback status are recorded from project-owner updates and may change. The customer simulator feedback section is currently being updated; deployment is pending confirmation. The Life Cycle page is maintained as changes are reported.
 
-## Run the website locally
+## Remember how it was built
 
-### Requirements
+1. Start with a **React + Vite** app and build the hub shell, navigation, and reusable cards.
+2. Embed the published **Copilot Studio** bots in iframes; provide direct links for opening them in a new tab.
+3. Build the learning activities in React; use the browser **Canvas API** for Skyfall.
+4. Style the site with **CSS**, shared theme variables, inline SVG icons, and restrained animation.
+5. Keep it client-side and static: no app database or custom backend is required. Theme and first-visit preferences use browser local storage.
+6. Run the production build and publish the generated `dist/` folder to **Vercel** or **Render Static Sites**.
 
-- Node.js and npm
-- Access to the repository
+## Tech stack
 
-### Install and start
+- React 19, JavaScript/JSX, Vite 8
+- CSS; inline SVG icons; HTML Canvas API for Skyfall
+- Node.js and npm for development, linting, and builds
+- Microsoft Copilot Studio for the customer and quiz simulators
+- Vercel and Render for static hosting
 
-From the repository root, install the locked dependencies and start Vite:
+## Run locally
+
+Requirements: Node.js and npm.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Vite prints the local development URL in the terminal, usually `http://localhost:5173`.
-
-### Build and preview
-
-Create a production build in `dist/` and serve it locally:
+Vite prints the local URL, usually `http://localhost:5173`.
 
 ```sh
-npm run build
-npm run preview
+npm run lint       # check JavaScript/JSX
+npm run build      # create the production site in dist/
+npm run preview    # preview the production build locally
 ```
 
-`npm run lint` runs ESLint across the repository.
+## Deploy
+
+Both hosts deploy the Vite static site from the repository root:
+
+- **Build command:** `npm ci && npm run build`
+- **Publish/output directory:** `dist`
+
+The embedded simulators depend on their Copilot Studio bots being published and available. The site’s themes and first-visit prompt are stored in the visitor’s browser; activity progress is not saved by the site.
 
 ## Project layout
 
 ```text
-src/                 React application and styles
-public/              Static images and the site icon
-index.html           Vite HTML entry point and page metadata
-vite.config.js       Vite configuration
+src/App.jsx       Site views, learning modules, content, and interactions
+src/index.css     Layout, themes, and visual styling
+src/main.jsx      React entry point
+public/           Team portraits and static site assets
+index.html        Page metadata and app mount point
+vite.config.js    Vite configuration
 ```
-
-## Deployment
-
-### Website on Vercel
-
-Deploy the repository as a Vite project. The production build command is `npm run build`, and the output directory is `dist`.
-
-### Website on Render
-
-Create a Render **Static Site** with the repository root as its root directory:
-
-- Build command: `npm ci && npm run build`
-- Publish directory: `dist`
-
-## Browser storage and external services
-
-The selected theme and dismissal of the first-visit prompt are stored in the browser’s local storage. Activity scores and typing results are not saved by the site. The embedded simulators are served by Microsoft Copilot Studio and are subject to Microsoft’s availability and privacy practices.
