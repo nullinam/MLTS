@@ -394,5 +394,8 @@ html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, 
 .module-open-link:hover, .simulator-open-link:hover { color: var(--ink); text-decoration: underline; }
 .module-open-link:focus-visible, .simulator-open-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 html[data-theme="light"] .module-open-link, html[data-theme="light"] .simulator-open-link { color: #36536c; }
+.module-card .module-goal, .game-card .module-goal { margin: -7px 0 15px; color: var(--ink); font-size: .75rem; line-height: 1.45; }
+.module-goal strong { color: var(--purple); font-weight: 800; }
+html[data-theme="light"] .module-card .module-goal, html[data-theme="light"] .game-card .module-goal { color: #34495c; }
 
 
