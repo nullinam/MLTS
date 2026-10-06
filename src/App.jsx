@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 
 const DESKTOP_MEDIA_QUERY = '(min-width: 768px) and (hover: hover) and (pointer: fine)'
 
@@ -1054,6 +1054,10 @@ function App() {
     document.documentElement.dataset.theme = theme
     try { window.localStorage.setItem('mlts-theme-v2', theme) } catch { /* Theme still applies for this visit. */ }
   }, [theme])
+
+  useLayoutEffect(() => {
+    if (infoPage === 'team') window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [infoPage])
 
   useEffect(() => {
     const targets = document.querySelectorAll('.hero, .games-section, .learning-section, .game-card, .module-card, .activity-panel, .simulator-frame')
