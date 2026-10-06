@@ -290,6 +290,7 @@ function Header({ onHome = null, theme = 'light', onToggleTheme }) {
   return <header className="topbar"><Brand onHome={onHome} /><button className="theme-toggle" onClick={onToggleTheme} aria-label={`Current theme: ${themeName}. Switch to ${nextTheme.label} theme`} title={`Switch to ${nextTheme.label} theme`}><span className={`theme-icon theme-icon-${theme}`}><ThemeGlyph theme={theme} /></span>{themeName}</button></header>
 }
 
+// Maintain this history whenever a completed website update adds, changes, or removes a feature.
 const lifeCycleVersions = [
   {
     version: 'v0.1', date: '17 Sep 2026', title: 'Project foundation',
@@ -336,9 +337,23 @@ const lifeCycleVersions = [
   {
     version: 'v1.0', date: '6 Oct 2026', title: 'Desktop-first learning hub',
     summary: 'Consolidated the current experience into a desktop-focused, lighter-weight learning hub.',
-    added: ['Desktop-only access notice, seven distinct themes, and a first-visit Start Here prompt.', 'Simulator open-in-new-tab and slow-load guidance; refined typing results, Skyfall options, and support-card rotation.', 'Reply Remix expanded to 250 randomized scenarios with mixed, plausible alternatives.', 'Meet the Team strength strip removed; this Life Cycle history documents the project’s completed milestones.'],
+    added: ['Desktop-only access notice, seven distinct themes, and a first-visit Start Here prompt.', 'Simulator open-in-new-tab and slow-load guidance; refined typing results, Skyfall options, and support-card rotation.', 'Reply Remix expanded to 250 randomized scenarios with mixed, plausible alternatives; progression now waits for an answer.', 'Meet the Team strength strip removed; this read-only Life Cycle history documents the project’s completed milestones.'],
     removed: ['Pulse and feedback code, the calendar, and leftover server/API experiments no longer needed by the site.'],
     commits: 'd8a76e0 · cf760d2 · 1e7faf9 · 4234b50',
+  },
+]
+
+// Simulator versions and deployment notes come from project-owner updates; extend this record when new details are shared.
+const copilotStudioRecords = [
+  {
+    name: 'Customer Chat Simulator', version: '10.1', status: 'Current · reported up to date',
+    topics: ['Windows', 'Office', 'Product activation', 'Volume licensing', 'Remote Desktop Server license management'],
+    feedback: 'Feedback is available. The feedback section is being updated; deployment is pending confirmation.',
+  },
+  {
+    name: 'Quiz Gauntlet', version: '6.2', status: 'Current · reported up to date',
+    topics: ['Windows', 'Office'],
+    feedback: 'Feedback is available and reported up to date.',
   },
 ]
 
@@ -349,7 +364,20 @@ function InfoPage({ kind, onBack }) {
       { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
       { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section><section className="lifecycle" aria-labelledby="lifecycle-title"><div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–6 Oct 2026</span><h2 id="lifecycle-title">Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names below are timeline labels based on the repository history, not formal Git release tags.</p></div><ol className="lifecycle-list">{lifeCycleVersions.map((milestone) => <li className="lifecycle-item" key={milestone.version}><span className="lifecycle-arrow" aria-hidden="true">→</span><article className="lifecycle-card"><div className="lifecycle-meta"><span className="lifecycle-version">{milestone.version}</span><time>{milestone.date}</time></div><div className="lifecycle-content"><h3>{milestone.title}</h3><p>{milestone.summary}</p><div className="lifecycle-columns"><section><h4>Added and improved</h4><ul>{milestone.added.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h4>Removed or replaced</h4><ul>{milestone.removed.map((item) => <li key={item}>{item}</li>)}</ul></section></div><p className="lifecycle-commits"><span>Commit trail</span> {milestone.commits}</p></div></article></li>)}</ol><p className="lifecycle-note">Dates reflect repository commit dates; Git does not store the time each change was pushed.</p></section></main>
+    return <main className="info-page team-page">
+      <button className="back-button" onClick={onBack}>← Learning hub</button>
+      <div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div>
+      <section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section>
+      <section className="lifecycle" aria-labelledby="lifecycle-title">
+        <div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–6 Oct 2026</span><h2 id="lifecycle-title">Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names below are timeline labels based on the repository history, not formal Git release tags.</p></div>
+        <ol className="lifecycle-list">{lifeCycleVersions.map((milestone) => <li className="lifecycle-item" key={milestone.version}><span className="lifecycle-arrow" aria-hidden="true">→</span><article className="lifecycle-card"><div className="lifecycle-meta"><span className="lifecycle-version">{milestone.version}</span><time>{milestone.date}</time></div><div className="lifecycle-content"><h3>{milestone.title}</h3><p>{milestone.summary}</p><div className="lifecycle-columns"><section><h4>Added and improved</h4><ul>{milestone.added.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h4>Removed or replaced</h4><ul>{milestone.removed.map((item) => <li key={item}>{item}</li>)}</ul></section></div><p className="lifecycle-commits"><span>Commit trail</span> {milestone.commits}</p></div></article></li>)}</ol>
+        <p className="lifecycle-note">This history is maintained alongside completed website updates. Dates reflect repository commit dates; Git does not store the time each change was pushed.</p>
+      </section>
+      <section className="copilot-lifecycle" aria-labelledby="copilot-lifecycle-title">
+        <div className="lifecycle-heading"><span className="eyebrow">Owner-reported status · 6 Oct 2026</span><h2 id="copilot-lifecycle-title">Copilot Studio simulators</h2><p>Current simulator versions and known scope, recorded from project-owner updates. Earlier release details will be added as they are provided.</p></div>
+        <div className="copilot-record-grid">{copilotStudioRecords.map((record) => <article className="copilot-record-card" key={record.name}><div className="copilot-record-top"><div><span className="eyebrow">{record.name}</span><h3>Version {record.version}</h3></div><span className="copilot-record-status">{record.status}</span></div><h4>Topics covered</h4><ul className="copilot-topic-list">{record.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul><p className="copilot-feedback"><strong>Feedback status</strong>{record.feedback}</p></article>)}</div>
+      </section>
+    </main>
   }
 
   const entries = [
