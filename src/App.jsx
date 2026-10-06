@@ -223,43 +223,45 @@ function TypingSprint({ onBack }) {
   const [typingText, setTypingText] = useState(buildTypingPassage)
   const inputRef = useRef(null)
   const startedAtRef = useRef(0)
-  const finishedAtRef = useRef(0)
   const [started, setStarted] = useState(false)
   const duration = 90
   const [seconds, setSeconds] = useState(90)
+  const [elapsed, setElapsed] = useState(0)
   const [typed, setTyped] = useState('')
   const [finished, setFinished] = useState(false)
 
   useEffect(() => {
     if (!started || finished) return undefined
     const timer = window.setInterval(() => {
-      setSeconds((value) => {
-        if (value <= 1) {
-          window.clearInterval(timer)
-          finishedAtRef.current = Date.now()
-          setFinished(true)
-          return 0
-        }
-        return value - 1
-      })
+      const elapsedSeconds = Math.min(duration, Math.max(0, (Date.now() - startedAtRef.current) / 1000))
+      setElapsed(elapsedSeconds)
+      if (elapsedSeconds >= duration) {
+        setSeconds(0)
+        setFinished(true)
+      } else {
+        setSeconds(Math.ceil(duration - elapsedSeconds))
+      }
     }, 1000)
     return () => window.clearInterval(timer)
-  }, [started, finished])
+  }, [started, finished, duration])
   useEffect(() => {
     if (started && !finished) inputRef.current?.focus()
   }, [started, finished])
 
   const correct = [...typed].filter((char, index) => char === typingText[index]).length
   const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 100
-  const elapsed = startedAtRef.current ? Math.min(duration, Math.max(0, ((finishedAtRef.current || Date.now()) - startedAtRef.current) / 1000)) : 0
   const wpm = elapsed ? Math.round((correct / 5) / (elapsed / 60)) : 0
   const badge = accuracy >= 98 && wpm >= 80 ? 'Snow Leopard' : accuracy >= 96 && wpm >= 60 ? 'Falcon' : accuracy >= 92 && wpm >= 35 ? 'Red Panda' : accuracy >= 88 ? 'Koala' : 'First Flight'
-  function reset() { startedAtRef.current = 0; finishedAtRef.current = 0; setStarted(false); setFinished(false); setSeconds(90); setTyped(''); setTypingText((current) => buildTypingPassage(current)) }
+  function reset() { startedAtRef.current = 0; setStarted(false); setFinished(false); setSeconds(90); setElapsed(0); setTyped(''); setTypingText((current) => buildTypingPassage(current)) }
   function updateTyped(value) {
     const next = value.slice(0, typingText.length)
-    if (!started && next.length > 0) { startedAtRef.current = Date.now(); finishedAtRef.current = 0; setStarted(true) }
+    if (!started && next.length > 0) { startedAtRef.current = Date.now(); setElapsed(0); setStarted(true) }
     setTyped(next)
-    if (next.length >= typingText.length) { finishedAtRef.current = Date.now(); setFinished(true) }
+    if (next.length >= typingText.length) {
+      const elapsedSeconds = Math.min(duration, Math.max(0, (Date.now() - startedAtRef.current) / 1000))
+      setElapsed(elapsedSeconds)
+      setFinished(true)
+    }
   }
 
   return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">90-second typing test</span><h1>Typing Master</h1><p>Start typing when you’re ready. Speed and accuracy update live.</p></div><section className="activity-panel typing-panel">
@@ -299,6 +301,7 @@ function SkyDropGame({ onBack }) {
   const gameRef = useRef(null)
   const [status, setStatus] = useState('ready')
   const [score, setScore] = useState(0)
+  const [endReason, setEndReason] = useState('')
 
   function startGame() {
     const startX = 480
@@ -308,9 +311,10 @@ function SkyDropGame({ onBack }) {
       hazards: [{ x: 245, y: 300, radius: 25 }, { x: 760, y: 80, radius: 22 }],
       gusts: [{ x: 690, y: 355, width: 170, phase: 1.4 }],
       boosts: [{ x: 335, y: 250, phase: 0 }], shield: 0,
-      keys: new Set(), reason: '',
+      keys: new Set(),
     }
     setScore(0)
+    setEndReason('')
     setStatus('running')
   }
 
@@ -338,7 +342,7 @@ function SkyDropGame({ onBack }) {
       const game = gameRef.current
       if (!game?.running) return
       game.running = false
-      game.reason = reason
+      setEndReason(reason)
       setStatus('over')
     }
 
@@ -634,7 +638,7 @@ function SkyDropGame({ onBack }) {
     else keys.delete(key)
   }
 
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2D skydiving · endless run</span><h1>Skyfall</h1><p>Land safely, dodge storms, and collect shield rings.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div></div><div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2D parachute landing game with hills, clouds, landing zones, and shield rings. Use left/right arrows or A/D to steer." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${gameRef.current?.reason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D. Touch arrows work on mobile.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Try again' : 'Start descent'} <span>→</span></button></div></div>}</div><div className="skyfall-mobile-controls"><button onPointerDown={(event) => { event.preventDefault(); holdDirection('left', true) }} onPointerUp={() => holdDirection('left', false)} onPointerCancel={() => holdDirection('left', false)} onPointerLeave={() => holdDirection('left', false)} aria-label="Steer left">←</button><span>STEER</span><button onPointerDown={(event) => { event.preventDefault(); holdDirection('right', true) }} onPointerUp={() => holdDirection('right', false)} onPointerCancel={() => holdDirection('right', false)} onPointerLeave={() => holdDirection('right', false)} aria-label="Steer right">→</button></div></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2D skydiving · endless run</span><h1>Skyfall</h1><p>Land safely, dodge storms, and collect shield rings.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div></div><div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2D parachute landing game with hills, clouds, landing zones, and shield rings. Use left/right arrows or A/D to steer." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D. Touch arrows work on mobile.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Try again' : 'Start descent'} <span>→</span></button></div></div>}</div><div className="skyfall-mobile-controls"><button onPointerDown={(event) => { event.preventDefault(); holdDirection('left', true) }} onPointerUp={() => holdDirection('left', false)} onPointerCancel={() => holdDirection('left', false)} onPointerLeave={() => holdDirection('left', false)} aria-label="Steer left">←</button><span>STEER</span><button onPointerDown={(event) => { event.preventDefault(); holdDirection('right', true) }} onPointerUp={() => holdDirection('right', false)} onPointerCancel={() => holdDirection('right', false)} onPointerLeave={() => holdDirection('right', false)} aria-label="Steer right">→</button></div></section></div>
 }
 
 const fixTopics = [
@@ -738,20 +742,14 @@ function fixCardOrder(cycle) {
 }
 
 function sharedFixSlotAt(timestamp = Date.now()) {
-  const elapsed = Math.max(0, Math.floor((timestamp - FIX_CARD_EPOCH) / 1000))
-  let interval = 0
-  let elapsedInSchedule = 0
-  let duration = 300 + Math.floor(seededRandom((FIX_CARD_SEED + Math.imul(interval + 1, 0x85EBCA6B)) >>> 0)() * 301)
-  while (elapsedInSchedule + duration <= elapsed) {
-    elapsedInSchedule += duration
-    interval += 1
-    duration = 300 + Math.floor(seededRandom((FIX_CARD_SEED + Math.imul(interval + 1, 0x85EBCA6B)) >>> 0)() * 301)
-  }
-  const cycle = Math.floor(interval / fixCards.length)
-  const position = interval % fixCards.length
+  const today = new Date(timestamp)
+  const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+  const elapsedDays = Math.max(0, Math.floor((todayUtc - FIX_CARD_EPOCH) / 86_400_000))
+  const cycle = Math.floor(elapsedDays / fixCards.length)
+  const position = elapsedDays % fixCards.length
   return {
     index: fixCardOrder(cycle)[position],
-    changesAt: FIX_CARD_EPOCH + (elapsedInSchedule + duration) * 1000,
+    changesAt: todayUtc + 86_400_000,
   }
 }
 
@@ -767,12 +765,9 @@ function FixOfTheDay() {
   const card = fixCards[slot.index]
   const accent = ({ Windows: '#1689e8', Word: '#185abd', Excel: '#107c41', PowerPoint: '#c43e1c', Outlook: '#0078d4', OneDrive: '#2b9bea', 'Microsoft 365': '#8764d8', 'Microsoft Defender': '#4b9b73', 'Microsoft Teams': '#6264a7', 'Microsoft account': '#1689e8', 'Microsoft billing': '#c9822b', 'Microsoft Store': '#43a77a', 'Family Safety': '#b76eac', 'Business licensing': '#687f98', 'Remote Desktop Services': '#7d70cb', Sales: '#29998d', Support: '#597a99' })[card.product] || '#6ba8e8'
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      const timestamp = Date.now()
-      setSlot((current) => timestamp >= current.changesAt ? sharedFixSlotAt(timestamp) : current)
-    }, 1000)
-    return () => window.clearInterval(timer)
-  }, [])
+    const timer = window.setTimeout(() => setSlot(sharedFixSlotAt()), Math.max(0, slot.changesAt - Date.now()))
+    return () => window.clearTimeout(timer)
+  }, [slot.changesAt])
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
     <div className="fix-deck-heading"><div><span className="eyebrow">Support skill</span><h2 id="fix-deck-title">Fix for the Day</h2></div></div>
@@ -801,8 +796,10 @@ function App() {
       return THEMES.some((item) => item.id === saved) ? saved : 'light'
     } catch { return 'light' }
   })
-  const [simulatorLoad, setSimulatorLoad] = useState('loading')
+  const [simulatorLoad, setSimulatorLoad] = useState({ key: '', state: 'loading' })
   const [simulatorAttempt, setSimulatorAttempt] = useState(0)
+  const simulatorRequestId = activeSimulator ? `${activeSimulator}-${simulatorAttempt}` : ''
+  const simulatorLoadState = simulatorLoad.key === simulatorRequestId ? simulatorLoad.state : 'loading'
   const [showStartHere, setShowStartHere] = useState(() => {
     try { return window.localStorage.getItem('mlts-start-here-dismissed') !== 'yes' } catch { return true }
   })
@@ -813,7 +810,7 @@ function App() {
   }, [theme])
 
   useEffect(() => {
-    const targets = document.querySelectorAll('.hero, .games-section, .learning-section, .support-radar, .game-card, .module-card, .activity-panel, .simulator-frame')
+    const targets = document.querySelectorAll('.hero, .games-section, .learning-section, .game-card, .module-card, .activity-panel, .simulator-frame')
     if (!('IntersectionObserver' in window)) { targets.forEach((target) => target.classList.add('is-visible')); return undefined }
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
       if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target) }
@@ -833,16 +830,15 @@ function App() {
 
   useEffect(() => {
     if (!activeSimulator) return undefined
-    setSimulatorLoad('loading')
-    const timer = window.setTimeout(() => setSimulatorLoad((current) => current === 'loading' ? 'delayed' : current), 12000)
+    const timer = window.setTimeout(() => setSimulatorLoad((current) => current.key === simulatorRequestId && current.state === 'loading' ? { key: simulatorRequestId, state: 'delayed' } : current), 12000)
     return () => window.clearTimeout(timer)
-  }, [activeSimulator, simulatorAttempt])
+  }, [activeSimulator, simulatorAttempt, simulatorRequestId])
 
   if (infoPage) return <div className="app-shell"><Header onHome={() => setInfoPage(null)} theme={theme} onToggleTheme={toggleTheme} /><InfoPage kind={infoPage} onBack={() => setInfoPage(null)} /><footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div></footer></div>
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
-    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section>{simulatorLoad === 'delayed' && <div className="simulator-load-message" role="status"><span>This simulator is taking a while to load.</span><button className="button-secondary" onClick={() => setSimulatorAttempt((value) => value + 1)}>Reload</button></div>}<section className="simulator-frame"><iframe key={activeSimulator + '-' + simulatorAttempt} title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" onLoad={() => setSimulatorLoad('loaded')} onError={() => setSimulatorLoad('delayed')} /></section></main></div>
+    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section>{simulatorLoadState === 'delayed' && <div className="simulator-load-message" role="status"><span>This simulator is taking a while to load.</span><button className="button-secondary" onClick={() => setSimulatorAttempt((value) => value + 1)}>Reload</button></div>}<section className="simulator-frame"><iframe key={simulatorRequestId} title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" onLoad={() => setSimulatorLoad({ key: simulatorRequestId, state: 'loaded' })} onError={() => setSimulatorLoad({ key: simulatorRequestId, state: 'delayed' })} /></section></main></div>
   }
   if (activeGame) {
     const Game = activeGame === 'typing' ? TypingSprint : activeGame === 'skyfall' ? SkyDropGame : ReplyRemix

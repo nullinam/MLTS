@@ -50,8 +50,6 @@ npm run preview
 ```text
 src/                 React application and styles
 public/              Static images and the site icon
-api/                 Vercel serverless functions
-Pulse-api/           Separate Node.js Microsoft feed API
 index.html           Vite HTML entry point and page metadata
 vite.config.js       Vite configuration
 ```
@@ -60,7 +58,7 @@ vite.config.js       Vite configuration
 
 ### Website on Vercel
 
-Deploy the repository as a Vite project. The production build command is `npm run build`, and the output directory is `dist`. Vercel also detects the serverless functions in `api/`.
+Deploy the repository as a Vite project. The production build command is `npm run build`, and the output directory is `dist`.
 
 ### Website on Render
 
@@ -68,28 +66,6 @@ Create a Render **Static Site** with the repository root as its root directory:
 
 - Build command: `npm ci && npm run build`
 - Publish directory: `dist`
-
-The front end does not require the separate `Pulse-api` service to load its learning activities.
-
-### Optional Microsoft feed API on Render
-
-`Pulse-api/` contains a standalone Node.js HTTP service. It fetches official Microsoft RSS feeds and exposes:
-
-- `GET /health` — health check
-- `GET /api/microsoft-pulse` — recent feed items grouped into Consumer and Other Microsoft channels
-
-To deploy it as a Render **Web Service**, set the root directory to `Pulse-api`, use `npm start` as the start command, and set `SITE_ORIGINS` to the comma-separated website origins allowed to call it. For example, use the exact HTTPS origin of the deployed static site. Requests from other origins are rejected. The service keeps feed results in memory briefly to reduce repeated upstream requests.
-
-The current learning hub does not call this feed API; it is a separate service for deployments or integrations that need the feed.
-
-## Optional Vercel feedback endpoints
-
-The repository also contains two Vercel functions:
-
-- `POST /api/feedback-code` emails a one-time verification code.
-- `POST /api/feedback-submit` verifies the code and emails submitted feedback to the recipients approved in the function.
-
-These functions require the Vercel environment variables `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `FEEDBACK_OTP_SECRET`. The secret must be at least 32 characters. The functions accept work addresses ending in `@concentrix.com` or `@microsoft.com`. They are API endpoints; the current learning hub does not include a feedback form that calls them.
 
 ## Browser storage and external services
 
