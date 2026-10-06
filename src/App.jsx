@@ -346,14 +346,14 @@ const lifeCycleVersions = [
 // Simulator versions and deployment notes come from project-owner updates; extend this record when new details are shared.
 const copilotStudioRecords = [
   {
-    name: 'Customer Chat Simulator', version: '10.1', status: 'Current · reported up to date',
+    name: 'Customer Chat Simulator', previousVersion: '10.1', version: '10.2', recorded: '6 Oct 2026', status: 'Current · owner-confirmed',
     topics: ['Windows', 'Office', 'Product activation', 'Volume licensing', 'Remote Desktop Server license management'],
-    feedback: 'Feedback is available. The feedback section is being updated; deployment is pending confirmation.',
+    feedback: 'Feedback section updated; current status confirmed by the project owner.',
   },
   {
-    name: 'Quiz Gauntlet', version: '6.2', status: 'Current · reported up to date',
+    name: 'Quiz Gauntlet', previousVersion: '6.2', version: '6.3', recorded: '6 Oct 2026', status: 'Current · owner-confirmed',
     topics: ['Windows', 'Office'],
-    feedback: 'Feedback is available and reported up to date.',
+    feedback: 'Feedback available; current status confirmed by the project owner.',
   },
 ]
 
@@ -375,7 +375,7 @@ function InfoPage({ kind, onBack }) {
       </section>
       <section className="copilot-lifecycle" aria-labelledby="copilot-lifecycle-title">
         <div className="lifecycle-heading"><span className="eyebrow">Owner-reported status · 6 Oct 2026</span><h2 id="copilot-lifecycle-title">Copilot Studio simulators</h2><p>Current simulator versions and known scope, recorded from project-owner updates. Earlier release details will be added as they are provided.</p></div>
-        <div className="copilot-record-grid">{copilotStudioRecords.map((record) => <article className="copilot-record-card" key={record.name}><div className="copilot-record-top"><div><span className="eyebrow">{record.name}</span><h3>Version {record.version}</h3></div><span className="copilot-record-status">{record.status}</span></div><h4>Topics covered</h4><ul className="copilot-topic-list">{record.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul><p className="copilot-feedback"><strong>Feedback status</strong>{record.feedback}</p></article>)}</div>
+        <div className="copilot-record-grid">{copilotStudioRecords.map((record) => <article className="copilot-record-card" key={record.name}><div className="copilot-record-top"><div><span className="eyebrow">{record.name}</span><h3>Version {record.version}</h3></div><span className="copilot-record-status">{record.status}</span></div><p className="copilot-version-trail">Version record: {record.previousVersion} → {record.version} · updated <time dateTime="2026-10-06">{record.recorded}</time></p><h4>Topics covered</h4><ul className="copilot-topic-list">{record.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul><p className="copilot-feedback"><strong>Feedback status</strong>{record.feedback}</p></article>)}</div>
       </section>
     </main>
   }

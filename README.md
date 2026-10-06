@@ -4,8 +4,8 @@ A desktop-only learning hub for practicing Microsoft consumer support conversati
 
 ## What’s in the hub
 
-- **Customer Chat Simulator** — Copilot Studio, version **10.1** (project-owner reported); Windows, Office, product activation, volume licensing, and Remote Desktop Server license management.
-- **Quiz Gauntlet** — Copilot Studio, version **6.2** (project-owner reported); Windows and Office.
+- **Customer Chat Simulator** — Copilot Studio, version **10.2** (project-owner reported; updated from 10.1); Windows, Office, product activation, volume licensing, and Remote Desktop Server license management.
+- **Quiz Gauntlet** — Copilot Studio, version **6.3** (project-owner reported; updated from 6.2); Windows and Office.
 - **Typing Master** — 90-second typing practice with a results dialog.
 - **Reply Remix** — 250 randomized support scenarios; an answer is required before continuing.
 - **Skyfall** — 2.5D canvas landing game with three difficulty settings and hazards.
@@ -13,7 +13,7 @@ A desktop-only learning hub for practicing Microsoft consumer support conversati
 - **Meet the Team** — team profiles and a read-only Life Cycle timeline of website milestones and Copilot Studio updates.
 - **Seven themes** and a first-visit “Start here” prompt.
 
-Simulator versions and feedback status are recorded from project-owner updates and may change. The customer simulator feedback section is currently being updated; deployment is pending confirmation. The Life Cycle page is maintained as changes are reported.
+Simulator versions and feedback status are recorded from project-owner updates and may change. As of 6 Oct 2026, both simulators are reported current; the customer simulator feedback section update is complete. The Life Cycle page is maintained as changes are reported.
 
 ## Remember how it was built
 

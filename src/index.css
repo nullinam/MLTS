@@ -321,6 +321,8 @@ footer { flex-wrap: wrap; }
 .copilot-record-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
 .copilot-record-top .eyebrow { margin-bottom: 6px; letter-spacing: .08em; }
 .copilot-record-top h3 { margin: 0; color: var(--ink); font: 700 1.25rem/1.2 Inter,sans-serif; }
+.copilot-version-trail { margin: 10px 0 0; color: var(--muted); font-size: .67rem; line-height: 1.5; }
+.copilot-version-trail time { color: var(--ink); font-weight: 750; }
 .copilot-record-status { max-width: 180px; padding: 6px 9px; border: 1px solid color-mix(in srgb,#75bb91 42%,var(--line)); border-radius: 8px; background: color-mix(in srgb,var(--panel-2) 82%,#75bb91 18%); color: var(--ink); font-size: .65rem; font-weight: 750; line-height: 1.35; text-align: center; }
 .copilot-record-card > h4 { margin: 18px 0 8px; color: var(--ink); font-size: .71rem; font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
 .copilot-topic-list { margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; list-style: none; }
