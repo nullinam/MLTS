@@ -290,6 +290,58 @@ function Header({ onHome = null, theme = 'light', onToggleTheme }) {
   return <header className="topbar"><Brand onHome={onHome} /><button className="theme-toggle" onClick={onToggleTheme} aria-label={`Current theme: ${themeName}. Switch to ${nextTheme.label} theme`} title={`Switch to ${nextTheme.label} theme`}><span className={`theme-icon theme-icon-${theme}`}><ThemeGlyph theme={theme} /></span>{themeName}</button></header>
 }
 
+const lifeCycleVersions = [
+  {
+    version: 'v0.1', date: '17 Sep 2026', title: 'Project foundation',
+    summary: 'Started the MLTS repository as a React and Vite web app, then shaped it into a consumer-support simulator hub.',
+    added: ['Initial site shell, navigation, styling, and deployment configuration.', 'Customer Chat simulator entry point and the first Support Academy interface.'],
+    removed: ['Vite starter artwork and unused starter assets were removed during later repository cleanup.'],
+    commits: '578e9a3 · e7ae8e3 · 16987c6',
+  },
+  {
+    version: 'v0.2', date: '23 Sep 2026', title: 'Knowledge practice and identity',
+    summary: 'Expanded the hub from a single simulator experience into a clearer branded learning site.',
+    added: ['Quiz Gauntlet connected to its published Copilot Studio quiz.', 'Updated page layout, logo, and supporting project documentation.'],
+    removed: ['The initial GitHub Pages deployment workflow was retired after the hosting direction changed.'],
+    commits: 'b2b1449 · 6c92424 · d62b6b8 · 1a414a4 · 30da3fa',
+  },
+  {
+    version: 'v0.3', date: '23–29 Sep 2026', title: 'Feedback and Pulse pilot',
+    summary: 'Added a feedback and Microsoft Pulse experiment, including API-backed submission and verification paths.',
+    added: ['Microsoft Pulse experience and its supporting API experiments.', 'Feedback form with separate code and submission endpoints.'],
+    removed: ['The Pulse and feedback features and their backend endpoints were later removed after the learning hub focus changed.'],
+    commits: '7075386 · fbd2328 · ad082c9 · 2a5d819',
+  },
+  {
+    version: 'v0.4', date: '29–30 Sep 2026', title: 'Practice activities and learning cards',
+    summary: 'Built out short, repeatable practice tools alongside the simulator and quiz.',
+    added: ['Typing Master, Skyfall, and Fix for the Day learning cards.', 'Improved the activity cards, visual feedback, and deployment assets for the hosted site.'],
+    removed: ['Experimental Pulse API deployment variants were superseded and later deleted during cleanup.'],
+    commits: 'ee41eb5 · 23cc401 · 791de32 · c6c7cbf',
+  },
+  {
+    version: 'v0.5', date: '2 Oct 2026', title: 'Team identity and calendar experiment',
+    summary: 'Added a team profile experience and briefly explored a calendar alongside the learning modules.',
+    added: ['Meet the Team page with three portraits and RFC Global Escalations Tier-3 for Consumers role labels.', 'Calendar feature experiment and further team-card styling.'],
+    removed: ['The calendar was removed in the next cleanup pass because it distracted from the site’s support-learning purpose.'],
+    commits: '65d9f5d · 58be8c9 · 094ecc1 · b0fbd90 · b075350',
+  },
+  {
+    version: 'v0.6', date: '4–5 Oct 2026', title: 'Focused content and repository cleanup',
+    summary: 'Removed unused features and files, clarified the site documentation, and kept the hub centered on practical learning.',
+    added: ['Revised README covering the modules, local setup, build, and Vercel/Render deployment.', 'Refined learning cards and support content.'],
+    removed: ['Calendar code, obsolete deployment and API files, and unused favicon/Vite starter assets.'],
+    commits: 'e23fef0 · 46a7c88 · c547d63 · c17dd25 · c074978',
+  },
+  {
+    version: 'v1.0', date: '6 Oct 2026', title: 'Desktop-first learning hub',
+    summary: 'Consolidated the current experience into a desktop-focused, lighter-weight learning hub.',
+    added: ['Desktop-only access notice, seven distinct themes, and a first-visit Start Here prompt.', 'Simulator open-in-new-tab and slow-load guidance; refined typing results, Skyfall options, and support-card rotation.', 'Reply Remix expanded to 250 randomized scenarios with mixed, plausible alternatives.', 'Meet the Team strength strip removed; this Life Cycle history documents the project’s completed milestones.'],
+    removed: ['Pulse and feedback code, the calendar, and leftover server/API experiments no longer needed by the site.'],
+    commits: 'd8a76e0 · cf760d2 · 1e7faf9 · 4234b50',
+  },
+]
+
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
@@ -297,7 +349,7 @@ function InfoPage({ kind, onBack }) {
       { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
       { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section><section className="lifecycle" aria-labelledby="lifecycle-title"><div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–6 Oct 2026</span><h2 id="lifecycle-title">Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names below are timeline labels based on the repository history, not formal Git release tags.</p></div><ol className="lifecycle-list">{lifeCycleVersions.map((milestone) => <li className="lifecycle-item" key={milestone.version}><span className="lifecycle-arrow" aria-hidden="true">→</span><article className="lifecycle-card"><div className="lifecycle-meta"><span className="lifecycle-version">{milestone.version}</span><time>{milestone.date}</time></div><div className="lifecycle-content"><h3>{milestone.title}</h3><p>{milestone.summary}</p><div className="lifecycle-columns"><section><h4>Added and improved</h4><ul>{milestone.added.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h4>Removed or replaced</h4><ul>{milestone.removed.map((item) => <li key={item}>{item}</li>)}</ul></section></div><p className="lifecycle-commits"><span>Commit trail</span> {milestone.commits}</p></div></article></li>)}</ol><p className="lifecycle-note">Dates reflect repository commit dates; Git does not store the time each change was pushed.</p></section></main>
   }
 
   const entries = [
@@ -392,7 +444,7 @@ function ReplyRemix({ onBack }) {
     setRound((value) => value + 1)
     setChoice(null)
   }
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">{replyChallengeCount} randomized scenarios</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'That is not the strongest next step.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next}>Next scenario <span aria-hidden="true">→</span></button></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">{replyChallengeCount} randomized scenarios</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'That is not the strongest next step.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next} disabled={choice === null}>Next scenario <span aria-hidden="true">→</span></button></section></div>
 }
 
 function SkyDropGame({ onBack }) {

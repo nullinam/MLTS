@@ -292,6 +292,29 @@ footer { flex-wrap: wrap; }
 .team-member-copy { min-height: 122px; padding: 14px 13px 17px; border-top: 1px solid var(--line); }
 .team-member-copy h2 { margin: 7px 0 5px; color: var(--ink); font: 700 clamp(.94rem,1.35vw,1.12rem)/1.2 Inter,sans-serif; letter-spacing: -.025em; overflow-wrap: anywhere; }
 .team-card-spark { position: absolute; top: 12px; right: 15px; z-index: 1; color: var(--member-accent); font-size: .9rem; opacity: .8; animation: team-sparkle 2.4s ease-in-out infinite; }
+.lifecycle { margin-top: 54px; padding-top: 30px; border-top: 1px solid var(--line); }
+.lifecycle-heading { max-width: 790px; margin-bottom: 24px; }
+.lifecycle-heading h2 { margin: 0; color: var(--ink); font: 700 clamp(1.8rem,3.6vw,2.4rem)/1.08 Inter,sans-serif; letter-spacing: -.045em; }
+.lifecycle-heading p { margin: 10px 0 0; color: var(--muted); font-size: .83rem; line-height: 1.65; }
+.lifecycle-list { margin: 0; padding: 0; position: relative; display: grid; gap: 13px; list-style: none; }
+.lifecycle-list::before { content: ""; width: 1px; position: absolute; top: 22px; bottom: 22px; left: 15px; background: linear-gradient(var(--purple),var(--line) 88%,transparent); }
+.lifecycle-item { min-width: 0; padding-left: 44px; position: relative; }
+.lifecycle-arrow { width: 30px; height: 30px; position: absolute; top: 20px; left: 0; z-index: 1; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--purple) 45%,var(--line)); border-radius: 50%; background: var(--bg); color: var(--purple); font-size: .9rem; font-weight: 800; }
+.lifecycle-card { min-width: 0; padding: 18px 20px; display: grid; grid-template-columns: 138px minmax(0,1fr); gap: 20px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg,var(--panel),color-mix(in srgb,var(--panel) 83%,var(--panel-2))); box-shadow: 0 9px 24px rgba(0,0,0,.08); }
+.lifecycle-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.lifecycle-version { padding: 5px 9px; border: 1px solid color-mix(in srgb,var(--purple) 40%,var(--line)); border-radius: 7px; background: color-mix(in srgb,var(--panel-2) 75%,var(--purple) 25%); color: var(--ink); font-size: .7rem; font-weight: 850; letter-spacing: .035em; }
+.lifecycle-meta time { color: var(--muted); font-size: .7rem; font-weight: 700; line-height: 1.5; }
+.lifecycle-content { min-width: 0; }
+.lifecycle-content h3 { margin: 1px 0 6px; color: var(--ink); font: 700 1rem/1.35 Inter,sans-serif; }
+.lifecycle-content > p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.6; }
+.lifecycle-columns { margin-top: 14px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.lifecycle-columns section { min-width: 0; }
+.lifecycle-columns h4 { margin: 0 0 6px; color: var(--ink); font-size: .7rem; font-weight: 800; }
+.lifecycle-columns ul { margin: 0; padding-left: 17px; color: var(--muted); font-size: .73rem; line-height: 1.55; }
+.lifecycle-columns li + li { margin-top: 4px; }
+.lifecycle-commits { margin-top: 13px !important; padding-top: 10px; border-top: 1px solid var(--line); font-size: .66rem !important; overflow-wrap: anywhere; }
+.lifecycle-commits span { margin-right: 5px; color: var(--purple); font-weight: 850; text-transform: uppercase; letter-spacing: .07em; }
+.lifecycle-note { margin: 13px 0 0; color: var(--muted); font-size: .68rem; line-height: 1.55; }
 html[data-theme="light"] .team-member-card { background: #fff; box-shadow: 0 12px 30px rgba(36,58,78,.08); }
 html[data-theme="light"] .team-portrait { background: radial-gradient(ellipse at 50% 78%,color-mix(in srgb,var(--member-accent) 14%,transparent),transparent 62%),linear-gradient(145deg,#f9fbfd,#f0f4f7); }
 html[data-theme="anniversary"] .team-member-card { border-color: color-mix(in srgb,var(--member-accent) 38%,#51463a); background: linear-gradient(150deg,#211e21,#17161b); }
@@ -308,6 +331,11 @@ html[data-theme="anniversary"] .team-portrait { background: radial-gradient(elli
   .team-grid { grid-template-columns: 1fr; max-width: 430px; margin: 0 auto; }
   .team-portrait { height: 192px; }
   .team-member-copy h2 { font-size: 1.05rem; }
+  .lifecycle-card { grid-template-columns: 1fr; gap: 11px; padding: 15px; }
+  .lifecycle-meta { flex-direction: row; align-items: center; flex-wrap: wrap; }
+  .lifecycle-columns { grid-template-columns: 1fr; gap: 11px; }
+  .lifecycle-item { padding-left: 39px; }
+  .lifecycle-list::before { left: 13px; }
   footer { align-items: flex-start; }
   .footer-links { order: 3; width: 100%; }
 }
