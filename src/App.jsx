@@ -1,4 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+
+const DESKTOP_MEDIA_QUERY = '(min-width: 768px) and (hover: hover) and (pointer: fine)'
+
+function subscribeToDesktopMode(onChange) {
+  const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY)
+  mediaQuery.addEventListener('change', onChange)
+  return () => mediaQuery.removeEventListener('change', onChange)
+}
+
+function getDesktopMode() {
+  return window.matchMedia(DESKTOP_MEDIA_QUERY).matches
+}
+
+function DesktopOnlyNotice() {
+  return <main className="desktop-only-page"><section className="desktop-only-card" aria-labelledby="desktop-only-title"><span className="desktop-only-icon" aria-hidden="true">▣</span><span className="eyebrow">MLTS Consumer Simulator</span><h1 id="desktop-only-title">Desktop browser required</h1><p>This learning hub is designed for desktop use. Open it on a laptop or desktop browser to continue.</p></section></main>
+}
 
 const simulators = {
   customer: {
@@ -787,6 +803,7 @@ function FixOfTheDay() {
 }
 
 function App() {
+  const isDesktop = useSyncExternalStore(subscribeToDesktopMode, getDesktopMode)
   const [activeSimulator, setActiveSimulator] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
   const [infoPage, setInfoPage] = useState(null)
@@ -834,11 +851,13 @@ function App() {
     return () => window.clearTimeout(timer)
   }, [activeSimulator, simulatorAttempt, simulatorRequestId])
 
+  if (!isDesktop) return <div className="app-shell"><DesktopOnlyNotice /></div>
+
   if (infoPage) return <div className="app-shell"><Header onHome={() => setInfoPage(null)} theme={theme} onToggleTheme={toggleTheme} /><InfoPage kind={infoPage} onBack={() => setInfoPage(null)} /><footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div></footer></div>
 
   if (activeSimulator) {
     const simulator = simulators[activeSimulator]
-    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p></section>{simulatorLoadState === 'delayed' && <div className="simulator-load-message" role="status"><span>This simulator is taking a while to load.</span><button className="button-secondary" onClick={() => setSimulatorAttempt((value) => value + 1)}>Reload</button></div>}<section className="simulator-frame"><iframe key={simulatorRequestId} title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" onLoad={() => setSimulatorLoad({ key: simulatorRequestId, state: 'loaded' })} onError={() => setSimulatorLoad({ key: simulatorRequestId, state: 'delayed' })} /></section></main></div>
+    return <div className="app-shell"><Header onHome={() => setActiveSimulator(null)} theme={theme} onToggleTheme={toggleTheme} /><main className="simulator-page"><button className="back-button" onClick={() => setActiveSimulator(null)}>← Learning hub</button><section className="simulator-intro"><span className="eyebrow">{simulator.label}</span><div className="simulator-icon">{simulator.icon}</div><h1>{simulator.title}</h1><p>{simulator.description}</p><a className="simulator-open-link" href={simulator.url} target="_blank" rel="noopener noreferrer">Open in new tab <span aria-hidden="true">↗</span></a></section>{simulatorLoadState === 'delayed' && <div className="simulator-load-message" role="status"><span>This simulator is taking a while to load.</span><button className="button-secondary" onClick={() => setSimulatorAttempt((value) => value + 1)}>Reload</button></div>}<section className="simulator-frame"><iframe key={simulatorRequestId} title={simulator.title} src={simulator.url} allow="microphone; clipboard-read; clipboard-write" onLoad={() => setSimulatorLoad({ key: simulatorRequestId, state: 'loaded' })} onError={() => setSimulatorLoad({ key: simulatorRequestId, state: 'delayed' })} /></section></main></div>
   }
   if (activeGame) {
     const Game = activeGame === 'typing' ? TypingSprint : activeGame === 'skyfall' ? SkyDropGame : ReplyRemix
@@ -856,7 +875,7 @@ function App() {
   ]
 
   return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero"><div className="hero-copy"><span className="eyebrow light">{showStartHere ? 'Start here · consumer support' : 'Consumer support practice'}</span><h1>Build confident support conversations.</h1><p>Practise customer chat, product knowledge, and support skills.</p><div className="hero-actions"><button className="button-primary" onClick={() => { dismissStartHere(); setActiveSimulator('customer') }}>Start Customer Chat <span aria-hidden="true">→</span></button><a className="button-secondary hero-secondary" href="#activities">Browse activities</a></div></div><div className="hero-sticker" aria-label="Practice, play, and build support skills"><span className="sticker-spark" aria-hidden="true">✦</span><strong>Inside the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div></div></section>
-    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">Practice</span><h2>Customer simulators</h2></div></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button></article>)}</div></section>
+    <section className="learning-section" id="simulators"><div className="section-heading"><div><span className="eyebrow">Practice</span><h2>Customer simulators</h2></div></div><div className="module-grid">{simulatorsList.map((item, index) => <article className={`module-card module-${index + 1}`} key={item.id}><div className="card-top"><span className="module-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button onClick={() => setActiveSimulator(item.id)}>{item.id === 'customer' ? 'Start simulator' : 'Start Quiz Gauntlet'} <span aria-hidden="true">→</span></button><a className="module-open-link" href={simulators[item.id].url} target="_blank" rel="noopener noreferrer">Open in new tab <span aria-hidden="true">↗</span></a></article>)}</div></section>
     <section className="games-section" id="activities"><div className="section-heading"><div><span className="eyebrow">Quick practice</span><h2>Activities</h2></div></div><div className="game-grid">{games.map((item) => <article className="game-card" key={item.id}><div className="game-card-top"><span className="game-icon"><ActivityIcon name={item.icon} /></span><span className="card-tag">{item.tag}</span></div><h3>{item.title}</h3><p>{item.text}</p><button className="game-launch" onClick={() => setActiveGame(item.id)}>Play now <span aria-hidden="true">↗</span></button></article>)}</div></section>
     <FixOfTheDay />
     <footer><div><strong>MLTS Consumer Simulator</strong><span>Microsoft learning, made practical.</span></div><nav className="footer-links" aria-label="More information"><button onClick={() => setInfoPage('manual')}>Manual</button><button onClick={() => setInfoPage('team')}>Meet the Team</button></nav><span>Practice at your pace.</span></footer>

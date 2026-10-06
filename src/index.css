@@ -380,4 +380,19 @@ html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, 
 @media (max-width: 560px) { .hero h1 { font-size: clamp(2rem, 9vw, 2.45rem); }.games-section, .learning-section { padding-top: 32px; }.game-card, .module-card { min-height: 180px; }.team-member-copy { min-height: unset; }.simulator-load-message { align-items: flex-start; flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { .fix-more-details summary span { transition: none; } }
 
+.desktop-only-page { width: 100%; min-height: 100vh; margin: 0; padding: 24px; display: grid; place-items: center; background: var(--bg); color: var(--ink); }
+.desktop-only-card { width: min(100%, 500px); padding: clamp(28px, 7vw, 48px); border: 1px solid var(--line); border-radius: 18px; background: var(--panel); box-shadow: 0 20px 55px rgba(0,0,0,.22); text-align: center; }
+.desktop-only-icon { width: 54px; height: 54px; margin: 0 auto 20px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 15px; background: var(--panel-2); color: var(--cyan); font-size: 1.8rem; }
+.desktop-only-card .eyebrow { margin-bottom: 8px; }
+.desktop-only-card h1 { margin: 0; color: var(--ink); font: 750 clamp(1.65rem, 6vw, 2.2rem)/1.08 Inter, sans-serif; letter-spacing: -.04em; }
+.desktop-only-card p { max-width: 360px; margin: 14px auto 0; color: var(--muted); font-size: .92rem; line-height: 1.6; }
+
+/* Simulator-only direct launch links */
+.module-open-link, .simulator-open-link { color: var(--purple); font-size: .76rem; font-weight: 750; text-decoration: none; }
+.module-open-link { align-self: center; margin-top: 10px; }
+.simulator-open-link { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+.module-open-link:hover, .simulator-open-link:hover { color: var(--ink); text-decoration: underline; }
+.module-open-link:focus-visible, .simulator-open-link:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+html[data-theme="light"] .module-open-link, html[data-theme="light"] .simulator-open-link { color: #36536c; }
+
 
