@@ -158,6 +158,35 @@ const advancedReplyScenarios = [
   ['“The issue affects several computers at work.”', 'That scope may involve organization settings. Let’s capture affected devices and timing, then involve the customer’s IT administrator.'],
   ['“A refund has not appeared on my statement.”', 'I understand you want a clear update. Let’s check the order status and refund date, then explain the expected processing window shown there.'],
   ['“I was sent a link to verify my Microsoft password.”', 'Please do not use that link yet. Let’s open the account directly through its known official address and check security there.'],
+  ['“My laptop battery drains while it is asleep.”', 'Let’s compare the battery use and sleep settings, then check whether a connected accessory or app is keeping the device active.'],
+  ['“I see a charge from Microsoft but do not recognize it.”', 'I can help you identify it safely. Let’s review the order history on the account without sharing card numbers or security codes.'],
+  ['“My child cannot join a multiplayer game.”', 'Let’s check the child account’s privacy and family settings, then confirm the game and platform requirements.'],
+  ['“The screen keeps rotating when I move the tablet.”', 'Let’s check rotation lock and the current display mode so we can match the screen to how you want to use the device.'],
+  ['“My OneDrive says it is full, but I deleted files.”', 'Let’s review storage usage and the Recycle Bin first, since deleted items may still count until they are removed there.'],
+  ['“I got a pop-up saying my PC is infected.”', 'Please do not call any number in the pop-up. Let’s identify whether it is a browser notification and close it safely.'],
+  ['“My laptop will not connect to the hotel Wi-Fi.”', 'Let’s check whether the network sign-in page appears and whether another device can connect before changing saved network settings.'],
+  ['“I cannot hear sound through my monitor.”', 'Let’s check the selected output device and whether the monitor supports audio over the connection you are using.'],
+  ['“My Microsoft Store download is stuck.”', 'Let’s check the download status, available storage, and account first, then retry only after we know what is blocking it.'],
+  ['“The family organizer cannot see my location.”', 'Let’s confirm the account, device permissions, and location-sharing settings with everyone’s consent.'],
+  ['“I forgot my Microsoft account password.”', 'I can guide you to the official recovery page. Keep verification codes private and enter them only on that page.'],
+  ['“A new app is asking for administrator access.”', 'Before approving it, let’s confirm where the app came from and what change it says it needs to make.'],
+  ['“My laptop connects to Wi-Fi but says no internet.”', 'Let’s check whether other devices are online and whether a browser can open the network sign-in page.'],
+  ['“I want to cancel a subscription before it renews.”', 'Let’s find the subscription under the purchasing account and review the renewal date and cancellation terms together.'],
+  ['“My camera image is too dark during calls.”', 'Let’s check the app’s camera controls, room lighting, and selected camera before changing system settings.'],
+  ['“I cannot open a shared family calendar.”', 'Let’s confirm which account received the sharing invitation and whether it is still active.'],
+  ['“The Windows taskbar moved to the side.”', 'I can help restore the layout. Let’s check taskbar alignment and display orientation before changing other settings.'],
+  ['“A support agent asked me for my one-time code.”', 'Do not share it. A verification code is private; let’s continue through the official support and account security steps.'],
+  ['“My document formatting changed on another computer.”', 'Let’s compare the app version, fonts, and file format, and keep a copy of the original before changing it.'],
+  ['“I cannot sign into my Xbox profile.”', 'Let’s note the exact sign-in message and check the account status through the official Xbox sign-in flow.'],
+  ['“The PC restarted during an update.”', 'Let’s check update history and the current restart status before starting another update or recovery step.'],
+  ['“My family sharing invite went to the wrong email.”', 'Let’s verify the recipient account and invitation status before sending a corrected invite.'],
+  ['“My Bluetooth mouse keeps disconnecting.”', 'Let’s check its battery, connection status, and whether it disconnects from another device too.'],
+  ['“I want to remove an old device from my account.”', 'Let’s identify the correct device in the official account page and review what removing it changes before confirming.'],
+  ['“The customer wants a guaranteed fix today.”', 'I understand the urgency. I’ll explain what we can verify now and give a clear update if the next step needs more time.'],
+  ['“My phone backup has not completed.”', 'Let’s check the backup status, available storage, power, and network before restarting the backup.'],
+  ['“I cannot tell whether this email is really from Microsoft.”', 'Please avoid its links for now. Let’s review the sender and message safely, then open your account by typing its known address.'],
+  ['“An app stopped working after I changed my password.”', 'Let’s confirm which account the app uses and sign in through its official prompt without sharing the password here.'],
+  ['“My files are available online but not on this PC.”', 'Let’s check the sync client, signed-in account, and selected folders before moving or deleting any files.'],
 ]
 const replyQuestionFrames = [
   (customer) => `${customer} Choose the strongest response.`,
@@ -186,12 +215,16 @@ const THEMES = [
   { id: 'anniversary', label: '50 Years' },
   { id: 'dev', label: 'Developer' },
   { id: 'support', label: 'Support' },
+  { id: 'ocean', label: 'Ocean' },
+  { id: 'ember', label: 'Ember' },
 ]
 
 function ThemeGlyph({ theme }) {
   const common = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
   if (theme === 'dev') return <svg {...common}><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14" /></svg>
   if (theme === 'support') return <svg {...common}><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 13a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2Zm16 0a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM7 18h6" /><path d="M13 18a2 2 0 0 1-2 2H9" /></svg>
+  if (theme === 'ocean') return <svg {...common}><path d="M3 15c2.2 0 2.2-2 4.5-2S9.8 15 12 15s2.2-2 4.5-2S18.8 15 21 15M3 20c2.2 0 2.2-2 4.5-2S9.8 20 12 20s2.2-2 4.5-2S18.8 20 21 20" /><path d="M12 3v5m-3-2 3 2 3-2" /></svg>
+  if (theme === 'ember') return <svg {...common}><path d="M12 22c4.3 0 7-2.9 7-6.7 0-2.8-1.6-4.7-4.2-7.3.1 2.2-.8 3.4-1.8 4.1C13.2 8.2 11 5.2 8.2 3 8.7 7.8 5 9.8 5 15.2 5 19.2 7.7 22 12 22Z" /><path d="M10 18c0-1.5 1.2-2.4 2.3-3.5.2 1.2 1.7 1.7 1.7 3.5a2 2 0 1 1-4 0Z" /></svg>
   if (theme === 'anniversary') return <svg {...common}><path d="m12 3 2.2 5.5L20 11l-5.8 2.4L12 19l-2.3-5.6L4 11l5.7-2.5L12 3Z" /><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16Z" /></svg>
   if (theme === 'dark') return <svg {...common}><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" /></svg>
   return <svg {...common}><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
@@ -220,24 +253,27 @@ function InfoPage({ kind, onBack }) {
       { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
       { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>We focus on complex consumer issues, careful troubleshooting, and clear next steps.</p></div><section className="team-focus" aria-label="Team strengths"><strong>What we’re best at</strong><ul><li>Complex consumer escalations</li><li>Evidence-led troubleshooting</li><li>Clear customer handoffs</li></ul></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
   }
 
   const entries = [
-    ['Microsoft 50 Years', 'Microsoft began in 1975 and celebrated 50 years in 2025. This theme highlights the company’s history and the products people use today.'],
-    ['Typing Master', 'Build typing speed and accuracy with a fresh passage and a timed practice run.'],
-    ['Fix for the Day', 'Learn one support concept at a time through a short, collectible-style scenario card.'],
-    ['Skyfall', 'A quick game break that adds movement, focus, and a little challenge to the learning hub.'],
-    ['Reply Remix', 'Practice choosing clear, empathetic replies and useful next steps for customer situations.'],
-    ['Customer Chat Simulator', 'Use a Copilot Studio conversation to practice listening, clarifying, and guiding a customer. It is a training simulation, not a live support channel.'],
-    ['Quiz Gauntlet', 'Explore consumer Microsoft products through quiz prompts that encourage recall and discussion.'],
+    ['Customer simulators', 'Practice customer conversations and product knowledge. Use Open in new tab if Copilot is slow or blocked; these are simulations, not live support.', 'Best for rehearsing support conversations or reviewing consumer product knowledge.'],
+    ['Typing Master', 'Type the displayed passage. The 90-second clock begins with your first keystroke; speed and accuracy update as you type. A compact results dialog appears when the run ends.', 'Best for short speed and accuracy practice.'],
+    ['Skyfall', 'Steer with ← → or A / D, dodge hazards, collect shield rings, and land on each target. Choose a relaxed, standard, or challenge run before starting.', 'Best for a quick focus break and reflex challenge.'],
+    ['Reply Remix', 'Read the customer scenario, choose a reply, review the feedback, and continue to the next scenario. The library keeps cycling through shuffled prompts.', 'Best for practicing empathy and clear next steps.'],
+    ['Fix for the Day', 'Review the objective and customer scenario. Expand More product detail for key knowledge, terms, and a practical tip. A fresh card rotates every six minutes.', 'Best for a focused support skill refresher.'],
+    ['Themes', 'Use the header control to cycle through seven palettes, including the new Ocean and Ember themes. Your selection is saved for your next visit.', 'Best for choosing a comfortable visual style.'],
+    ['Meet the Team', 'View the RFC Global Escalations Tier-3 for Consumers team and its shared focus.', 'Best for understanding who the learning hub represents.'],
+    ['Microsoft 50 Years', 'This palette highlights Microsoft’s history alongside the products people use today.', 'Best for a warm anniversary-inspired appearance.'],
+    ['Quiz Gauntlet', 'Explore consumer Microsoft products through quiz prompts that encourage recall and discussion.', 'Best for checking product knowledge.'],
   ]
-  return <main className="info-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">A quick guide</span><h1>Website Manual</h1><p>What each feature is for and how to use it.</p></div><section className="manual-grid">{entries.map(([title, description], index) => <article className="manual-card" key={title}><span>{String(index + 1).padStart(2, '0')}</span><div><h2>{title}</h2><p>{description}</p></div></article>)}</section></main>
+  return <main className="info-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">A quick guide</span><h1>Website Manual</h1><p>What each feature is for and when it is most useful.</p></div><section className="manual-grid">{entries.map(([title, description, bestFor], index) => <article className="manual-card" key={title}><span>{String(index + 1).padStart(2, '0')}</span><div><h2>{title}</h2><p>{description}</p><p className="manual-best-for"><strong>Best for:</strong> {bestFor}</p></div></article>)}</section></main>
 }
 
 function TypingSprint({ onBack }) {
   const [typingText, setTypingText] = useState(buildTypingPassage)
   const inputRef = useRef(null)
+  const resultDialogRef = useRef(null)
   const startedAtRef = useRef(0)
   const [started, setStarted] = useState(false)
   const duration = 90
@@ -263,11 +299,14 @@ function TypingSprint({ onBack }) {
   useEffect(() => {
     if (started && !finished) inputRef.current?.focus()
   }, [started, finished])
+  useEffect(() => {
+    if (finished && resultDialogRef.current && !resultDialogRef.current.open) resultDialogRef.current.showModal()
+  }, [finished])
 
   const correct = [...typed].filter((char, index) => char === typingText[index]).length
   const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 100
   const wpm = elapsed ? Math.round((correct / 5) / (elapsed / 60)) : 0
-  const badge = accuracy >= 98 && wpm >= 80 ? 'Snow Leopard' : accuracy >= 96 && wpm >= 60 ? 'Falcon' : accuracy >= 92 && wpm >= 35 ? 'Red Panda' : accuracy >= 88 ? 'Koala' : 'First Flight'
+  const badge = accuracy >= 99 && wpm >= 100 ? 'Jetstream' : accuracy >= 98 && wpm >= 80 ? 'Snow Leopard' : accuracy >= 96 && wpm >= 60 ? 'Falcon' : accuracy >= 92 && wpm >= 35 ? 'Red Panda' : accuracy >= 88 && wpm >= 25 ? 'Koala' : accuracy >= 75 ? 'Wind Rider' : typed.length ? 'First Flight' : 'Ground Crew'
   function reset() { startedAtRef.current = 0; setStarted(false); setFinished(false); setSeconds(90); setElapsed(0); setTyped(''); setTypingText((current) => buildTypingPassage(current)) }
   function updateTyped(value) {
     const next = value.slice(0, typingText.length)
@@ -285,7 +324,7 @@ function TypingSprint({ onBack }) {
     <div className="typing-stats"><div><span>Speed</span><strong>{wpm} <small>WPM</small></strong></div><div><span>Accuracy</span><strong>{accuracy}<small>%</small></strong></div><div><span>Typed</span><strong>{typed.length}<small> chars</small></strong></div></div>
     <div className={`typing-stage ${started && !finished ? 'is-typing' : ''}`} onClick={() => inputRef.current?.focus()} role="group" aria-label="Typing passage; type the highlighted text to start the test"><p className="typing-copy">{[...typingText].map((char, index) => { const state = index < typed.length ? (typed[index] === char ? 'correct-char' : 'wrong-char') : index === typed.length && !finished ? 'current-char' : ''; return <span key={index} className={state}>{char}</span> })}</p><textarea ref={inputRef} className="typing-capture" aria-label="Type the passage shown above; the timer begins with your first keystroke" value={typed} onChange={(event) => updateTyped(event.target.value)} onPaste={(event) => event.preventDefault()} onKeyDown={(event) => { if (event.key === 'Tab') event.preventDefault() }} disabled={finished} autoCapitalize="off" autoCorrect="off" spellCheck="false" /></div>
     <div className="typing-actions"><span>{started && !finished ? 'Keep going — every character counts.' : 'The clock starts on your first keystroke.'}</span><button className="button-secondary" onClick={reset}>↻ Try another passage</button></div>
-    {finished && <div className="typing-result typing-finish" role="status"><strong>🏅 {badge} earned</strong><span>You typed <b>{wpm} WPM</b> with <b>{accuracy}% accuracy</b> in {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}.</span></div>}
+    <dialog ref={resultDialogRef} className="typing-result-dialog" aria-labelledby="typing-result-title"><span className="eyebrow">Run complete</span><h2 id="typing-result-title">{badge}</h2><p>You typed <b>{wpm} WPM</b> with <b>{accuracy}% accuracy</b> in {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}.</p><div className="typing-result-actions"><button className="button-secondary" onClick={() => resultDialogRef.current?.close()}>Close</button><button className="button-primary" onClick={() => { resultDialogRef.current?.close(); reset() }}>Try another passage</button></div></dialog>
   </section></div>
 }
 
@@ -309,7 +348,7 @@ function ReplyRemix({ onBack }) {
     setRound((value) => value + 1)
     setChoice(null)
   }
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">100+ randomized scenarios</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round} · {session.index + 1} of {session.deck.length}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next}>Next scenario <span aria-hidden="true">→</span></button></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Expanded scenario library</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round} · {session.index + 1} of {session.deck.length}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next}>Next scenario <span aria-hidden="true">→</span></button></section></div>
 }
 
 function SkyDropGame({ onBack }) {
@@ -317,19 +356,27 @@ function SkyDropGame({ onBack }) {
   const gameRef = useRef(null)
   const [status, setStatus] = useState('ready')
   const [score, setScore] = useState(0)
+  const [shieldReady, setShieldReady] = useState(false)
   const [endReason, setEndReason] = useState('')
+  const [difficulty, setDifficulty] = useState('standard')
+  const [bestScore, setBestScore] = useState(() => {
+    try { return Number(window.localStorage.getItem('mlts-skyfall-best')) || 0 } catch { return 0 }
+  })
+  const bestScoreRef = useRef(bestScore)
 
   function startGame() {
     const startX = 480
+    const mode = { relaxed: { speed: .82, targetWidth: 174, shield: 1 }, standard: { speed: 1, targetWidth: 150, shield: 0 }, challenge: { speed: 1.14, targetWidth: 128, shield: 0 } }[difficulty]
     gameRef.current = {
-      running: true, playerX: startX, score: 0, elapsed: 0, flash: 0, landingWait: 0,
-      target: { x: 480, y: 430, width: 150, height: 16, checked: false },
-      hazards: [{ x: 245, y: 300, radius: 25 }, { x: 760, y: 80, radius: 22 }],
+      running: true, playerX: startX, score: 0, elapsed: 0, flash: 0, landingWait: 0, speedScale: mode.speed,
+      target: { x: 480, y: 430, width: mode.targetWidth, height: 16, checked: false },
+      hazards: [{ x: 245, y: 300, radius: 25, kind: 'storm' }, { x: 760, y: 80, radius: 19, kind: 'balloon' }],
       gusts: [{ x: 690, y: 355, width: 170, phase: 1.4 }],
-      boosts: [{ x: 335, y: 250, phase: 0 }], shield: 0,
+      boosts: [{ x: 335, y: 250, phase: 0 }], shield: mode.shield,
       keys: new Set(),
     }
     setScore(0)
+    setShieldReady(Boolean(mode.shield))
     setEndReason('')
     setStatus('running')
   }
@@ -358,6 +405,11 @@ function SkyDropGame({ onBack }) {
       const game = gameRef.current
       if (!game?.running) return
       game.running = false
+      if (game.score > bestScoreRef.current) {
+        bestScoreRef.current = game.score
+        setBestScore(game.score)
+        try { window.localStorage.setItem('mlts-skyfall-best', String(game.score)) } catch { /* Keep the best score for this visit if storage is unavailable. */ }
+      }
       setEndReason(reason)
       setStatus('over')
     }
@@ -367,18 +419,26 @@ function SkyDropGame({ onBack }) {
       if (!game?.running) return
       game.elapsed += dt
       game.flash = Math.max(0, game.flash - dt)
-      const speed = 112 + game.score * 5 + 150 * (1 - Math.exp(-game.score / 12))
-      const moveSpeed = 300 + Math.min(game.score * 5, 120)
+      const speed = (112 + game.score * 5 + 150 * (1 - Math.exp(-game.score / 12))) * game.speedScale
+      const moveSpeed = (300 + Math.min(game.score * 5, 120)) * game.speedScale
       if (game.keys.has('arrowleft') || game.keys.has('a')) game.playerX -= moveSpeed * dt
       if (game.keys.has('arrowright') || game.keys.has('d')) game.playerX += moveSpeed * dt
       game.playerX = Math.max(44, Math.min(width - 44, game.playerX))
 
-      game.hazards.forEach((hazard) => { hazard.y -= speed * dt * 0.9; hazard.x += Math.sin(game.elapsed * 1.7 + hazard.y) * 10 * dt })
+      game.hazards.forEach((hazard) => {
+        hazard.y -= speed * dt * (hazard.kind === 'balloon' ? .66 : .9)
+        hazard.x += Math.sin(game.elapsed * (hazard.kind === 'bird' ? 3 : 1.7) + hazard.y) * (hazard.kind === 'bird' ? 34 : 10) * dt
+        hazard.x = Math.max(38, Math.min(width - 38, hazard.x))
+      })
       game.hazards = game.hazards.filter((hazard) => hazard.y > -70)
       const hitHazard = game.hazards.findIndex((hazard) => Math.abs(hazard.y - (playerY + 6)) < hazard.radius + 14 && Math.abs(hazard.x - game.playerX) < hazard.radius + 12)
       if (hitHazard >= 0) {
-        if (game.shield) { game.shield = 0; game.hazards.splice(hitHazard, 1); game.flash = 0.8 }
-        else { finish('A storm cloud clipped your parachute.'); return }
+        if (game.shield) { game.shield = 0; setShieldReady(false); game.hazards.splice(hitHazard, 1); game.flash = 0.8 }
+        else {
+          const names = { storm: 'storm cloud', bird: 'bird', balloon: 'hot-air balloon', drone: 'drone', rock: 'rocky outcrop' }
+          finish(`You clipped a ${names[game.hazards[hitHazard].kind] || 'hazard'}.`)
+          return
+        }
       }
 
       game.gusts.forEach((gust) => { gust.y -= speed * dt * 0.8; gust.phase += dt * (1.2 + game.score * .025) })
@@ -389,7 +449,7 @@ function SkyDropGame({ onBack }) {
       game.playerX = Math.max(44, Math.min(width - 44, game.playerX))
       game.boosts.forEach((boost) => { boost.y -= speed * dt * .88; boost.phase += dt * 3 })
       const boostHit = game.boosts.findIndex((boost) => Math.abs(boost.y - (playerY + 18)) < 35 && Math.abs(boost.x - game.playerX) < 36)
-      if (boostHit >= 0) { game.shield = 1; game.boosts.splice(boostHit, 1); game.flash = 0.65 }
+      if (boostHit >= 0) { game.shield = 1; setShieldReady(true); game.boosts.splice(boostHit, 1); game.flash = 0.65 }
       game.boosts = game.boosts.filter((boost) => boost.y > -45)
 
       const target = game.target
@@ -417,9 +477,15 @@ function SkyDropGame({ onBack }) {
         if (game.landingWait <= 0) {
           const nextY = height + 75
           const nextX = 100 + Math.random() * (width - 200)
-          game.target = { x: nextX, y: nextY, width: Math.max(102, 150 - game.score), height: 16, checked: false }
-          game.hazards.push({ x: 70 + Math.random() * (width - 140), y: nextY - 128, radius: 20 + Math.random() * 9 })
-          if (game.score % 4 === 0) game.hazards.push({ x: 80 + Math.random() * (width - 160), y: nextY - 265, radius: 18 })
+          game.target = { x: nextX, y: nextY, width: Math.max(game.speedScale > 1 ? 98 : 112, game.target.width - (game.speedScale > 1 ? 3 : 1)), height: 16, checked: false }
+          const awayFromTarget = nextX < width / 2 ? 1 : -1
+          const hazardKinds = ['storm', 'bird', 'balloon', 'drone', 'rock']
+          const firstKind = pickRandom(hazardKinds)
+          game.hazards.push({ x: Math.max(48, Math.min(width - 48, nextX + awayFromTarget * (210 + Math.random() * 150))), y: nextY - 135, radius: firstKind === 'balloon' ? 18 : 20 + Math.random() * 9, kind: firstKind })
+          if (game.score > 1) {
+            const secondKind = pickRandom(hazardKinds, firstKind)
+            game.hazards.push({ x: 70 + Math.random() * (width - 140), y: nextY - 295, radius: secondKind === 'bird' ? 14 : 17 + Math.random() * 8, kind: secondKind })
+          }
           if (game.score % 2 === 0) game.gusts.push({ x: 100 + Math.random() * (width - 200), y: nextY - 205, width: 120 + Math.random() * 90, phase: Math.random() * Math.PI * 2 })
           if (game.score % 3 === 1) game.boosts.push({ x: 90 + Math.random() * (width - 180), y: nextY - 330, phase: Math.random() * 6 })
         }
@@ -492,6 +558,12 @@ function SkyDropGame({ onBack }) {
         const y = 438 + row * 22
         context.beginPath(); context.moveTo(0, y); context.quadraticCurveTo(470, y - 20, width, y + 4); context.stroke()
       }
+      context.strokeStyle = 'rgba(236,238,211,.2)'
+      context.lineWidth = 1
+      for (let track = 0; track <= 8; track += 1) {
+        const groundX = track * (width / 8)
+        context.beginPath(); context.moveTo(width / 2 + (groundX - width / 2) * .18, 352); context.lineTo(groundX, height); context.stroke()
+      }
       for (let tree = 0; tree < 26; tree += 1) {
         const x = (tree * 113 + 38) % width
         const y = 324 + (tree * 47) % 142
@@ -544,13 +616,36 @@ function SkyDropGame({ onBack }) {
       })
 
       game.hazards.forEach((hazard) => {
-        drawCloud(hazard.x, hazard.y, .9, '#909da0')
         context.save()
-        context.strokeStyle = 'rgba(75,91,101,.66)'
-        context.lineWidth = 2
-        for (let drop = -1; drop <= 1; drop += 1) {
-          const x = hazard.x + drop * 13
-          context.beginPath(); context.moveTo(x, hazard.y + 13); context.lineTo(x - 4, hazard.y + 22); context.stroke()
+        context.translate(hazard.x, hazard.y)
+        if (hazard.kind === 'bird') {
+          context.fillStyle = '#344c58'
+          context.beginPath(); context.ellipse(0, 0, 14, 6, 0, 0, Math.PI * 2); context.fill()
+          context.strokeStyle = '#344c58'; context.lineWidth = 4; context.lineCap = 'round'
+          const wing = Math.sin(elapsed * 12 + hazard.y) * 7
+          context.beginPath(); context.moveTo(-5, 0); context.quadraticCurveTo(-12, -12 + wing, -21, -9 + wing); context.moveTo(5, 0); context.quadraticCurveTo(12, -12 + wing, 21, -9 + wing); context.stroke()
+          context.fillStyle = '#e0a35c'; context.beginPath(); context.moveTo(13, -1); context.lineTo(21, 2); context.lineTo(13, 4); context.fill()
+        } else if (hazard.kind === 'balloon') {
+          context.fillStyle = 'rgba(34,58,68,.17)'; context.beginPath(); context.ellipse(4, 28, 23, 6, 0, 0, Math.PI * 2); context.fill()
+          const balloon = context.createLinearGradient(-18, -20, 18, 18); balloon.addColorStop(0, '#f0b66e'); balloon.addColorStop(1, '#c86f55')
+          context.fillStyle = balloon; context.beginPath(); context.ellipse(0, 0, 18, 23, 0, 0, Math.PI * 2); context.fill()
+          context.strokeStyle = '#795546'; context.lineWidth = 1.5; context.beginPath(); context.moveTo(-7, 18); context.lineTo(-3, 29); context.lineTo(4, 29); context.lineTo(7, 18); context.stroke()
+          context.fillStyle = '#73513e'; context.fillRect(-5, 28, 11, 7)
+        } else if (hazard.kind === 'drone') {
+          context.fillStyle = 'rgba(34,58,68,.17)'; context.beginPath(); context.ellipse(0, 17, 24, 5, 0, 0, Math.PI * 2); context.fill()
+          context.fillStyle = '#526b78'; context.beginPath(); context.roundRect(-13, -4, 26, 10, 5); context.fill()
+          context.strokeStyle = '#526b78'; context.lineWidth = 3; context.beginPath(); context.moveTo(-9, 0); context.lineTo(-20, -7); context.moveTo(9, 0); context.lineTo(20, -7); context.stroke()
+          context.strokeStyle = '#263d49'; context.lineWidth = 2; context.beginPath(); context.ellipse(-21, -8, 7, 2, 0, 0, Math.PI * 2); context.ellipse(21, -8, 7, 2, 0, 0, Math.PI * 2); context.stroke()
+          context.fillStyle = '#d99564'; context.beginPath(); context.arc(0, 1, 2.5, 0, Math.PI * 2); context.fill()
+        } else if (hazard.kind === 'rock') {
+          context.fillStyle = 'rgba(35,50,61,.2)'; context.beginPath(); context.ellipse(2, 15, 25, 6, 0, 0, Math.PI * 2); context.fill()
+          context.fillStyle = '#829398'; context.beginPath(); context.moveTo(-23, 8); context.lineTo(-17, -7); context.lineTo(-6, -15); context.lineTo(5, -12); context.lineTo(20, -4); context.lineTo(24, 9); context.closePath(); context.fill()
+          context.fillStyle = 'rgba(255,255,255,.22)'; context.beginPath(); context.moveTo(-17, -6); context.lineTo(-6, -14); context.lineTo(-2, -4); context.closePath(); context.fill()
+        } else {
+          context.translate(0, 0)
+          drawCloud(0, 0, .9, '#909da0')
+          context.strokeStyle = 'rgba(75,91,101,.66)'; context.lineWidth = 2
+          for (let drop = -1; drop <= 1; drop += 1) { const x = drop * 13; context.beginPath(); context.moveTo(x, 13); context.lineTo(x - 4, 22); context.stroke() }
         }
         context.restore()
       })
@@ -562,11 +657,13 @@ function SkyDropGame({ onBack }) {
         context.save()
         context.shadowColor = 'rgba(37,55,42,.25)'
         context.shadowBlur = 12
+        context.fillStyle = 'rgba(37,55,42,.2)'; context.beginPath(); context.ellipse(target.x + 6, top + 31, target.width * .58, 11, 0, 0, Math.PI * 2); context.fill()
+        context.fillStyle = '#344d3d'; context.beginPath(); context.moveTo(left, top + 5); context.lineTo(left + target.width, top + 5); context.lineTo(left + target.width + 7, top + 31); context.lineTo(left + 7, top + 31); context.closePath(); context.fill()
         context.fillStyle = '#496847'
-        context.beginPath(); context.roundRect(left, top, target.width, 30, 5); context.fill()
+        context.beginPath(); context.roundRect(left, top, target.width, 25, 5); context.fill()
         context.shadowBlur = 0
         context.fillStyle = '#81936b'
-        context.fillRect(left + 4, top + 4, target.width - 8, 22)
+        context.fillRect(left + 4, top + 4, target.width - 8, 16)
         context.strokeStyle = 'rgba(241,239,210,.86)'
         context.lineWidth = 2
         context.setLineDash([9, 6])
@@ -575,7 +672,7 @@ function SkyDropGame({ onBack }) {
         context.fillStyle = 'rgba(248,246,222,.82)'
         context.font = '700 9px Inter, sans-serif'
         context.textAlign = 'center'
-        context.fillText('LANDING ZONE', target.x, top + 27)
+        context.fillText('LANDING ZONE', target.x, top + 22)
         context.restore()
       }
 
@@ -654,7 +751,7 @@ function SkyDropGame({ onBack }) {
     else keys.delete(key)
   }
 
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2D skydiving · endless run</span><h1>Skyfall</h1><p>Land safely, dodge storms, and collect shield rings.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div></div><div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2D parachute landing game with hills, clouds, landing zones, and shield rings. Use left/right arrows or A/D to steer." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Try again' : 'Start descent'} <span>→</span></button></div></div>}</div><div className="skyfall-mobile-controls"><button onPointerDown={(event) => { event.preventDefault(); holdDirection('left', true) }} onPointerUp={() => holdDirection('left', false)} onPointerCancel={() => holdDirection('left', false)} onPointerLeave={() => holdDirection('left', false)} aria-label="Steer left">←</button><span>STEER</span><button onPointerDown={(event) => { event.preventDefault(); holdDirection('right', true) }} onPointerUp={() => holdDirection('right', false)} onPointerCancel={() => holdDirection('right', false)} onPointerLeave={() => holdDirection('right', false)} aria-label="Steer right">→</button></div></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2.5D endless landing run</span><h1>Skyfall</h1><p>Thread through storms, birds, drones, and balloons. Collect shield rings and land on target.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Personal best</span><strong>{bestScore}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div><div><span>Shield</span><strong>{shieldReady ? 'Ready' : '—'}</strong></div></div>{status !== 'running' && <div className="skyfall-options" aria-label="Choose game difficulty"><span>Flight mode</span><div>{[['relaxed', 'Relaxed'], ['standard', 'Standard'], ['challenge', 'Challenge']].map(([id, label]) => <button key={id} className={difficulty === id ? 'active' : ''} aria-pressed={difficulty === id} onClick={() => setDifficulty(id)}>{label}</button>)}</div><small>{difficulty === 'relaxed' ? 'Slower descent, wide landing zones, and a starter shield.' : difficulty === 'challenge' ? 'Faster descent, narrow targets, and more hazards.' : 'Balanced speed, targets, and a growing obstacle field.'}</small></div>}<div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2.5D parachute landing game. Use left and right arrow keys or A and D to steer around moving hazards and land on raised platforms." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer. Grab a glowing ring for one shield hit.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Fly again' : 'Start descent'} <span>→</span></button></div></div>}</div><p className="skyfall-caption">Steer with ← → or A / D · Rings absorb one hit · Landings increase the pace</p></section></div>
 }
 
 const fixTopics = [
@@ -727,6 +824,16 @@ const fixTopics = [
   ['Sales', 'Handle price objections with value and empathy', 'Value statement', 'Acknowledge budget concerns and explain options without pressure.', 'A price objection can signal a need to understand usage, value, or lower-cost alternatives.', 'The customer’s budget is a valid constraint.', 'Ask which benefit matters most and compare only relevant options.', 'A customer says the subscription costs more than they expected.', 4],
   ['Sales', 'Respect “I do not need it”', 'Customer choice', 'Respect a declined offer and keep support focused on the customer’s goal.', 'A customer can decline an offer. The interaction should remain helpful and pressure-free.', 'Repeatedly pitching after a clear no damages trust.', 'Acknowledge the decision and continue with the original support request.', 'A customer declines a plan recommendation and still needs help installing an app.', 3],
   ['Sales', 'Structure a sales conversation', 'Recommendation flow', 'Move from discovery to recommendation with clear customer agreement.', 'A strong conversation opens, discovers needs, recommends a fit, answers questions, and confirms next steps.', 'A recommendation should follow discovery, not replace it.', 'Summarize the need and ask whether your understanding is right before offering a fit.', 'A customer wants cloud backup but is unsure how much storage is needed.', 4],
+  ['Windows', 'Bluetooth devices and pairing', 'Pairing mode', 'Separate pairing, connection, and driver clues before removing a device.', 'Bluetooth accessories must be discoverable and may be connected to another device already.', 'Removing a paired device can require setting it up again.', 'Check power, pairing mode, and nearby device connections before changing Windows settings.', 'A customer’s headphones appear in Bluetooth settings but will not connect.', 4],
+  ['Windows', 'Display scale, resolution, and multiple screens', 'Display configuration', 'Identify which display setting causes a blurry or crowded screen.', 'Resolution, scaling, refresh rate, and monitor capability affect what the customer sees.', 'A cable or adapter may limit available display modes.', 'Check each display separately and change one setting at a time.', 'A customer’s external monitor looks stretched after connecting a new dock.', 4],
+  ['Windows', 'Storage cleanup and temporary files', 'Available storage', 'Free space safely without removing customer documents or app data unexpectedly.', 'Storage settings can show temporary files, installed apps, and personal content separately.', 'A cleanup selection can remove downloads or previous installation files.', 'Review each category with the customer before choosing what to remove.', 'A Windows update cannot complete because the system drive is nearly full.', 4],
+  ['Microsoft account', 'Aliases and sign-in names', 'Account alias', 'Clarify which sign-in name belongs to the account before changing it.', 'One account can have multiple aliases, but removing an alias may affect where the customer can sign in.', 'An email address used for sign-in may also be used by another service.', 'Confirm another working sign-in method before editing aliases.', 'A customer wants to remove an old email address but still uses it to sign in.', 4],
+  ['OneDrive', 'Sync conflicts and version history', 'Version history', 'Protect the current file while checking which version contains the needed changes.', 'Sync conflicts and version history can help identify edits made on different devices.', 'A conflict copy may contain unique work; do not delete it before comparing.', 'Open both versions and confirm the correct content before replacing a file.', 'A customer sees two copies of a presentation after editing it offline.', 4],
+  ['Microsoft 365', 'Outlook profile and mailbox checks', 'Mailbox profile', 'Distinguish a sign-in issue from a profile, sync, or mailbox problem.', 'The web mailbox and desktop app can help determine whether the issue is account-wide or app-specific.', 'Rebuilding a profile can take time and may require account setup again.', 'Check the web experience and exact error before recreating an Outlook profile.', 'Outlook on one PC is missing recent mail that appears on the web.', 5],
+  ['Microsoft Teams', 'Audio and device selection', 'Selected device', 'Check meeting audio routes before changing system-wide sound settings.', 'A meeting app may select its own speaker and microphone independently from Windows.', 'Mute controls may exist in both the meeting and the device.', 'Verify the selected devices and test one change at a time.', 'A customer hears the meeting through laptop speakers instead of their headset.', 4],
+  ['Microsoft Store', 'App update and download status', 'Download queue', 'Check the Store queue, account, network, and storage before reinstalling an app.', 'A queued or paused download can look like a failed install.', 'Reinstalling may not help when the account or queue is the cause.', 'Record the exact status and check whether other downloads are also waiting.', 'A customer’s game update is stuck while other apps download normally.', 4],
+  ['Xbox', 'Profile, purchase, and content ownership', 'Signed-in profile', 'Confirm which profile owns the content before reinstalling or buying it again.', 'Digital purchases and subscriptions are associated with the account that acquired them.', 'Console profile and purchasing account can differ.', 'Check the signed-in profile and order history before changing the console setup.', 'A customer cannot find an add-on they bought on another family profile.', 4],
+  ['Support', 'Close the loop and verify resolution', 'Verification', 'Confirm the original task works and summarize the agreed next step.', 'A symptom disappearing does not prove the customer’s task is working again.', 'A workaround may need follow-up even when the immediate symptom stops.', 'Ask the customer to repeat the original action and describe what happens.', 'A printer comes back online, but the customer has not tried printing the document they need.', 3],
 ]
 
 const fixCards = fixTopics.map(([product, subject, keyTerm, objective, knowledge, knowThis, tip, scenario, minutes], index) => ({
@@ -734,6 +841,7 @@ const fixCards = fixTopics.map(([product, subject, keyTerm, objective, knowledge
 }))
 
 const FIX_CARD_EPOCH = Date.UTC(2026, 8, 30)
+const FIX_CARD_INTERVAL = 360_000
 const FIX_CARD_SEED = 0x4d4c5453
 
 function seededRandom(seed) {
@@ -758,14 +866,12 @@ function fixCardOrder(cycle) {
 }
 
 function sharedFixSlotAt(timestamp = Date.now()) {
-  const today = new Date(timestamp)
-  const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-  const elapsedDays = Math.max(0, Math.floor((todayUtc - FIX_CARD_EPOCH) / 86_400_000))
-  const cycle = Math.floor(elapsedDays / fixCards.length)
-  const position = elapsedDays % fixCards.length
+  const elapsedSlots = Math.max(0, Math.floor((timestamp - FIX_CARD_EPOCH) / FIX_CARD_INTERVAL))
+  const cycle = Math.floor(elapsedSlots / fixCards.length)
+  const position = elapsedSlots % fixCards.length
   return {
     index: fixCardOrder(cycle)[position],
-    changesAt: todayUtc + 86_400_000,
+    changesAt: FIX_CARD_EPOCH + (elapsedSlots + 1) * FIX_CARD_INTERVAL,
   }
 }
 
@@ -778,15 +884,22 @@ function ProductGlyph({ product }) {
 
 function FixOfTheDay() {
   const [slot, setSlot] = useState(() => sharedFixSlotAt())
+  const [clock, setClock] = useState(() => Date.now())
   const card = fixCards[slot.index]
   const accent = ({ Windows: '#1689e8', Word: '#185abd', Excel: '#107c41', PowerPoint: '#c43e1c', Outlook: '#0078d4', OneDrive: '#2b9bea', 'Microsoft 365': '#8764d8', 'Microsoft Defender': '#4b9b73', 'Microsoft Teams': '#6264a7', 'Microsoft account': '#1689e8', 'Microsoft billing': '#c9822b', 'Microsoft Store': '#43a77a', 'Family Safety': '#b76eac', 'Business licensing': '#687f98', 'Remote Desktop Services': '#7d70cb', Sales: '#29998d', Support: '#597a99' })[card.product] || '#6ba8e8'
   useEffect(() => {
     const timer = window.setTimeout(() => setSlot(sharedFixSlotAt()), Math.max(0, slot.changesAt - Date.now()))
     return () => window.clearTimeout(timer)
   }, [slot.changesAt])
+  useEffect(() => {
+    const timer = window.setInterval(() => setClock(Date.now()), 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+  const secondsLeft = Math.max(0, Math.ceil((slot.changesAt - clock) / 1000))
+  const countdown = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`
 
   return <section className="fix-deck-section" id="fix-of-the-day" aria-labelledby="fix-deck-title">
-    <div className="fix-deck-heading"><div><span className="eyebrow">Support skill</span><h2 id="fix-deck-title">Fix for the Day</h2></div></div>
+    <div className="fix-deck-heading"><div><span className="eyebrow">Support skill</span><h2 id="fix-deck-title">Fix for the Day</h2><p>A fresh support card appears every 6 minutes · next in {countdown}</p></div></div>
     <article className="fix-card" key={`${card.id}-${slot.changesAt}`} style={{ '--card-accent': accent }}>
       <div className="fix-card-top"><div className="fix-product"><span className="fix-logo-tile"><ProductGlyph product={card.product} /></span><span><small>PRODUCT CARD</small><strong>{card.product}</strong></span></div></div>
       <div className="fix-card-title-row"><div><span className="fix-card-kicker">FIELD GUIDE · {card.product.toUpperCase()}</span><h3>{card.subject}</h3></div><span className="fix-read-time">◷ {card.minutes} min read</span></div>

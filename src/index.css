@@ -175,11 +175,6 @@ html[data-theme="light"] footer { border-color: #cbd5de; }
 @media (prefers-reduced-motion: reduce) { .reveal, .reveal.is-visible { opacity: 1; transform: none; transition: none; } .hero::after { animation: none; } .game-card.reveal.is-visible, .module-card.reveal.is-visible { animation: none; } }
 
 /* Trainer tools: product change cards and expanded typing test. */
-.typing-result { margin-top: 14px; padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; border: 1px solid #52677b; border-radius: 11px; background: linear-gradient(110deg,rgba(141,169,196,.16),rgba(141,169,196,.04)); animation: card-in .4s ease both; }
-.typing-result strong { color: #d8e8f6; font-size: .95rem; }
-.typing-result span { color: var(--muted); font-size: .78rem; }
-html[data-theme="light"] .typing-result { border-color: #cbd6df; background: linear-gradient(110deg,#e6eef4,#f6f9fb); }
-html[data-theme="light"] .typing-result strong { color: #23394b; }
 
 /* Fix of the Day: a polished collectible learning card deck. */
 .fix-deck-section { margin: 56px 0 34px; scroll-margin-top: 24px; }
@@ -241,8 +236,6 @@ html[data-theme="light"] .fix-scenario p { color: #273a49; }
 .typing-capture { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; min-height: 100%; padding: 0; opacity: .01; resize: none; border: 0; color: transparent; background: transparent; caret-color: transparent; }
 .typing-actions { margin-top: 11px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .72rem; }
 .typing-actions .button-secondary { min-height: 36px; }
-.typing-result.typing-finish { align-items: flex-start; flex-direction: column; gap: 6px; }
-.typing-result.typing-finish span b { color: var(--ink); }
 html[data-theme="dark"] .typing-stage { border-color: #314151; background: #0e151d; }
 html[data-theme="dark"] .typing-stage.is-typing { border-color: #8DA9C4; }
 html[data-theme="dark"] .typing-copy { color: #8b9aa8; }
@@ -261,10 +254,6 @@ html[data-theme="dark"] .typing-clock { border-color: #344352; background: #1118
 .skyfall-overlay-card { max-width: 340px; padding: 22px; display: grid; justify-items: center; gap: 9px; border: 1px solid rgba(255,255,255,.7); border-radius: 15px; background: rgba(250,253,255,.92); color: #213544; text-align: center; box-shadow: 0 16px 42px rgba(30,58,81,.22); }
 .skyfall-overlay-card strong { font: 750 1.35rem/1.1 Inter,sans-serif; letter-spacing: -.04em; }.skyfall-overlay-card > span:not(.skyfall-emoji) { color: #536879; font-size: .76rem; line-height: 1.5; }.skyfall-overlay-card .button-primary { margin-top: 5px; }
 .skyfall-emoji { font-size: 2.4rem; filter: drop-shadow(0 5px 6px rgba(26,65,96,.14)); animation: parachute-bob 1.8s ease-in-out infinite; }
-.skyfall-mobile-controls { margin: 10px auto 0; display: flex; align-items: center; justify-content: center; gap: 12px; touch-action: none; }
-.skyfall-mobile-controls span { color: #687b89; font-size: .6rem; font-weight: 850; letter-spacing: .13em; }
-.skyfall-mobile-controls button { width: 52px; height: 48px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); color: var(--ink); font-size: 1.3rem; font-weight: 850; box-shadow: 0 4px 12px rgba(31,61,84,.1); touch-action: none; user-select: none; }
-.skyfall-mobile-controls button:active { transform: translateY(2px); background: #d1e1ec; }
 .skyfall-caption { margin: 10px 2px 0; color: var(--muted); font-size: .68rem; text-align: center; }
 html[data-theme="dark"] .skyfall-stage { border-color: #354a5a; }
 @keyframes clock-pulse { to { box-shadow: 0 0 0 4px rgba(236,112,93,.12); } }
@@ -397,5 +386,46 @@ html[data-theme="light"] .module-open-link, html[data-theme="light"] .simulator-
 .module-card .module-goal, .game-card .module-goal { margin: -7px 0 15px; color: var(--ink); font-size: .75rem; line-height: 1.45; }
 .module-goal strong { color: var(--purple); font-weight: 800; }
 html[data-theme="light"] .module-card .module-goal, html[data-theme="light"] .game-card .module-goal { color: #34495c; }
+
+/* Compact typing results dialog, support card countdown, and added palettes. */
+.typing-result-dialog { width: min(420px, calc(100% - 32px)); margin: auto; padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--ink); box-shadow: 0 24px 70px rgba(0,0,0,.35); }
+.typing-result-dialog::backdrop { background: rgba(5,10,15,.58); backdrop-filter: blur(3px); }
+.typing-result-dialog h2 { margin: 7px 0 4px; color: var(--ink); font: 750 1.65rem/1.1 Inter,sans-serif; letter-spacing: -.04em; }
+.typing-result-dialog p { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+.typing-result-dialog p b { color: var(--ink); }
+.typing-result-actions { margin-top: 19px; display: flex; justify-content: flex-end; gap: 9px; }
+.typing-result-actions button { min-height: 38px; padding: 0 12px; }
+.manual-card .manual-best-for { margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--line); font-size: .72rem; }
+.manual-best-for strong { color: var(--purple); }
+.team-focus { margin: -9px 0 22px; padding: 14px 16px; display: flex; align-items: center; gap: 17px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.team-focus > strong { flex: 0 0 auto; color: var(--ink); font-size: .76rem; }
+.team-focus ul { margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; list-style: none; }
+.team-focus li { padding: 6px 9px; border: 1px solid var(--line); border-radius: 99px; background: var(--panel-2); color: var(--muted); font-size: .68rem; font-weight: 700; }
+.fix-deck-heading p { font-variant-numeric: tabular-nums; }
+.skyfall-hud > div span { color: var(--muted); }
+.skyfall-hud > div strong { color: var(--ink); }
+.skyfall-options { margin-bottom: 12px; padding: 11px 13px; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 7px 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+.skyfall-options > span { color: var(--ink); font-size: .73rem; font-weight: 800; }
+.skyfall-options > div { display: flex; gap: 6px; }
+.skyfall-options button { min-height: 31px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel-2); color: var(--muted); font-size: .68rem; font-weight: 750; cursor: pointer; }
+.skyfall-options button.active { border-color: var(--purple); background: color-mix(in srgb,var(--panel-2) 76%,var(--purple) 24%); color: var(--ink); }
+.skyfall-options small { grid-column: 1 / -1; color: var(--muted); font-size: .67rem; }
+.skyfall-caption { margin: 10px 2px 0; color: var(--muted); font-size: .68rem; text-align: center; }
+html[data-theme="ocean"] { color-scheme: dark; --bg: #07151b; --panel: #0d2028; --panel-2: #132b34; --ink: #e5f3f4; --muted: #9db9bd; --line: #27464e; --purple: #77c7c3; --purple-dark: #3b8b8a; --lime: #b8e6ce; --pink: #9dd8d7; --cyan: #76c8d3; --focus: #d0f0ed; }
+html[data-theme="ocean"] body { background: radial-gradient(ellipse at 88% 2%,rgba(66,164,164,.15),transparent 32rem),#07151b; }
+html[data-theme="ocean"] .hero { border-color: #31595e; background: linear-gradient(120deg,#10252b,#163a40 62%,#205054); }
+html[data-theme="ocean"] .hero h1 span, html[data-theme="ocean"] .sticker-spark { color: #a8e2d9; }
+html[data-theme="ocean"] .hero-sticker, html[data-theme="ocean"] .game-card, html[data-theme="ocean"] .module-card, html[data-theme="ocean"] .activity-panel { border-color: #294a50; background: linear-gradient(150deg,#11272e,#0c1c23); }
+html[data-theme="ocean"] .button-primary { background: #9bd9d0; color: #0c292b; }
+html[data-theme="ocean"] .theme-toggle { border-color: #31595e; background: #10242b; color: #e2f2f0; }
+html[data-theme="ember"] { color-scheme: dark; --bg: #19110f; --panel: #241916; --panel-2: #30201b; --ink: #f5ece6; --muted: #c4aaa0; --line: #4b342c; --purple: #e6a47e; --purple-dark: #b96f51; --lime: #ecd0a0; --pink: #e4a18d; --cyan: #e9b888; --focus: #ffe1b2; }
+html[data-theme="ember"] body { background: radial-gradient(ellipse at 88% 2%,rgba(191,100,64,.15),transparent 32rem),#19110f; }
+html[data-theme="ember"] .hero { border-color: #654337; background: linear-gradient(120deg,#281914,#3c241b 62%,#4a2d20); }
+html[data-theme="ember"] .hero h1 span, html[data-theme="ember"] .sticker-spark { color: #f2bf8d; }
+html[data-theme="ember"] .hero-sticker, html[data-theme="ember"] .game-card, html[data-theme="ember"] .module-card, html[data-theme="ember"] .activity-panel { border-color: #50362d; background: linear-gradient(150deg,#2b1e19,#201613); }
+html[data-theme="ember"] .button-primary { background: #f0bb88; color: #2a1a12; }
+html[data-theme="ember"] .theme-toggle { border-color: #5b3c30; background: #281a15; color: #f4e8dd; }
+@media (max-width: 650px) { .team-focus { align-items: flex-start; flex-direction: column; gap: 9px; } }
+@media (max-width: 600px) { .skyfall-options { grid-template-columns: 1fr; }.skyfall-options > div { flex-wrap: wrap; }.skyfall-options small { grid-column: auto; }.typing-result-actions { flex-wrap: wrap; } }
 
 
