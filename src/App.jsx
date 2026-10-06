@@ -187,6 +187,26 @@ const advancedReplyScenarios = [
   ['“I cannot tell whether this email is really from Microsoft.”', 'Please avoid its links for now. Let’s review the sender and message safely, then open your account by typing its known address.'],
   ['“An app stopped working after I changed my password.”', 'Let’s confirm which account the app uses and sign in through its official prompt without sharing the password here.'],
   ['“My files are available online but not on this PC.”', 'Let’s check the sync client, signed-in account, and selected folders before moving or deleting any files.'],
+  ['“My laptop gets hot when it is closed.”', 'Let’s check whether it is sleeping or staying awake, then review power and connected-device behavior before changing settings.'],
+  ['“The verification email never arrived.”', 'Let’s confirm the account address, check junk mail and other inbox tabs, and use only the service’s official resend option.'],
+  ['“My child’s screen-time limit did not apply.”', 'Let’s verify the child account, device connection, and schedule shown in Family Safety before adjusting the limit again.'],
+  ['“The Microsoft Store asks me to buy an app I already own.”', 'Let’s check the account currently signed into Store and compare it with the purchase history before buying it again.'],
+  ['“I cannot open a PDF from an email attachment.”', 'Let’s confirm the file downloaded safely and whether other PDFs open, then check the selected app and exact error.'],
+  ['“My OneDrive folder is missing from File Explorer.”', 'Let’s check which account is signed in, whether sync is running, and if the folder is selected for this device.'],
+  ['“The laptop does not wake when I open the lid.”', 'Let’s note whether power or keyboard lights respond and check the power state before trying a forced shutdown.'],
+  ['“I accidentally shared a file with the wrong person.”', 'Let’s review the file’s access list and remove only the unintended recipient, then confirm who should retain access.'],
+  ['“My Microsoft 365 apps show different accounts.”', 'Let’s identify the account in the affected app and the one that owns the subscription before signing out anywhere.'],
+  ['“The customer cannot follow the instructions because the screen looks different.”', 'Let’s pause and ask what they see now, then match one instruction to the current screen before continuing.'],
+  ['“My browser keeps opening the wrong home page.”', 'Let’s check the browser’s startup and home-page settings, then review extensions if the setting changes back.'],
+  ['“The customer has limited time and wants the shortest path.”', 'Let’s agree on the immediate goal, try the least disruptive relevant check, and explain any longer follow-up clearly.'],
+  ['“I changed my account email and now purchases are missing.”', 'Let’s confirm whether the new address is an alias on the same account or a separate account, then check order history.'],
+  ['“My PC is asking for a recovery key after a restart.”', 'Please keep the recovery key private. Let’s identify the device and direct you to the official account or administrator path to retrieve it.'],
+  ['“A family member cannot edit the document I shared.”', 'Let’s check whether the link grants edit access and whether they are signed in with the invited account.'],
+  ['“A customer wants to change several settings at once.”', 'Let’s agree on the desired outcome and change one relevant setting at a time so we can tell what helped.'],
+  ['“The device works on Wi-Fi but not through the wired dock.”', 'Let’s compare the network status with and without the dock and capture any adapter or connection message before changing drivers.'],
+  ['“My subscription benefits disappeared from one device.”', 'Let’s check the signed-in account and subscription status, then compare whether the same benefit appears on another device.'],
+  ['“I want to factory-reset my PC, but I am unsure about my files.”', 'Let’s stop before resetting and first confirm backup status, the intended reset option, and which files must be kept.'],
+  ['“My Teams call keeps dropping, but my internet seems fine.”', 'Let’s note whether the issue affects other apps and check the call quality details before changing network settings.'],
 ]
 const replyQuestionFrames = [
   (customer) => `${customer} Choose the strongest response.`,
@@ -199,6 +219,30 @@ replyChallenges.push(...advancedReplyScenarios.flatMap(([customer, bestReply]) =
   answer: 0,
   feedback: 'A strong reply is calm, protects the customer, and gives a specific next step.',
 }))))
+
+const nuancedReplyDistractors = [
+  'Let’s try a quick restart first; if it is still happening, we can check the exact details.',
+  'It could be temporary. Wait a little and try again before we change anything.',
+  'Let’s review the related settings and adjust the one that seems most likely.',
+  'Could you repeat the same steps once more while I look up the usual fix?',
+  'Let’s update the app or device, then check whether the issue goes away.',
+  'I think this may be account-related. Try signing out and back in, and we can go from there.',
+  'Let’s try the most common fix first, then gather more details if it persists.',
+  'Could you apply the suggestion you found and tell me whether it works?',
+  'Let’s make a couple of related changes and test the task again.',
+  'I’ll give you the usual set of troubleshooting steps so we can cover the common causes.',
+  'We can wait and monitor it for now, then investigate if it continues.',
+  'Let’s reinstall the affected app and see whether that clears it.',
+]
+replyChallenges.forEach((challenge, index) => {
+  const answer = challenge.options[challenge.answer]
+  const firstDistractor = nuancedReplyDistractors[index % nuancedReplyDistractors.length]
+  const secondDistractor = nuancedReplyDistractors[(index + 5) % nuancedReplyDistractors.length]
+  challenge.options = [answer, firstDistractor, secondDistractor]
+  challenge.answer = 0
+})
+replyChallenges.push({ prompt: '“I’m not sure which step is safe to try.” Choose the strongest response.', options: ['Let’s pause before changing anything. Tell me what you see, and we’ll choose one safe check together.', 'Most steps are safe, so try the first few suggestions and we can undo them if needed.', 'Start with a reset; it often fixes the problem and we can review the details afterward.'], answer: 0, feedback: 'Check the customer’s concern, explain the next step, and avoid broad changes before you understand the impact.' })
+const replyChallengeCount = replyChallenges.length
 
 function MicrosoftMark() {
   return <span className="microsoft-mark" aria-hidden="true"><i /><i /><i /><i /></span>
@@ -215,7 +259,7 @@ const THEMES = [
   { id: 'anniversary', label: '50 Years' },
   { id: 'dev', label: 'Developer' },
   { id: 'support', label: 'Support' },
-  { id: 'ocean', label: 'Ocean' },
+  { id: 'violet', label: 'Violet' },
   { id: 'ember', label: 'Ember' },
 ]
 
@@ -223,7 +267,7 @@ function ThemeGlyph({ theme }) {
   const common = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
   if (theme === 'dev') return <svg {...common}><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14" /></svg>
   if (theme === 'support') return <svg {...common}><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 13a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2Zm16 0a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM7 18h6" /><path d="M13 18a2 2 0 0 1-2 2H9" /></svg>
-  if (theme === 'ocean') return <svg {...common}><path d="M3 15c2.2 0 2.2-2 4.5-2S9.8 15 12 15s2.2-2 4.5-2S18.8 15 21 15M3 20c2.2 0 2.2-2 4.5-2S9.8 20 12 20s2.2-2 4.5-2S18.8 20 21 20" /><path d="M12 3v5m-3-2 3 2 3-2" /></svg>
+  if (theme === 'violet') return <svg {...common}><path d="m12 3 9 6-9 12L3 9l9-6Z" /><path d="M3 9h18M8 9l4 12m4-12-4 12" /></svg>
   if (theme === 'ember') return <svg {...common}><path d="M12 22c4.3 0 7-2.9 7-6.7 0-2.8-1.6-4.7-4.2-7.3.1 2.2-.8 3.4-1.8 4.1C13.2 8.2 11 5.2 8.2 3 8.7 7.8 5 9.8 5 15.2 5 19.2 7.7 22 12 22Z" /><path d="M10 18c0-1.5 1.2-2.4 2.3-3.5.2 1.2 1.7 1.7 1.7 3.5a2 2 0 1 1-4 0Z" /></svg>
   if (theme === 'anniversary') return <svg {...common}><path d="m12 3 2.2 5.5L20 11l-5.8 2.4L12 19l-2.3-5.6L4 11l5.7-2.5L12 3Z" /><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16Z" /></svg>
   if (theme === 'dark') return <svg {...common}><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" /></svg>
@@ -253,7 +297,7 @@ function InfoPage({ kind, onBack }) {
       { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
       { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
     ]
-    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1><p>We focus on complex consumer issues, careful troubleshooting, and clear next steps.</p></div><section className="team-focus" aria-label="Team strengths"><strong>What we’re best at</strong><ul><li>Complex consumer escalations</li><li>Evidence-led troubleshooting</li><li>Clear customer handoffs</li></ul></section><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
+    return <main className="info-page team-page"><button className="back-button" onClick={onBack}>← Learning hub</button><div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div><section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section></main>
   }
 
   const entries = [
@@ -262,7 +306,7 @@ function InfoPage({ kind, onBack }) {
     ['Skyfall', 'Steer with ← → or A / D, dodge hazards, collect shield rings, and land on each target. Choose a relaxed, standard, or challenge run before starting.', 'Best for a quick focus break and reflex challenge.'],
     ['Reply Remix', 'Read the customer scenario, choose a reply, review the feedback, and continue to the next scenario. The library keeps cycling through shuffled prompts.', 'Best for practicing empathy and clear next steps.'],
     ['Fix for the Day', 'Review the objective and customer scenario. Expand More product detail for key knowledge, terms, and a practical tip. A fresh card rotates every six minutes.', 'Best for a focused support skill refresher.'],
-    ['Themes', 'Use the header control to cycle through seven palettes, including the new Ocean and Ember themes. Your selection is saved for your next visit.', 'Best for choosing a comfortable visual style.'],
+    ['Themes', 'Use the header control to cycle through seven palettes, including the new Violet and Ember themes. Your selection is saved for your next visit.', 'Best for choosing a comfortable visual style.'],
     ['Meet the Team', 'View the RFC Global Escalations Tier-3 for Consumers team and its shared focus.', 'Best for understanding who the learning hub represents.'],
     ['Microsoft 50 Years', 'This palette highlights Microsoft’s history alongside the products people use today.', 'Best for a warm anniversary-inspired appearance.'],
     ['Quiz Gauntlet', 'Explore consumer Microsoft products through quiz prompts that encourage recall and discussion.', 'Best for checking product knowledge.'],
@@ -348,7 +392,7 @@ function ReplyRemix({ onBack }) {
     setRound((value) => value + 1)
     setChoice(null)
   }
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">Expanded scenario library</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round} · {session.index + 1} of {session.deck.length}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'Try a more supportive opener.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next}>Next scenario <span aria-hidden="true">→</span></button></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">{replyChallengeCount} randomized scenarios</span><h1>Reply Remix</h1><p>Choose the clearest, most helpful response.</p></div><section className="activity-panel challenge-panel"><div className="challenge-meta"><span>Scenario {round}</span><span>Good replies {score}</span></div><h2>{challenge.prompt}</h2><div className="answer-options">{challenge.options.map((option, index) => <button key={option} className={choice !== null && index === challenge.answer ? 'correct' : (choice === index ? 'incorrect' : '')} onClick={() => choose(index)} disabled={choice !== null}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{choice !== null && <div className={`answer-feedback ${choice === challenge.answer ? 'good' : 'try-again'}`} role="status"><strong>{choice === challenge.answer ? 'That lands well!' : 'That is not the strongest next step.'}</strong><span>{challenge.feedback}</span></div>}<button className="button-primary next-button" onClick={next}>Next scenario <span aria-hidden="true">→</span></button></section></div>
 }
 
 function SkyDropGame({ onBack }) {
@@ -743,14 +787,6 @@ function SkyDropGame({ onBack }) {
     return () => { window.cancelAnimationFrame(animationId); window.removeEventListener('keydown', keyDown); window.removeEventListener('keyup', keyUp); window.removeEventListener('blur', clearKeys) }
   }, [])
 
-  function holdDirection(direction, pressed) {
-    const keys = gameRef.current?.keys
-    if (!keys) return
-    const key = direction === 'left' ? 'arrowleft' : 'arrowright'
-    if (pressed) keys.add(key)
-    else keys.delete(key)
-  }
-
   return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2.5D endless landing run</span><h1>Skyfall</h1><p>Thread through storms, birds, drones, and balloons. Collect shield rings and land on target.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Personal best</span><strong>{bestScore}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div><div><span>Shield</span><strong>{shieldReady ? 'Ready' : '—'}</strong></div></div>{status !== 'running' && <div className="skyfall-options" aria-label="Choose game difficulty"><span>Flight mode</span><div>{[['relaxed', 'Relaxed'], ['standard', 'Standard'], ['challenge', 'Challenge']].map(([id, label]) => <button key={id} className={difficulty === id ? 'active' : ''} aria-pressed={difficulty === id} onClick={() => setDifficulty(id)}>{label}</button>)}</div><small>{difficulty === 'relaxed' ? 'Slower descent, wide landing zones, and a starter shield.' : difficulty === 'challenge' ? 'Faster descent, narrow targets, and more hazards.' : 'Balanced speed, targets, and a growing obstacle field.'}</small></div>}<div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2.5D parachute landing game. Use left and right arrow keys or A and D to steer around moving hazards and land on raised platforms." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer. Grab a glowing ring for one shield hit.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Fly again' : 'Start descent'} <span>→</span></button></div></div>}</div><p className="skyfall-caption">Steer with ← → or A / D · Rings absorb one hit · Landings increase the pace</p></section></div>
 }
 
@@ -984,7 +1020,7 @@ function App() {
   const games = [
     { id: 'typing', icon: 'keyboard', tag: '90 seconds', title: 'Typing Master', text: 'Test your speed and accuracy.', goal: 'Build typing speed while keeping accuracy high.' },
     { id: 'skyfall', icon: 'parachute', tag: 'Landing challenge', title: 'Skyfall', text: 'Steer, land, and collect shields.', goal: 'Practice timing, steering, and careful landings.' },
-    { id: 'reply', icon: 'reply', tag: '100+ scenarios', title: 'Reply Remix', text: 'Choose calm, useful responses.', goal: 'Choose empathetic replies with a clear next step.' },
+    { id: 'reply', icon: 'reply', tag: `${replyChallengeCount} scenarios`, title: 'Reply Remix', text: 'Choose calm, useful responses.', goal: 'Choose empathetic replies with a clear next step.' },
   ]
 
   return <div className="app-shell"><Header theme={theme} onToggleTheme={toggleTheme} /><main id="home"><section className="hero"><div className="hero-copy"><span className="eyebrow light">{showStartHere ? 'Start here · consumer support' : 'Consumer support practice'}</span><h1>Build confident support conversations.</h1><p>Practice customer chat, product knowledge, and support skills.</p><div className="hero-actions"><button className="button-primary" onClick={() => { dismissStartHere(); setActiveSimulator('customer') }}>Start customer chat <span aria-hidden="true">→</span></button><a className="button-secondary hero-secondary" href="#activities">Browse activities</a></div></div><div className="hero-sticker" aria-label="Practice, play, and build support skills"><span className="sticker-spark" aria-hidden="true">✦</span><strong>Inside the hub</strong><div><span>01</span> Practice</div><div><span>02</span> Play</div><div><span>03</span> Build skills</div></div></section>
