@@ -858,14 +858,14 @@ function SkyDropGame({ onBack }) {
       previousTime = now
       update(dt)
       draw()
-      animationId = window.requestAnimationFrame(frame)
+      if (gameRef.current?.running) animationId = window.requestAnimationFrame(frame)
     }
     window.addEventListener('keydown', keyDown)
     window.addEventListener('keyup', keyUp)
     window.addEventListener('blur', clearKeys)
     animationId = window.requestAnimationFrame(frame)
     return () => { window.cancelAnimationFrame(animationId); window.removeEventListener('keydown', keyDown); window.removeEventListener('keyup', keyUp); window.removeEventListener('blur', clearKeys) }
-  }, [])
+  }, [status])
 
   return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2.5D endless landing run</span><h1>Skyfall</h1><p>Thread through storms, birds, drones, and balloons. Collect shield rings and land on target.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Personal best</span><strong>{bestScore}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div><div><span>Shield</span><strong>{shieldReady ? 'Ready' : '—'}</strong></div></div>{status !== 'running' && <div className="skyfall-options" aria-label="Choose game difficulty"><span>Flight mode</span><div>{[['relaxed', 'Relaxed'], ['standard', 'Standard'], ['challenge', 'Challenge']].map(([id, label]) => <button key={id} className={difficulty === id ? 'active' : ''} aria-pressed={difficulty === id} onClick={() => setDifficulty(id)}>{label}</button>)}</div><small>{difficulty === 'relaxed' ? 'Slower descent, wide landing zones, and a starter shield.' : difficulty === 'challenge' ? 'Faster descent, narrow targets, and more hazards.' : 'Balanced speed, targets, and a growing obstacle field.'}</small></div>}<div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2.5D parachute landing game. Use left and right arrow keys or A and D to steer around moving hazards and land on raised platforms." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer. Grab a glowing ring for one shield hit.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Fly again' : 'Start descent'} <span>→</span></button></div></div>}</div><p className="skyfall-caption">Steer with ← → or A / D · Rings absorb one hit · Landings increase the pace</p></section></div>
 }
