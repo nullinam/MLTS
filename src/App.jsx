@@ -348,6 +348,13 @@ const lifeCycleVersions = [
     removed: [],
     commits: '',
   },
+  {
+    version: 'v1.2', date: '13 Oct 2026', title: 'Meet the Team roster refresh',
+    summary: 'Simplified the team cards into a coordinated, photo-free roster focused on names and initials.',
+    added: ['Consistent monogram tiles, shorter cards, and a restrained hover highlight.'],
+    removed: ['Role captions, placeholder silhouette portraits, sparkle and orbit decoration, and the now-unused team image assets.'],
+    commits: '',
+  },
 ]
 
 // Simulator versions and deployment notes come from project-owner updates; extend this record when new details are shared.
@@ -386,14 +393,14 @@ const copilotStudioTimeline = [
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
-      { name: 'Mohammed Inam Ul Hassan', photo: '/team-inam.png', accent: '#8DA9C4', initials: 'MI' },
-      { name: 'Mohammed Yasir Hasan', photo: '/team-yasir.png', accent: '#8DA9C4', initials: 'MY' },
-      { name: 'Ganaraj Nayak', photo: '/team-ganaraj.png', accent: '#8DA9C4', initials: 'GN' },
+      { name: 'Mohammed Inam Ul Hassan', accent: '#8DA9C4', initials: 'MI' },
+      { name: 'Mohammed Yasir Hasan', accent: '#8DA9C4', initials: 'MY' },
+      { name: 'Ganaraj Nayak', accent: '#8DA9C4', initials: 'GN' },
     ]
     return <main className="info-page team-page">
       <button className="back-button" onClick={onBack}>← Learning hub</button>
       <div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div>
-      <section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section>
+      <section className="team-grid" aria-label="Team members">{members.map((member) => <article className="team-member-card" key={member.name} style={{ '--member-accent': member.accent }}><div className="team-portrait"><span className="team-monogram" aria-hidden="true">{member.initials}</span></div><div className="team-member-copy"><h2>{member.name}</h2></div></article>)}</section>
       <div className="timeline-comparison">
       <section className="lifecycle website-timeline" aria-labelledby="lifecycle-title">
         <div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–13 Oct 2026</span><h2 id="lifecycle-title">Website Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names are timeline labels, not formal Git release tags.</p></div>
