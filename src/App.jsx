@@ -341,6 +341,13 @@ const lifeCycleVersions = [
     removed: ['Pulse and feedback code, the calendar, and leftover server/API experiments no longer needed by the site.'],
     commits: 'd8a76e0 · cf760d2 · 1e7faf9 · 4234b50',
   },
+  {
+    version: 'v1.1', date: '13 Oct 2026', title: 'Project histories brought together',
+    summary: 'Paired the website’s repository milestones with the owner-reported development history for both Copilot Studio simulators.',
+    added: ['Side-by-side website and simulator timelines, including named model stages through the current October 6 versions.'],
+    removed: [],
+    commits: '',
+  },
 ]
 
 // Simulator versions and deployment notes come from project-owner updates; extend this record when new details are shared.
@@ -357,6 +364,25 @@ const copilotStudioRecords = [
   },
 ]
 
+// Dates and stage names below are provided by the project owner; labels describe milestones, not formal release tags.
+const copilotStudioTimeline = [
+  { date: '10 Jul 2026', dateTime: '2026-07-10', simulator: 'Customer Chat', version: 'Foundation Build', title: 'Base One', summary: 'The initial customer simulator foundation.' },
+  { date: '16 Jul 2026', dateTime: '2026-07-16', simulator: 'Customer Chat', version: 'Version 1 · First Contact', title: 'Version 1', summary: 'First named iteration of the customer simulator.' },
+  { date: '24 Jul 2026', dateTime: '2026-07-24', simulator: 'Customer Chat', version: 'Version 2 · Expanded Support', title: 'Version 2', summary: 'The simulator’s next development milestone.' },
+  { date: '27 Jul 2026', dateTime: '2026-07-27', simulator: 'Customer Chat', version: 'Version 3 · Guided Resolution', title: 'Version 3', summary: 'A new model stage in the customer simulator progression.' },
+  { date: '28 Jul 2026', dateTime: '2026-07-28', simulator: 'Customer Chat', version: 'Version 4 · Conversation Framework', title: 'Version 4', summary: 'The fourth named iteration.' },
+  { date: '28 Jul 2026', dateTime: '2026-07-28', simulator: 'Customer Chat', version: 'Version 5 · Refined Responses', title: 'Version 5', summary: 'The fifth named iteration.' },
+  { date: '28 Jul 2026', dateTime: '2026-07-28', simulator: 'Customer Chat', version: 'Final Model 1 · Gold Standard', title: 'Final Model 1', summary: 'First model designated as a final model.' },
+  { date: '29 Jul 2026', dateTime: '2026-07-29', simulator: 'Customer Chat', version: 'First Customer Model', title: '1st Model', summary: 'The first model milestone, recorded the following day.' },
+  { date: '6 Aug 2026', dateTime: '2026-08-06', simulator: 'Customer Chat', version: 'Final Model 2 · Calibrated Support', title: 'Final Model 2', summary: 'Second final-model milestone.' },
+  { date: '19 Aug 2026', dateTime: '2026-08-19', simulator: 'Customer Chat', version: 'Final Model 3 · Advanced Scenarios', title: 'Final Model 3', summary: 'Third final-model milestone.' },
+  { date: '24 Aug 2026', dateTime: '2026-08-24', simulator: 'Quiz Gauntlet', version: 'Kickoff · Knowledge Challenge', title: 'Quiz Started', summary: 'Initial development of the consumer knowledge quiz.' },
+  { date: '19 Sep 2026', dateTime: '2026-09-19', simulator: 'Customer Chat', version: 'Working Model · Operations Ready', title: 'Working Model', summary: 'A working customer model was reached.' },
+  { date: '19 Sep 2026', dateTime: '2026-09-19', simulator: 'Quiz Gauntlet', version: 'Final Version 2 · Knowledge Edition', title: 'Final Version 2', summary: 'The quiz reached its second final-version milestone.' },
+  { date: '6 Oct 2026', dateTime: '2026-10-06', simulator: 'Customer Chat', version: 'Version 10.2 · Current Model', title: 'Current Customer Model', summary: 'Updated and confirmed current by the project owner.' },
+  { date: '6 Oct 2026', dateTime: '2026-10-06', simulator: 'Quiz Gauntlet', version: 'Version 6.3 · Current Quiz Model', title: 'Current Quiz Model', summary: 'Updated and confirmed current by the project owner.' },
+]
+
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
@@ -368,13 +394,19 @@ function InfoPage({ kind, onBack }) {
       <button className="back-button" onClick={onBack}>← Learning hub</button>
       <div className="page-heading"><span className="eyebrow">Microsoft · Consumer support</span><h1>Meet the Team</h1></div>
       <section className="team-grid" aria-label="Team members">{members.map((member, index) => <article className="team-member-card" key={member.name} style={{ '--member-order': index, '--member-accent': member.accent }}><div className="team-portrait"><img src={member.photo} alt={member.name + ' profile portrait'} /><span className="team-initials" aria-hidden="true">{member.initials}</span><span className="team-card-spark" aria-hidden="true">✦</span></div><div className="team-member-copy"><h2>{member.name}</h2><p className="team-member-org">RFC Global Escalations Tier-3 for Consumers</p></div></article>)}</section>
-      <section className="lifecycle" aria-labelledby="lifecycle-title">
-        <div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–6 Oct 2026</span><h2 id="lifecycle-title">Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names below are timeline labels based on the repository history, not formal Git release tags.</p></div>
-        <ol className="lifecycle-list">{lifeCycleVersions.map((milestone) => <li className="lifecycle-item" key={milestone.version}><span className="lifecycle-arrow" aria-hidden="true">→</span><article className="lifecycle-card"><div className="lifecycle-meta"><span className="lifecycle-version">{milestone.version}</span><time>{milestone.date}</time></div><div className="lifecycle-content"><h3>{milestone.title}</h3><p>{milestone.summary}</p><div className="lifecycle-columns"><section><h4>Added and improved</h4><ul>{milestone.added.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h4>Removed or replaced</h4><ul>{milestone.removed.map((item) => <li key={item}>{item}</li>)}</ul></section></div><p className="lifecycle-commits"><span>Commit trail</span> {milestone.commits}</p></div></article></li>)}</ol>
-        <p className="lifecycle-note">This history is maintained alongside completed website updates. Dates reflect repository commit dates; Git does not store the time each change was pushed.</p>
+      <div className="timeline-comparison">
+      <section className="lifecycle website-timeline" aria-labelledby="lifecycle-title">
+        <div className="lifecycle-heading"><span className="eyebrow">Repository milestones · 17 Sep–13 Oct 2026</span><h2 id="lifecycle-title">Website Life Cycle</h2><p>A dated record of the modules, experiments, refinements, and removals that shaped the learning hub. Version names are timeline labels, not formal Git release tags.</p></div>
+        <ol className="lifecycle-list">{lifeCycleVersions.map((milestone) => <li className="lifecycle-item" key={milestone.version}><span className="lifecycle-arrow" aria-hidden="true">→</span><article className="lifecycle-card"><div className="lifecycle-meta"><span className="lifecycle-version">{milestone.version}</span><time>{milestone.date}</time></div><div className="lifecycle-content"><h3>{milestone.title}</h3><p>{milestone.summary}</p><div className="lifecycle-columns"><section><h4>Added and improved</h4><ul>{milestone.added.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h4>Removed or replaced</h4><ul>{milestone.removed.length ? milestone.removed.map((item) => <li key={item}>{item}</li>) : <li>Nothing removed in this update.</li>}</ul></section></div>{milestone.commits && <p className="lifecycle-commits"><span>Commit trail</span> {milestone.commits}</p>}</div></article></li>)}</ol>
+        <p className="lifecycle-note">This history is maintained alongside completed website updates. Website dates follow repository history where recorded; Git does not store the time each change was pushed.</p>
       </section>
       <section className="copilot-lifecycle" aria-labelledby="copilot-lifecycle-title">
-        <div className="lifecycle-heading"><span className="eyebrow">Owner-reported status · 6 Oct 2026</span><h2 id="copilot-lifecycle-title">Copilot Studio simulators</h2><p>Current simulator versions and known scope, recorded from project-owner updates. Earlier release details will be added as they are provided.</p></div>
+        <div className="lifecycle-heading"><span className="eyebrow">Owner-reported model milestones · 10 Jul–6 Oct 2026</span><h2 id="copilot-lifecycle-title">Copilot Studio Timeline</h2><p>Named development stages for Customer Chat and Quiz Gauntlet, recorded from the project owner. The current model versions are shown below.</p></div>
+        <ol className="copilot-timeline-list">{copilotStudioTimeline.map((milestone, index) => <li className="copilot-timeline-item" key={`${milestone.dateTime}-${milestone.simulator}-${index}`}><span className="copilot-timeline-arrow" aria-hidden="true">→</span><article className="copilot-timeline-card"><div className="copilot-timeline-meta"><span className={`copilot-track copilot-track-${milestone.simulator === 'Quiz Gauntlet' ? 'quiz' : 'customer'}`}>{milestone.simulator}</span><time dateTime={milestone.dateTime}>{milestone.date}</time></div><h3>{milestone.title}</h3><p className="copilot-stage-name">{milestone.version}</p><p>{milestone.summary}</p></article></li>)}</ol>
+      </section>
+      </div>
+      <section className="copilot-lifecycle copilot-current" aria-labelledby="copilot-current-title">
+        <div className="lifecycle-heading"><span className="eyebrow">Current models · 6 Oct 2026</span><h2 id="copilot-current-title">Current Copilot Studio Models</h2><p>Both simulators are up to date, with feedback status and supported topics recorded below.</p></div>
         <div className="copilot-record-grid">{copilotStudioRecords.map((record) => <article className="copilot-record-card" key={record.name}><div className="copilot-record-top"><div><span className="eyebrow">{record.name}</span><h3>Version {record.version}</h3></div><span className="copilot-record-status">{record.status}</span></div><p className="copilot-version-trail">Version record: {record.previousVersion} → {record.version} · updated <time dateTime="2026-10-06">{record.recorded}</time></p><h4>Topics covered</h4><ul className="copilot-topic-list">{record.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul><p className="copilot-feedback"><strong>Feedback status</strong>{record.feedback}</p></article>)}</div>
       </section>
     </main>
