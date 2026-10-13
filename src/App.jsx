@@ -350,8 +350,8 @@ const lifeCycleVersions = [
   },
   {
     version: 'v1.2', date: '13 Oct 2026', title: 'Meet the Team roster refresh',
-    summary: 'Simplified the team cards into a coordinated, photo-free roster focused on names and initials.',
-    added: ['Consistent monogram tiles, shorter cards, and a restrained hover highlight.'],
+    summary: 'Simplified the team cards into a coordinated, photo-free roster focused on names and initials, then refined its spacing and visual accents.',
+    added: ['Monogram tiles labeled MIUH, MYH, and GN, with balanced spacing and restrained accent details.'],
     removed: ['Role captions, placeholder silhouette portraits, sparkle and orbit decoration, and the now-unused team image assets.'],
     commits: '',
   },
@@ -393,8 +393,8 @@ const copilotStudioTimeline = [
 function InfoPage({ kind, onBack }) {
   if (kind === 'team') {
     const members = [
-      { name: 'Mohammed Inam Ul Hassan', accent: '#8DA9C4', initials: 'MI' },
-      { name: 'Mohammed Yasir Hasan', accent: '#8DA9C4', initials: 'MY' },
+      { name: 'Mohammed Inam Ul Hassan', accent: '#8DA9C4', initials: 'MIUH' },
+      { name: 'Mohammed Yasir Hasan', accent: '#8DA9C4', initials: 'MYH' },
       { name: 'Ganaraj Nayak', accent: '#8DA9C4', initials: 'GN' },
     ]
     return <main className="info-page team-page">

@@ -281,12 +281,14 @@ footer { flex-wrap: wrap; }
 .manual-card h2 { margin: 0; color: var(--ink); font: 700 1rem/1.25 Inter,sans-serif; }
 .manual-card p { margin: 6px 0 0; color: var(--muted); font-size: .78rem; line-height: 1.55; }
 .team-placeholder { min-height: 48vh; }
-.team-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
-.team-member-card { --member-accent: #8da9c4; min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); box-shadow: 0 8px 22px rgba(0,0,0,.07); text-align: center; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
-.team-member-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb,var(--member-accent) 55%,var(--line)); box-shadow: 0 12px 26px rgba(0,0,0,.11); }
-.team-portrait { height: 148px; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--member-accent) 11%,transparent),transparent 68%),linear-gradient(145deg,color-mix(in srgb,var(--panel-2) 72%,var(--panel)),var(--panel)); }
-.team-monogram { width: 82px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--member-accent) 42%,var(--line)); border-radius: 23px; background: linear-gradient(145deg,color-mix(in srgb,var(--panel-2) 62%,var(--member-accent) 15%),var(--panel-2)); color: var(--ink); box-shadow: 0 8px 20px rgba(0,0,0,.1); font: 800 1.55rem/1 Inter,sans-serif; letter-spacing: -.08em; }
-.team-member-copy { min-height: 66px; padding: 13px 12px; display: grid; place-items: center; border-top: 1px solid var(--line); }
+.team-grid { margin-top: 20px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+.team-member-card { --member-accent: #8da9c4; min-width: 0; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: 0 8px 22px rgba(0,0,0,.07); text-align: center; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.team-member-card::before { content: ""; height: 2px; position: absolute; z-index: 2; top: 0; left: 18px; right: 18px; background: linear-gradient(90deg,transparent,var(--member-accent),transparent); opacity: .8; }
+.team-member-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb,var(--member-accent) 55%,var(--line)); box-shadow: 0 13px 28px rgba(0,0,0,.12); }
+.team-portrait { height: 158px; position: relative; isolation: isolate; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--member-accent) 11%,transparent),transparent 68%),linear-gradient(145deg,color-mix(in srgb,var(--panel-2) 72%,var(--panel)),var(--panel)); }
+.team-portrait::before { content: ""; width: 118px; aspect-ratio: 1; position: absolute; z-index: -1; border: 1px solid color-mix(in srgb,var(--member-accent) 18%,transparent); border-radius: 50%; box-shadow: 0 0 0 12px color-mix(in srgb,var(--member-accent) 5%,transparent); }
+.team-monogram { width: 92px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--member-accent) 48%,var(--line)); border-radius: 25px; background: linear-gradient(145deg,color-mix(in srgb,var(--panel-2) 62%,var(--member-accent) 15%),var(--panel-2)); color: var(--ink); box-shadow: 0 9px 22px rgba(0,0,0,.11),inset 0 1px rgba(255,255,255,.32); font: 800 clamp(.94rem,1.55vw,1.2rem)/1 Inter,sans-serif; letter-spacing: -.055em; }
+.team-member-copy { min-height: 74px; padding: 16px 14px; display: grid; place-items: center; border-top: 1px solid var(--line); }
 .team-member-copy h2 { margin: 0; color: var(--ink); font: 700 clamp(.94rem,1.25vw,1.08rem)/1.2 Inter,sans-serif; letter-spacing: -.025em; overflow-wrap: anywhere; }
 .lifecycle { margin-top: 54px; padding-top: 30px; border-top: 1px solid var(--line); }
 .lifecycle-heading { max-width: 790px; margin-bottom: 24px; }
@@ -353,8 +355,8 @@ html[data-theme="anniversary"] .team-portrait { background: radial-gradient(elli
 @keyframes sparkle-turn { to { transform: rotate(90deg) scale(1.25); } }
 @media (max-width: 650px) {
   .manual-grid { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: 1fr; max-width: 430px; margin: 0 auto; }
-  .team-portrait { height: 136px; }
+  .team-grid { grid-template-columns: 1fr; max-width: 430px; margin: 20px auto 0; }
+  .team-portrait { height: 148px; }
   .team-member-copy h2 { font-size: 1.05rem; }
   .lifecycle-card { grid-template-columns: 1fr; gap: 11px; padding: 15px; }
   .lifecycle-meta { flex-direction: row; align-items: center; flex-wrap: wrap; }
@@ -411,7 +413,7 @@ html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, 
 .game-card, .module-card { min-height: 194px; }
 .hero { min-height: 250px; }
 .hero-sticker { padding: 17px; }
-.team-member-copy { min-height: 66px; }
+.team-member-copy { min-height: 74px; }
 .fix-deck-section { margin-top: 40px; }
 .fix-more-details { margin-top: 14px; border-top: 1px solid color-mix(in srgb,var(--card-accent) 28%,var(--line)); }
 .fix-more-details summary { padding: 11px 2px 2px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .75rem; font-weight: 750; cursor: pointer; list-style: none; }
