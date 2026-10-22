@@ -1,40 +1,35 @@
 # MLTS Consumer Support Learning Hub
 
-A desktop-only learning hub for practicing Microsoft consumer support conversations and skills. It is a practice site, not a live support service.
+A desktop-only practice hub for Microsoft consumer support conversations, product knowledge, and short skill activities. It is a learning tool, not a live support service.
 
-## What’s in the hub
+## What is included
 
-- **Customer Chat Simulator** — Copilot Studio, version **10.2** (project-owner reported; updated from 10.1); Windows, Office, product activation, volume licensing, and Remote Desktop Server license management.
-- **Quiz Gauntlet** — Copilot Studio, version **6.3** (project-owner reported; updated from 6.2); Windows and Office.
-- **Typing Master** — 90-second typing practice with a results dialog.
-- **Reply Remix** — 250 randomized support scenarios; an answer is required before continuing.
-- **Skyfall** — 2.5D canvas landing game with three difficulty settings and hazards.
-- **Fix for the Day** — curated support-learning cards rotate every 360 seconds.
-- **Meet the Team** — team profiles and a read-only Life Cycle timeline of website milestones and Copilot Studio updates.
-- **Seven themes** and a first-visit “Start here” prompt.
+- **Customer Chat Simulator** — Copilot Studio, version **10.2**; practice Windows, Office, product activation, volume licensing, and Remote Desktop Server license management.
+- **Quiz Gauntlet** — Copilot Studio, version **6.3**; Windows and Office knowledge practice.
+- **Typing Master** — a 90-second typing session with live speed and accuracy and a compact results dialog.
+- **Reply Remix** — 250 randomized support scenarios. Each answer is reviewed before the next scenario is enabled.
+- **Skyfall** — a 2.5D canvas landing game with three difficulty settings, hazards, and a personal best.
+- **Fix for the Day** — support-learning cards that rotate every 360 seconds.
+- **Meet the Team** — a photo-free roster and a read-only timeline of website and Copilot Studio milestones.
+- **Seven visual themes** and a first-visit Start Here prompt.
 
-Simulator versions and feedback status are recorded from project-owner updates and may change. As of 6 Oct 2026, both simulators are reported current; the customer simulator feedback section update is complete. The Life Cycle page is maintained as changes are reported.
+The simulator versions and feedback status are owner-reported. The latest recorded confirmation is **6 October 2026**: Customer Chat 10.2 and Quiz Gauntlet 6.3 were both reported up to date, and the Customer Chat feedback section was reported updated. Check the Life Cycle page for the dated record; update it when the owner reports a newer simulator milestone or a website change is completed.
 
-## Remember how it was built
+## Technology
 
-1. Start with a **React + Vite** app and build the hub shell, navigation, and reusable cards.
-2. Embed the published **Copilot Studio** bots in iframes; provide direct links for opening them in a new tab.
-3. Build the learning activities in React; use the browser **Canvas API** for Skyfall.
-4. Style the site with **CSS**, shared theme variables, inline SVG icons, and restrained animation.
-5. Keep it client-side and static: no app database or custom backend is required. Theme and first-visit preferences use browser local storage.
-6. Run the production build and publish the generated `dist/` folder to **Vercel** or **Render Static Sites**.
+- React 19 and JavaScript (JSX)
+- Vite 8 for development and production builds
+- CSS variables for layout and themes; inline SVG for interface icons
+- HTML Canvas API for Skyfall
+- Microsoft Copilot Studio bots embedded in iframes, with direct new-tab links
+- Node.js and npm for local development, linting, and builds
+- Vercel and Render Static Sites for hosting
 
-## Tech stack
-
-- React 19, JavaScript/JSX, Vite 8
-- CSS; inline SVG icons; HTML Canvas API for Skyfall
-- Node.js and npm for development, linting, and builds
-- Microsoft Copilot Studio for the customer and quiz simulators
-- Vercel and Render for static hosting
+The hub is a static client-side app. It has no app database or custom backend. The selected theme, Start Here dismissal, and Skyfall best score use browser local storage; other activity progress is not saved.
 
 ## Run locally
 
-Requirements: Node.js and npm.
+Install a current Node.js release and npm, then run:
 
 ```sh
 npm ci
@@ -43,28 +38,41 @@ npm run dev
 
 Vite prints the local URL, usually `http://localhost:5173`.
 
+Useful project commands:
+
 ```sh
-npm run lint       # check JavaScript/JSX
-npm run build      # create the production site in dist/
+npm run lint       # lint the project
+npm run build      # write the production site to dist/
 npm run preview    # preview the production build locally
 ```
 
 ## Deploy
 
-Both hosts deploy the Vite static site from the repository root:
+The Vercel and Render static-site deployments use the repository root:
 
 - **Build command:** `npm ci && npm run build`
 - **Publish/output directory:** `dist`
 
-The embedded simulators depend on their Copilot Studio bots being published and available. The site’s themes and first-visit prompt are stored in the visitor’s browser; activity progress is not saved by the site.
+The embedded simulators require their Copilot Studio bots to be published and accessible. If an embed is slow or blocked, use **Open in new tab**. The website can report that the iframe page loaded, but it cannot inspect whether the cross-origin bot itself is ready or responding.
+
+The hub is intended for desktop browsers. It displays a desktop-required message when the device does not meet its desktop pointer and viewport checks.
 
 ## Project layout
 
 ```text
-src/App.jsx       Site views, learning modules, content, and interactions
-src/index.css     Layout, themes, and visual styling
+src/App.jsx       Views, modules, simulator records, and Life Cycle content
+src/index.css     Layout, themes, interaction states, and motion rules
 src/main.jsx      React entry point
-public/           Team portraits and static site assets
+public/MS.svg     Site brand mark
 index.html        Page metadata and app mount point
 vite.config.js    Vite configuration
 ```
+
+## Keeping the Life Cycle accurate
+
+The team page contains two separate histories:
+
+1. **Website Life Cycle:** record completed modules, design changes, fixes, and removals in `lifeCycleVersions` in `src/App.jsx`. Use repository commit dates and hashes when available. Do not invent commit details for work that is not yet committed.
+2. **Copilot Studio Timeline:** record simulator milestones only from owner-provided dates and version details. Keep that history separate from website commits, and update the model records and feedback status when the owner confirms a change.
+
+Keep the built-in Website Manual and this README aligned whenever visible modules or behavior change. The Life Cycle is a read-only history, not a navigation menu.

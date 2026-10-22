@@ -298,9 +298,12 @@ footer { flex-wrap: wrap; }
 .lifecycle-list::before { content: ""; width: 1px; position: absolute; top: 22px; bottom: 22px; left: 15px; background: linear-gradient(var(--purple),var(--line) 88%,transparent); }
 .lifecycle-item { min-width: 0; padding-left: 44px; position: relative; }
 .lifecycle-arrow { width: 30px; height: 30px; position: absolute; top: 20px; left: 0; z-index: 1; display: grid; place-items: center; border: 1px solid color-mix(in srgb,var(--purple) 45%,var(--line)); border-radius: 50%; background: var(--bg); color: var(--purple); font-size: .9rem; font-weight: 800; }
+.lifecycle-item.is-latest .lifecycle-arrow { border-color: color-mix(in srgb,#75bb91 65%,var(--line)); background: color-mix(in srgb,var(--panel) 82%,#75bb91 18%); color: #31744a; }
 .lifecycle-card { min-width: 0; padding: 18px 20px; display: grid; grid-template-columns: 138px minmax(0,1fr); gap: 20px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg,var(--panel),color-mix(in srgb,var(--panel) 83%,var(--panel-2))); box-shadow: 0 9px 24px rgba(0,0,0,.08); }
+.lifecycle-item.is-latest .lifecycle-card { border-color: color-mix(in srgb,#75bb91 45%,var(--line)); box-shadow: 0 12px 28px rgba(43,117,72,.1); }
 .lifecycle-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .lifecycle-version { padding: 5px 9px; border: 1px solid color-mix(in srgb,var(--purple) 40%,var(--line)); border-radius: 7px; background: color-mix(in srgb,var(--panel-2) 75%,var(--purple) 25%); color: var(--ink); font-size: .7rem; font-weight: 850; letter-spacing: .035em; }
+.lifecycle-latest-label { padding: 4px 7px; border: 1px solid color-mix(in srgb,#75bb91 48%,var(--line)); border-radius: 999px; background: color-mix(in srgb,var(--panel-2) 83%,#75bb91 17%); color: var(--ink); font-size: .59rem; font-weight: 800; letter-spacing: .025em; }
 .lifecycle-meta time { color: var(--muted); font-size: .7rem; font-weight: 700; line-height: 1.5; }
 .lifecycle-content { min-width: 0; }
 .lifecycle-content h3 { margin: 1px 0 6px; color: var(--ink); font: 700 1rem/1.35 Inter,sans-serif; }
@@ -421,10 +424,13 @@ html[data-theme="support"] .game-icon, html[data-theme="support"] .module-icon, 
 .fix-more-details summary span { color: var(--cyan); transition: transform .18s ease; }
 .fix-more-details[open] summary span { transform: rotate(45deg); }
 .fix-more-details summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
-.simulator-load-message { margin: 0 0 12px; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--muted); font-size: .8rem; }
+.simulator-load-message { min-height: 46px; margin: 0 0 12px; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--muted); font-size: .8rem; }
+.simulator-load-loaded { border-color: color-mix(in srgb,#75bb91 40%,var(--line)); }
+.simulator-loading-indicator { width: 16px; height: 16px; flex: 0 0 auto; border: 2px solid color-mix(in srgb,var(--purple) 24%,transparent); border-top-color: var(--purple); border-radius: 50%; animation: simulator-spin .8s linear infinite; }
+@keyframes simulator-spin { to { transform: rotate(360deg); } }
 @media (max-width: 800px) { .hero { min-height: 230px; } }
 @media (max-width: 560px) { .hero h1 { font-size: clamp(2rem, 9vw, 2.45rem); }.games-section, .learning-section { padding-top: 32px; }.game-card, .module-card { min-height: 180px; }.team-member-copy { min-height: unset; }.simulator-load-message { align-items: flex-start; flex-direction: column; } }
-@media (prefers-reduced-motion: reduce) { .fix-more-details summary span { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .fix-more-details summary span { transition: none; }.simulator-loading-indicator { animation: none; border-top-color: currentColor; } }
 
 .desktop-only-page { width: 100%; min-height: 100vh; margin: 0; padding: 24px; display: grid; place-items: center; background: var(--bg); color: var(--ink); }
 .desktop-only-card { width: min(100%, 500px); padding: clamp(28px, 7vw, 48px); border: 1px solid var(--line); border-radius: 18px; background: var(--panel); box-shadow: 0 20px 55px rgba(0,0,0,.22); text-align: center; }
