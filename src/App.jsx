@@ -360,6 +360,13 @@ const lifeCycleVersions = [
     summary: 'Improved clarity across simulator loading, the website timeline, and the project’s public-facing guidance.',
     added: ['Clearer embedded simulator loading, delayed, and loaded states with reload and direct-launch guidance.', 'Refined Life Cycle labels and the built-in manual; updated the README with the current modules, setup, and maintenance notes.'],
     removed: ['Outdated README references to team portrait assets and role descriptions.'],
+    commits: '9f283f7',
+  },
+  {
+    version: 'v1.4', date: '23 Oct 2026', dateTime: '2026-10-23', title: 'Skyfall precision challenge',
+    summary: 'Added a centered-landing reward that gives players a skill-based way to earn a shield during a run.',
+    added: ['Three consecutive clean landings recharge a shield; the target marks its centered landing zone and the HUD tracks streak progress.', 'Added concise in-game cues for clean landings and shield rewards; updated the game guide and README.'],
+    removed: [],
     commits: '',
   },
 ]
@@ -429,7 +436,7 @@ function InfoPage({ kind, onBack }) {
   const entries = [
     ['Customer simulators', 'Practice customer conversations and product knowledge. Use Open in new tab if Copilot is slow or blocked; these are simulations, not live support.', 'Best for rehearsing support conversations or reviewing consumer product knowledge.'],
     ['Typing Master', 'Type the displayed passage. The 90-second clock begins with your first keystroke; speed and accuracy update as you type. A compact results dialog appears when the run ends.', 'Best for short speed and accuracy practice.'],
-    ['Skyfall', 'Steer with ← → or A / D, dodge hazards, collect shield rings, and land on each target. Choose a relaxed, standard, or challenge run before starting.', 'Best for a quick focus break and reflex challenge.'],
+    ['Skyfall', 'Steer with ← → or A / D, dodge hazards, collect shield rings, and land on each target. Center three landings in a row to recharge a shield. Choose a relaxed, standard, or challenge run before starting.', 'Best for a quick focus break and reflex challenge.'],
     ['Reply Remix', 'Read the customer scenario, choose a reply, review the feedback, and continue to the next scenario. The library keeps cycling through shuffled prompts.', 'Best for practicing empathy and clear next steps.'],
     ['Fix for the Day', 'Review the objective and customer scenario. Expand More product detail for key knowledge, terms, and a practical tip. A fresh card rotates every six minutes.', 'Best for a focused support skill refresher.'],
     ['Themes', 'Use the header control to cycle through seven palettes, including the new Violet and Ember themes. Your selection is saved for your next visit.', 'Best for choosing a comfortable visual style.'],
@@ -526,6 +533,7 @@ function SkyDropGame({ onBack }) {
   const gameRef = useRef(null)
   const [status, setStatus] = useState('ready')
   const [score, setScore] = useState(0)
+  const [perfectStreak, setPerfectStreak] = useState(0)
   const [shieldReady, setShieldReady] = useState(false)
   const [endReason, setEndReason] = useState('')
   const [difficulty, setDifficulty] = useState('standard')
@@ -538,7 +546,7 @@ function SkyDropGame({ onBack }) {
     const startX = 480
     const mode = { relaxed: { speed: .82, targetWidth: 174, shield: 1 }, standard: { speed: 1, targetWidth: 150, shield: 0 }, challenge: { speed: 1.14, targetWidth: 128, shield: 0 } }[difficulty]
     gameRef.current = {
-      running: true, playerX: startX, score: 0, elapsed: 0, flash: 0, landingWait: 0, speedScale: mode.speed,
+      running: true, playerX: startX, score: 0, perfectStreak: 0, elapsed: 0, flash: 0, landingWait: 0, speedScale: mode.speed,
       target: { x: 480, y: 430, width: mode.targetWidth, height: 16, checked: false },
       hazards: [{ x: 245, y: 300, radius: 25, kind: 'storm' }, { x: 760, y: 80, radius: 19, kind: 'balloon' }],
       gusts: [{ x: 690, y: 355, width: 170, phase: 1.4 }],
@@ -546,6 +554,7 @@ function SkyDropGame({ onBack }) {
       keys: new Set(),
     }
     setScore(0)
+    setPerfectStreak(0)
     setShieldReady(Boolean(mode.shield))
     setEndReason('')
     setStatus('running')
@@ -632,6 +641,17 @@ function SkyDropGame({ onBack }) {
             game.score += 1
             setScore(game.score)
             game.flash = 0.45
+            const cleanLanding = Math.abs(game.playerX - target.x) <= target.width * .2
+            game.perfectStreak = cleanLanding ? game.perfectStreak + 1 : 0
+            if (game.perfectStreak >= 3) {
+              game.shield = 1
+              game.perfectStreak = 0
+              game.toast = { text: 'Perfect streak — shield recharged!', until: game.elapsed + 2.2 }
+              setShieldReady(true)
+            } else {
+              game.toast = { text: cleanLanding ? `Clean landing · ${game.perfectStreak} / 3` : 'Safe landing · center up for a shield streak', until: game.elapsed + 1.5 }
+            }
+            setPerfectStreak(game.perfectStreak)
             game.landingWait = 0.52
           } else {
             finish('You missed the landing platform.')
@@ -834,6 +854,8 @@ function SkyDropGame({ onBack }) {
         context.shadowBlur = 0
         context.fillStyle = '#81936b'
         context.fillRect(left + 4, top + 4, target.width - 8, 16)
+        context.fillStyle = 'rgba(240,245,196,.5)'
+        context.fillRect(target.x - target.width * .2, top + 5, target.width * .4, 14)
         context.strokeStyle = 'rgba(241,239,210,.86)'
         context.lineWidth = 2
         context.setLineDash([9, 6])
@@ -897,6 +919,17 @@ function SkyDropGame({ onBack }) {
         context.fillStyle = 'rgba(246,230,176,' + Math.min(.18, game.flash * .2) + ')'
         context.fillRect(0, 0, width, height)
       }
+      if (game.toast && game.toast.until > elapsed) {
+        context.save()
+        context.font = '700 14px Inter, sans-serif'
+        context.textAlign = 'center'
+        const toastWidth = Math.min(width - 32, context.measureText(game.toast.text).width + 30)
+        context.fillStyle = 'rgba(22,36,43,.78)'
+        context.beginPath(); context.roundRect((width - toastWidth) / 2, 19, toastWidth, 34, 12); context.fill()
+        context.fillStyle = '#fff8e8'
+        context.fillText(game.toast.text, width / 2, 41, toastWidth - 18)
+        context.restore()
+      }
     }
 
     function frame(now) {
@@ -913,7 +946,7 @@ function SkyDropGame({ onBack }) {
     return () => { window.cancelAnimationFrame(animationId); window.removeEventListener('keydown', keyDown); window.removeEventListener('keyup', keyUp); window.removeEventListener('blur', clearKeys) }
   }, [status])
 
-  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2.5D endless landing run</span><h1>Skyfall</h1><p>Thread through storms, birds, drones, and balloons. Collect shield rings and land on target.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Personal best</span><strong>{bestScore}</strong></div><div><span>Run status</span><strong>{status === 'running' ? 'In the air' : status === 'over' ? 'Run over' : 'Ready to drop'}</strong></div><div><span>Shield</span><strong>{shieldReady ? 'Ready' : '—'}</strong></div></div>{status !== 'running' && <div className="skyfall-options" aria-label="Choose game difficulty"><span>Flight mode</span><div>{[['relaxed', 'Relaxed'], ['standard', 'Standard'], ['challenge', 'Challenge']].map(([id, label]) => <button key={id} className={difficulty === id ? 'active' : ''} aria-pressed={difficulty === id} onClick={() => setDifficulty(id)}>{label}</button>)}</div><small>{difficulty === 'relaxed' ? 'Slower descent, wide landing zones, and a starter shield.' : difficulty === 'challenge' ? 'Faster descent, narrow targets, and more hazards.' : 'Balanced speed, targets, and a growing obstacle field.'}</small></div>}<div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2.5D parachute landing game. Use left and right arrow keys or A and D to steer around moving hazards and land on raised platforms." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer. Grab a glowing ring for one shield hit.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Fly again' : 'Start descent'} <span>→</span></button></div></div>}</div><p className="skyfall-caption">Steer with ← → or A / D · Rings absorb one hit · Landings increase the pace</p></section></div>
+  return <div className="activity-page"><button className="back-button" onClick={onBack}>← All activities</button><div className="page-heading"><span className="eyebrow">2.5D endless landing run</span><h1>Skyfall</h1><p>Thread through storms, birds, drones, and balloons. Collect shield rings and land on target.</p></div><section className="skyfall-panel"><div className="skyfall-hud"><div><span>Landings</span><strong>{score}</strong></div><div><span>Personal best</span><strong>{bestScore}</strong></div><div><span>Clean streak</span><strong aria-live="polite">{perfectStreak} / 3</strong></div><div><span>Shield</span><strong>{shieldReady ? 'Ready' : '—'}</strong></div></div>{status !== 'running' && <div className="skyfall-options" aria-label="Choose game difficulty"><span>Flight mode</span><div>{[['relaxed', 'Relaxed'], ['standard', 'Standard'], ['challenge', 'Challenge']].map(([id, label]) => <button key={id} className={difficulty === id ? 'active' : ''} aria-pressed={difficulty === id} onClick={() => setDifficulty(id)}>{label}</button>)}</div><small>{difficulty === 'relaxed' ? 'Slower descent, wide landing zones, and a starter shield.' : difficulty === 'challenge' ? 'Faster descent, narrow targets, and more hazards.' : 'Balanced speed, targets, and a growing obstacle field.'}</small></div>}<div className="skyfall-stage"><canvas ref={canvasRef} width="960" height="540" aria-label="2.5D parachute landing game. Use left and right arrow keys or A and D to steer around moving hazards and land on raised platforms. Center three landings in a row to recharge a shield." />{status !== 'running' && <div className="skyfall-overlay"><div className="skyfall-overlay-card"><span className="skyfall-emoji">{status === 'over' ? '💥' : '🪂'}</span><strong>{status === 'over' ? 'Drop complete' : 'Ready to drop?'}</strong><span>{status === 'over' ? `${endReason || 'Run ended.'} Landings: ${score}.` : 'Use ← → or A / D to steer. Grab a glowing ring or center three landings in a row to earn a shield.'}</span><button className="button-primary" onClick={startGame}>{status === 'over' ? 'Fly again' : 'Start descent'} <span>→</span></button></div></div>}</div><p className="skyfall-caption">Steer with ← → or A / D · Rings absorb one hit · Three centered landings recharge a shield</p></section></div>
 }
 
 const fixTopics = [

@@ -8,7 +8,7 @@ A desktop-only practice hub for Microsoft consumer support conversations, produc
 - **Quiz Gauntlet** — Copilot Studio, version **6.3**; Windows and Office knowledge practice.
 - **Typing Master** — a 90-second typing session with live speed and accuracy and a compact results dialog.
 - **Reply Remix** — 250 randomized support scenarios. Each answer is reviewed before the next scenario is enabled.
-- **Skyfall** — a 2.5D canvas landing game with three difficulty settings, hazards, and a personal best.
+- **Skyfall** — a 2.5D canvas landing game with three difficulty settings, varied hazards, a personal best, and shields earned by landing precisely.
 - **Fix for the Day** — support-learning cards that rotate every 360 seconds.
 - **Meet the Team** — a photo-free roster and a read-only timeline of website and Copilot Studio milestones.
 - **Seven visual themes** and a first-visit Start Here prompt.
