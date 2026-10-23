@@ -367,7 +367,7 @@ const lifeCycleVersions = [
     summary: 'Added a centered-landing reward that gives players a skill-based way to earn a shield during a run.',
     added: ['Three consecutive clean landings recharge a shield; the target marks its centered landing zone and the HUD tracks streak progress.', 'Added concise in-game cues for clean landings and shield rewards; updated the game guide and README.'],
     removed: [],
-    commits: '',
+    commits: '1b86491',
   },
 ]
 
